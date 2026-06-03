@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import VendorLayoutClient from '@/components/vendor/VendorLayoutClient'
+import ProductFormClient from '@/components/vendor/ProductFormClient'
 
-export default async function VendorLayout({ children }: { children: React.ReactNode }) {
+export default async function NewProductPage() {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -10,15 +10,22 @@ export default async function VendorLayout({ children }: { children: React.React
 
   const { data: vendor } = await supabase
     .from('vendors')
-    .select('id, business_name, slug, subscription_plan, subscription_status, logo_url')
+    .select('id')
     .eq('user_id', user.id)
     .single()
 
   if (!vendor) redirect('/vendor/register')
 
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('id, name')
+    .order('name')
+
   return (
-    <VendorLayoutClient vendor={vendor}>
-      {children}
-    </VendorLayoutClient>
+    <ProductFormClient
+      vendorId={vendor.id}
+      categories={categories ?? []}
+      product={null}
+    />
   )
 }
