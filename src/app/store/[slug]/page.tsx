@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { MapPin, Phone, Mail, Globe, Instagram, Facebook, Package, Star } from 'lucide-react'
+import EnquiryForm from '@/components/storefront/EnquiryForm'
 
 export default async function StorefrontPage({ params }: { params: { slug: string } }) {
   const supabase = await createClient()
@@ -134,13 +135,11 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
               )}
             </div>
 
-            {/* Enquiry */}
-            <div className="bg-brand-navy rounded-xl p-5">
-              <h2 className="font-semibold text-white mb-2">Send an Enquiry</h2>
-              <p className="text-gray-400 text-xs mb-3">Have a question? Contact this vendor directly.</p>
-              
-                <a href={`mailto:${vendor.email}`} className="block w-full text-center bg-brand-accent text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-blue-700 transition-colors">Contact Vendor</a>
-            </div>
+            {/* Enquiry Form */}
+            <EnquiryForm
+              vendorId={vendor.id}
+              vendorEmail={vendor.email}
+            />
           </aside>
 
           {/* Products */}
@@ -189,6 +188,15 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
                               R {Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                             </span>
                           )}
+                        </div>
+                        {/* Enquire about this product */}
+                        <div className="mt-3 pt-3 border-t border-gray-50">
+                          <EnquiryForm
+                            vendorId={vendor.id}
+                            vendorEmail={vendor.email}
+                            productId={product.id}
+                            productName={product.name}
+                          />
                         </div>
                       </div>
                     </div>

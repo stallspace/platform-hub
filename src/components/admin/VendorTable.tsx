@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { fireNotification } from '@/lib/notifications/fire'
 import type { VendorApplication } from '@/app/admin/vendors/page'
 import VendorDetailModal from './VendorDetailModal'
 
@@ -62,6 +63,9 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
   async function updateStatus(vendorId: string, newStatus: VendorApplication['status'], label: string) {
     setActionLoading(vendorId + newStatus)
     const supabase = createClient()
+
+    const currentVendor = vendors.find((v) => v.id === vendorId)
+
     const { error } = await supabase
       .from('vendors')
       .update({ status: newStatus, updated_at: new Date().toISOString() })
@@ -72,6 +76,17 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
     } else {
       showToast(`Vendor ${label} successfully.`, 'success')
       setSelectedVendor(null)
+
+      // Map new status to notification event
+      const isReactivation = newStatus === 'approved' && currentVendor?.status === 'suspended'
+      const eventMap: Partial<Record<VendorApplication['status'], string>> = {
+        approved:  'vendor.approved',
+        rejected:  'vendor.rejected',
+        suspended: 'vendor.suspended',
+      }
+      const event = isReactivation ? 'vendor.reactivated' : (eventMap[newStatus] ?? null)
+      if (event) fireNotification(event, { vendorId })
+
       startTransition(() => router.refresh())
     }
     setActionLoading(null)
@@ -179,7 +194,9 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
                           }
                         </div>
                         <div>
-                          <p className="font-semibold text-[#0A1F44]">{vendor.business_name}</p>
+                          <a href={`/admin/vendors/${vendor.id}`} className="font-semibold text-[#0A1F44] hover:text-[#1D4ED8] transition-colors">
+                            {vendor.business_name}
+                          </a>
                           <p className="text-gray-400 text-xs">{vendor.email}</p>
                         </div>
                       </div>

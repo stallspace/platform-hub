@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Package, Store, MessageSquare,
-  BarChart2, CreditCard, Settings, Crown, LogOut, Bell
+  BarChart2, CreditCard, Settings, Crown, LogOut, Bell,
+  ShoppingBag, Star, Truck
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -13,6 +14,9 @@ const NAV_ITEMS = [
   { href: '/vendor/products', icon: Package, label: 'Products' },
   { href: '/vendor/storefront', icon: Store, label: 'My Storefront' },
   { href: '/vendor/enquiries', icon: MessageSquare, label: 'Enquiries' },
+  { href: '/vendor/orders', icon: ShoppingBag, label: 'Orders' },
+  { href: '/vendor/reviews', icon: Star, label: 'Reviews' },
+  { href: '/vendor/store-settings', icon: Truck, label: 'Store Settings' },
   { href: '/vendor/analytics', icon: BarChart2, label: 'Analytics' },
   { href: '/vendor/payments', icon: CreditCard, label: 'Payments' },
   { href: '/vendor/subscription', icon: Crown, label: 'Subscription' },

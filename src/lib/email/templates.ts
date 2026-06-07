@@ -1,0 +1,240 @@
+import { APP_URL } from './resend'
+
+// ─── Shared layout ──────────────────────────────────────────────────────────
+
+function layout(body: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARCRTE</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f9;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+        <!-- Header -->
+        <tr>
+          <td style="background:#0A1F44;border-radius:12px 12px 0 0;padding:28px 36px;text-align:center;">
+            <span style="display:inline-block;background:#1D4ED8;border-radius:6px;padding:6px 10px;margin-bottom:12px;">
+              <span style="color:#fff;font-weight:900;font-size:16px;letter-spacing:-0.5px;">M</span>
+            </span>
+            <div style="color:#fff;font-weight:900;font-size:22px;letter-spacing:-0.5px;">MARCRTE</div>
+            <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;">Marketplace Platform</div>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="background:#ffffff;padding:36px;border-left:1px solid #e8ecf0;border-right:1px solid #e8ecf0;">
+            ${body}
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f8f9fc;border:1px solid #e8ecf0;border-top:none;border-radius:0 0 12px 12px;padding:20px 36px;text-align:center;">
+            <p style="margin:0;color:#9ca3af;font-size:12px;">
+              © ${new Date().getFullYear()} MARCRTE · South African Marketplace
+            </p>
+            <p style="margin:6px 0 0;color:#9ca3af;font-size:11px;">
+              <a href="${APP_URL}" style="color:#1D4ED8;text-decoration:none;">marcrte.co.za</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+}
+
+function heading(text: string): string {
+  return `<h1 style="margin:0 0 8px;color:#0A1F44;font-size:22px;font-weight:800;line-height:1.2;">${text}</h1>`
+}
+
+function para(text: string): string {
+  return `<p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6;">${text}</p>`
+}
+
+function badge(text: string, color: string): string {
+  const colors: Record<string, string> = {
+    green:  'background:#dcfce7;color:#166534;border:1px solid #bbf7d0;',
+    red:    'background:#fee2e2;color:#991b1b;border:1px solid #fecaca;',
+    blue:   'background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;',
+    amber:  'background:#fef3c7;color:#92400e;border:1px solid #fde68a;',
+    gray:   'background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;',
+  }
+  return `<span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;${colors[color] ?? colors.gray}">${text}</span>`
+}
+
+function ctaButton(text: string, url: string): string {
+  return `<div style="text-align:center;margin:28px 0 8px;">
+    <a href="${url}" style="display:inline-block;background:#0A1F44;color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:14px 32px;border-radius:10px;letter-spacing:0.2px;">${text}</a>
+  </div>`
+}
+
+function divider(): string {
+  return `<hr style="border:none;border-top:1px solid #e8ecf0;margin:24px 0;" />`
+}
+
+function infoRow(label: string, value: string): string {
+  return `<tr>
+    <td style="padding:8px 12px;background:#f8f9fc;border-bottom:1px solid #e8ecf0;color:#6b7280;font-size:13px;font-weight:600;width:40%;">${label}</td>
+    <td style="padding:8px 12px;background:#f8f9fc;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;">${value}</td>
+  </tr>`
+}
+
+function infoTable(rows: [string, string][]): string {
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="border-radius:8px;overflow:hidden;border:1px solid #e8ecf0;margin:16px 0;">
+    <tbody>${rows.map(([l, v]) => infoRow(l, v)).join('')}</tbody>
+  </table>`
+}
+
+// ─── Templates ──────────────────────────────────────────────────────────────
+
+export function vendorApprovedEmail(data: {
+  ownerName: string
+  businessName: string
+  plan: string
+  dashboardUrl: string
+}): { subject: string; html: string } {
+  const subject = `🎉 Welcome to MARCRTE — ${data.businessName} is approved!`
+  const html = layout(`
+    ${heading('Your application has been approved!')}
+    ${para(`Hi ${data.ownerName}, great news — <strong>${data.businessName}</strong> has been approved on the MARCRTE marketplace. Your storefront is now live and you can start listing products immediately.`)}
+    ${infoTable([
+      ['Business', data.businessName],
+      ['Plan', data.plan.charAt(0).toUpperCase() + data.plan.slice(1)],
+      ['Status', '✅ Approved & Active'],
+    ])}
+    ${para('Head to your dashboard to complete your storefront setup, add products, and configure your payment gateway.')}
+    ${ctaButton('Go to Dashboard', data.dashboardUrl)}
+    ${divider()}
+    ${para('<span style="color:#6b7280;font-size:13px;">If you have any questions, reply to this email and our team will assist you.</span>')}
+  `)
+  return { subject, html }
+}
+
+export function vendorRejectedEmail(data: {
+  ownerName: string
+  businessName: string
+  reason?: string
+}): { subject: string; html: string } {
+  const subject = `MARCRTE — Application Update for ${data.businessName}`
+  const html = layout(`
+    ${heading('Application not approved')}
+    ${para(`Hi ${data.ownerName}, thank you for applying to join the MARCRTE marketplace.`)}
+    ${para(`After reviewing your application for <strong>${data.businessName}</strong>, we were unable to approve it at this time.`)}
+    ${data.reason ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin:16px 0;">
+      <p style="margin:0;color:#991b1b;font-size:14px;"><strong>Reason:</strong> ${data.reason}</p>
+    </div>` : ''}
+    ${para('If you believe this was made in error or would like to reapply with additional documentation, please contact our support team.')}
+    ${ctaButton('Contact Support', `${APP_URL}/contact`)}
+  `)
+  return { subject, html }
+}
+
+export function vendorSuspendedEmail(data: {
+  ownerName: string
+  businessName: string
+  reason?: string
+}): { subject: string; html: string } {
+  const subject = `MARCRTE — ${data.businessName} account suspended`
+  const html = layout(`
+    ${heading('Your account has been suspended')}
+    ${para(`Hi ${data.ownerName}, your MARCRTE vendor account for <strong>${data.businessName}</strong> has been temporarily suspended.`)}
+    ${data.reason ? `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:16px;margin:16px 0;">
+      <p style="margin:0;color:#92400e;font-size:14px;"><strong>Reason:</strong> ${data.reason}</p>
+    </div>` : ''}
+    ${para('During suspension, your storefront and products are hidden from the marketplace. Please contact support to resolve this.')}
+    ${ctaButton('Contact Support', `${APP_URL}/contact`)}
+  `)
+  return { subject, html }
+}
+
+export function vendorReactivatedEmail(data: {
+  ownerName: string
+  businessName: string
+  dashboardUrl: string
+}): { subject: string; html: string } {
+  const subject = `MARCRTE — ${data.businessName} is back online!`
+  const html = layout(`
+    ${heading('Your account has been reactivated')}
+    ${para(`Hi ${data.ownerName}, great news — your MARCRTE vendor account for <strong>${data.businessName}</strong> has been reactivated.`)}
+    ${para('Your storefront and products are now visible on the marketplace again.')}
+    ${ctaButton('Go to Dashboard', data.dashboardUrl)}
+  `)
+  return { subject, html }
+}
+
+export function newEnquiryEmail(data: {
+  vendorName: string
+  businessName: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string | null
+  message: string
+  productName: string | null
+  enquiriesUrl: string
+}): { subject: string; html: string } {
+  const subject = `New enquiry from ${data.customerName}${data.productName ? ` about ${data.productName}` : ''}`
+  const html = layout(`
+    ${heading('You have a new customer enquiry')}
+    ${para(`Hi ${data.vendorName}, a customer has sent an enquiry${data.productName ? ` about <strong>${data.productName}</strong>` : ''} on your MARCRTE storefront.`)}
+    ${infoTable([
+      ['From', data.customerName],
+      ['Email', data.customerEmail],
+      ...(data.customerPhone ? [['Phone', data.customerPhone] as [string, string]] : []),
+      ...(data.productName ? [['Product', data.productName] as [string, string]] : []),
+    ])}
+    <div style="background:#f8f9fc;border:1px solid #e8ecf0;border-radius:8px;padding:16px;margin:16px 0;">
+      <p style="margin:0 0 6px;color:#6b7280;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Message</p>
+      <p style="margin:0;color:#111827;font-size:14px;line-height:1.6;">${data.message}</p>
+    </div>
+    ${ctaButton('View Enquiry', data.enquiriesUrl)}
+  `)
+  return { subject, html }
+}
+
+export function subscriptionPaymentFailedEmail(data: {
+  ownerName: string
+  businessName: string
+  plan: string
+  amount: string
+  retryUrl: string
+}): { subject: string; html: string } {
+  const subject = `Action required — Payment failed for ${data.businessName}`
+  const html = layout(`
+    ${heading('Payment failed')}
+    ${para(`Hi ${data.ownerName}, we were unable to process your subscription payment for <strong>${data.businessName}</strong>.`)}
+    ${infoTable([
+      ['Plan', data.plan.charAt(0).toUpperCase() + data.plan.slice(1)],
+      ['Amount Due', data.amount],
+      ['Status', '⚠️ Payment Failed'],
+    ])}
+    ${para('Please update your payment details to avoid suspension of your MARCRTE storefront. Your account will be suspended if payment is not resolved within 7 days.')}
+    ${ctaButton('Update Payment', data.retryUrl)}
+  `)
+  return { subject, html }
+}
+
+export function subscriptionCancelledEmail(data: {
+  ownerName: string
+  businessName: string
+  endDate: string
+}): { subject: string; html: string } {
+  const subject = `MARCRTE — Subscription cancelled for ${data.businessName}`
+  const html = layout(`
+    ${heading('Subscription cancelled')}
+    ${para(`Hi ${data.ownerName}, your MARCRTE subscription for <strong>${data.businessName}</strong> has been cancelled.`)}
+    ${infoTable([
+      ['Business', data.businessName],
+      ['Access Until', data.endDate],
+      ['Status', 'Cancelled'],
+    ])}
+    ${para('Your storefront will remain active until the end of your current billing period. After that, your store and products will be hidden from the marketplace.')}
+    ${para('We\'d love to have you back. Resubscribe anytime from your dashboard.')}
+    ${ctaButton('Resubscribe', `${APP_URL}/vendor/subscription`)}
+  `)
+  return { subject, html }
+}
