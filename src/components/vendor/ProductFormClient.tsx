@@ -202,11 +202,11 @@ export default function ProductFormClient({ vendorId, categories, product }: Pro
           <h2 className="font-semibold text-gray-900">Pricing</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label">Price (R) *</label>
+              <label className="label">Discounted Price (R)</label>
               <input className="input" type="number" min="0" step="0.01" value={form.price} onChange={e => set('price', e.target.value)} required />
             </div>
             <div>
-              <label className="label">Compare-at Price (R)</label>
+              <label className="label">Original Price (R)</label>
               <input className="input" type="number" min="0" step="0.01" value={form.compare_at_price} onChange={e => set('compare_at_price', e.target.value)} placeholder="Optional" />
             </div>
           </div>

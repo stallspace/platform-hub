@@ -1,85 +1,142 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Search, ShoppingCart, Menu, X, ChevronDown, User } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import {
+  Search, ShoppingCart, Menu, X, ChevronDown, User,
+  Heart, GitCompare, LayoutGrid, ChevronRight
+} from 'lucide-react'
+import { useCartStore } from '@/lib/cart/store'
 
-const categories = [
-  'Electronics', 'Fashion & Clothing', 'Home & Garden',
-  'Health & Beauty', 'Food & Beverages', 'Sports & Outdoor',
+const NAV_CATEGORIES = [
+  { name: 'Electronics',      slug: 'electronics' },
+  { name: 'Fashion',          slug: 'fashion-clothing' },
+  { name: 'Home & Garden',    slug: 'home-garden' },
+  { name: 'Health & Beauty',  slug: 'health-beauty' },
+  { name: 'Food & Beverages', slug: 'food-beverages' },
+  { name: 'Sports & Outdoor', slug: 'sports-outdoor' },
+  { name: 'Arts & Crafts',    slug: 'arts-crafts' },
+  { name: 'Pet Supplies',     slug: 'pet-supplies' },
 ]
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
+  const [mobileOpen, setMobileOpen]     = useState(false)
   const [categoriesOpen, setCategoriesOpen] = useState(false)
+  const [searchQuery, setSearchQuery]   = useState('')
+  const catRef = useRef<HTMLDivElement>(null)
+  const cartCount = useCartStore(s => s.itemCount())
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  // Close categories dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (catRef.current && !catRef.current.contains(e.target as Node)) {
+        setCategoriesOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/marketplace/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
+
+  function handleSearchKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (searchQuery.trim()) {
+        router.push(`/marketplace/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      }
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-brand-navy shadow-lg">
-      {/* Top bar */}
-      <div className="bg-brand-navy-dark py-1.5 px-4 text-center text-xs text-gray-300">
-        🇿🇦 South Africa&apos;s Vetted Online Marketplace — Trusted vendors, direct payments
+      {/* Announcement bar */}
+      <div className="bg-black py-1.5 px-4 text-center text-xs text-gray-400 tracking-wide">
+        South Africa&apos;s vetted online marketplace — trusted vendors, direct payments
       </div>
 
       {/* Main nav */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 h-16">
+
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-2">
+          <Link href="/marketplace" className="flex-shrink-0 flex items-center gap-2">
             <div className="w-8 h-8 bg-brand-accent rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">M</span>
             </div>
             <span className="text-white font-bold text-xl tracking-tight">MARCRTE</span>
           </Link>
 
-          {/* Search bar - desktop */}
-          <div className="hidden md:flex flex-1 max-w-xl mx-4">
+          {/* Search bar — desktop */}
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl mx-4">
             <div className="relative w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search products, vendors..."
+                placeholder="Search products, vendors, categories..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-4 pr-12 py-2.5 rounded-lg bg-white/10 text-white placeholder:text-gray-300 
-                           border border-white/20 focus:outline-none focus:ring-2 focus:ring-brand-accent 
-                           focus:bg-white focus:text-gray-900 focus:placeholder:text-gray-400 transition-all"
+                onKeyDown={handleSearchKey}
+                className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-white/10 text-white placeholder:text-gray-400
+                           border border-white/20 focus:outline-none focus:ring-2 focus:ring-brand-accent
+                           focus:bg-white focus:text-gray-900 focus:placeholder:text-gray-400 transition-all text-sm"
               />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white">
-                <Search className="w-4 h-4" />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-accent text-white text-xs font-semibold
+                           px-3 py-1.5 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Search
               </button>
             </div>
-          </div>
+          </form>
 
           {/* Desktop nav links */}
           <nav className="hidden md:flex items-center gap-1">
             {/* Categories dropdown */}
-            <div className="relative">
+            <div className="relative" ref={catRef}>
               <button
                 onClick={() => setCategoriesOpen(!categoriesOpen)}
-                className="flex items-center gap-1 text-gray-200 hover:text-white px-3 py-2 rounded-lg 
+                className="flex items-center gap-1 text-gray-200 hover:text-white px-3 py-2 rounded-lg
                            hover:bg-white/10 transition-colors text-sm font-medium"
               >
-                Categories <ChevronDown className="w-3.5 h-3.5" />
+                <LayoutGrid className="w-3.5 h-3.5" />
+                Categories
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} />
               </button>
+
               {categoriesOpen && (
-                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-50">
-                  {categories.map((cat) => (
+                <div className="absolute top-full left-0 mt-2 w-60 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50">
+                  {NAV_CATEGORIES.map((cat) => (
                     <Link
-                      key={cat}
-                      href={`/marketplace/categories`}
-                      className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
+                      key={cat.slug}
+                      href={`/marketplace/products?category=${cat.slug}`}
+                      className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700
+                                 hover:bg-gray-50 hover:text-brand-accent transition-colors"
                       onClick={() => setCategoriesOpen(false)}
                     >
-                      {cat}
+                      {cat.name}
+                      <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
                     </Link>
                   ))}
-                  <div className="border-t border-gray-100 mt-1 pt-1">
+                  <div className="border-t border-gray-100 mt-1 pt-1 px-2">
                     <Link
-                      href="/marketplace/categories"
-                      className="block px-3 py-2 text-sm text-brand-accent font-medium hover:bg-gray-50 rounded-lg"
+                      href="/marketplace/products"
+                      className="flex items-center justify-between px-2 py-2 text-sm text-brand-accent
+                                 font-semibold hover:bg-blue-50 rounded-lg transition-colors"
                       onClick={() => setCategoriesOpen(false)}
                     >
-                      View all categories →
+                      Browse all categories
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
@@ -92,45 +149,53 @@ export default function Navbar() {
             >
               Vendors
             </Link>
-
-            <Link
-              href="/marketplace/products"
-              className="text-gray-200 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium"
-            >
-              Products
-            </Link>
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-1 ml-auto">
+            {/* Compare */}
             <Link
-              href="/vendor/register"
-              className="hidden md:flex items-center gap-1.5 text-sm font-semibold text-white bg-brand-accent 
-                         hover:bg-brand-accent-dark px-4 py-2 rounded-lg transition-colors"
+              href="/marketplace/compare"
+              title="Compare products"
+              className="relative flex items-center text-gray-200 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              Sell Here
+              <GitCompare className="w-5 h-5" />
             </Link>
 
+            {/* Favourites */}
             <Link
-              href="/auth/login"
-              className="flex items-center gap-1.5 text-gray-200 hover:text-white px-3 py-2 rounded-lg 
-                         hover:bg-white/10 transition-colors"
+              href="/marketplace/favourites"
+              title="Favourites"
+              className="relative flex items-center text-gray-200 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm">Account</span>
+              <Heart className="w-5 h-5" />
             </Link>
 
+            {/* Cart */}
             <Link
               href="/marketplace/cart"
+              title="Cart"
               className="relative flex items-center text-gray-200 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
             >
               <ShoppingCart className="w-5 h-5" />
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                0
-              </span>
+              {mounted && cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
             </Link>
 
-            {/* Mobile menu toggle */}
+            {/* Account */}
+            <Link
+              href="/account"
+              className="flex items-center gap-1.5 text-gray-200 hover:text-white px-2 py-2 rounded-lg
+                         hover:bg-white/10 transition-colors"
+            >
+              <User className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm">Account</span>
+            </Link>
+
+            {/* Mobile toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden text-gray-200 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -141,34 +206,55 @@ export default function Navbar() {
         </div>
 
         {/* Mobile search */}
-        <div className="md:hidden pb-3">
+        <form onSubmit={handleSearch} className="md:hidden pb-3">
           <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
               placeholder="Search products, vendors..."
-              className="w-full pl-4 pr-10 py-2.5 rounded-lg bg-white/10 text-white placeholder:text-gray-300 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKey}
+              className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-white/10 text-white placeholder:text-gray-400
                          border border-white/20 focus:outline-none focus:ring-2 focus:ring-brand-accent text-sm"
             />
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
           </div>
-        </div>
+        </form>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-brand-navy-light border-t border-white/10">
+        <div className="md:hidden bg-brand-navy border-t border-white/10">
           <div className="px-4 py-3 space-y-1">
-            <Link href="/marketplace/products" className="block py-2 text-gray-200 hover:text-white text-sm">Products</Link>
-            <Link href="/marketplace/vendors" className="block py-2 text-gray-200 hover:text-white text-sm">Vendors</Link>
-            <Link href="/marketplace/categories" className="block py-2 text-gray-200 hover:text-white text-sm">Categories</Link>
-            <div className="pt-2 border-t border-white/10">
-              <Link
-                href="/vendor/register"
-                className="block w-full text-center py-2.5 text-sm font-semibold text-white bg-brand-accent rounded-lg"
-              >
-                Sell on MARCRTE
-              </Link>
-            </div>
+            <Link
+              href="/marketplace/products"
+              className="block py-2.5 text-gray-200 hover:text-white text-sm border-b border-white/5"
+              onClick={() => setMobileOpen(false)}
+            >
+              All Products
+            </Link>
+            <Link
+              href="/marketplace/vendors"
+              className="block py-2.5 text-gray-200 hover:text-white text-sm border-b border-white/5"
+              onClick={() => setMobileOpen(false)}
+            >
+              Vendors
+            </Link>
+            <Link
+              href="/marketplace/compare"
+              className="flex items-center gap-2 py-2.5 text-gray-200 hover:text-white text-sm border-b border-white/5"
+              onClick={() => setMobileOpen(false)}
+            >
+              <GitCompare className="w-4 h-4" /> Compare Products
+            </Link>
+            <Link
+              href="/marketplace/favourites"
+              className="flex items-center gap-2 py-2.5 text-gray-200 hover:text-white text-sm border-b border-white/5"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Heart className="w-4 h-4" /> Favourites
+            </Link>
+
           </div>
         </div>
       )}

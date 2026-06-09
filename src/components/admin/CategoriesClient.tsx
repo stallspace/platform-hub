@@ -3,6 +3,11 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import {
+  Laptop, Shirt, Home, Leaf, ShoppingBag, Dumbbell,
+  Palette, PawPrint, Package, Car, Gamepad2, BookOpen,
+  Wrench, Plane, Sparkles, Tag, Music, Gem, Apple, Baby
+} from 'lucide-react'
 import type { Category } from '@/app/admin/categories/page'
 
 interface Props {
@@ -14,7 +19,51 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').trim()
 }
 
-const ICONS = ['🛍️', '👗', '👟', '🏠', '📱', '🖥️', '🍕', '🌿', '🎨', '📚', '🧴', '🏋️', '🎮', '🐾', '🚗', '✈️', '💄', '🧰', '🎵', '💎']
+// Icon options — stored as string key in DB, rendered as Lucide component
+const ICON_OPTIONS = [
+  { key: 'laptop',    label: 'Electronics',  icon: <Laptop    className="w-5 h-5" /> },
+  { key: 'shirt',     label: 'Fashion',      icon: <Shirt     className="w-5 h-5" /> },
+  { key: 'home',      label: 'Home',         icon: <Home      className="w-5 h-5" /> },
+  { key: 'leaf',      label: 'Health',       icon: <Leaf      className="w-5 h-5" /> },
+  { key: 'bag',       label: 'Food',         icon: <ShoppingBag className="w-5 h-5" /> },
+  { key: 'dumbbell',  label: 'Sports',       icon: <Dumbbell  className="w-5 h-5" /> },
+  { key: 'palette',   label: 'Arts',         icon: <Palette   className="w-5 h-5" /> },
+  { key: 'paw',       label: 'Pets',         icon: <PawPrint  className="w-5 h-5" /> },
+  { key: 'car',       label: 'Automotive',   icon: <Car       className="w-5 h-5" /> },
+  { key: 'gamepad',   label: 'Gaming',       icon: <Gamepad2  className="w-5 h-5" /> },
+  { key: 'book',      label: 'Books',        icon: <BookOpen  className="w-5 h-5" /> },
+  { key: 'wrench',    label: 'Industrial',   icon: <Wrench    className="w-5 h-5" /> },
+  { key: 'plane',     label: 'Travel',       icon: <Plane     className="w-5 h-5" /> },
+  { key: 'sparkles',  label: 'Beauty',       icon: <Sparkles  className="w-5 h-5" /> },
+  { key: 'music',     label: 'Music',        icon: <Music     className="w-5 h-5" /> },
+  { key: 'gem',       label: 'Jewellery',    icon: <Gem       className="w-5 h-5" /> },
+  { key: 'apple',     label: 'Produce',      icon: <Apple     className="w-5 h-5" /> },
+  { key: 'baby',      label: 'Baby',         icon: <Baby      className="w-5 h-5" /> },
+  { key: 'tag',       label: 'General',      icon: <Tag       className="w-5 h-5" /> },
+  { key: 'package',   label: 'Other',        icon: <Package   className="w-5 h-5" /> },
+]
+
+function getCategoryIcon(iconKey: string | null, slug: string) {
+  // First try to match by stored icon key
+  if (iconKey) {
+    const match = ICON_OPTIONS.find(o => o.key === iconKey)
+    if (match) return match.icon
+  }
+  // Fallback: match by slug fragment
+  if (slug.includes('electronics') || slug.includes('tech')) return <Laptop className="w-5 h-5" />
+  if (slug.includes('fashion') || slug.includes('clothing')) return <Shirt className="w-5 h-5" />
+  if (slug.includes('home') || slug.includes('garden')) return <Home className="w-5 h-5" />
+  if (slug.includes('health') || slug.includes('beauty')) return <Leaf className="w-5 h-5" />
+  if (slug.includes('food') || slug.includes('beverage')) return <ShoppingBag className="w-5 h-5" />
+  if (slug.includes('sport') || slug.includes('outdoor')) return <Dumbbell className="w-5 h-5" />
+  if (slug.includes('art') || slug.includes('craft')) return <Palette className="w-5 h-5" />
+  if (slug.includes('pet')) return <PawPrint className="w-5 h-5" />
+  if (slug.includes('auto') || slug.includes('car')) return <Car className="w-5 h-5" />
+  if (slug.includes('toy') || slug.includes('game')) return <Gamepad2 className="w-5 h-5" />
+  if (slug.includes('book') || slug.includes('station')) return <BookOpen className="w-5 h-5" />
+  if (slug.includes('industrial') || slug.includes('business')) return <Wrench className="w-5 h-5" />
+  return <Package className="w-5 h-5" />
+}
 
 const EMPTY_FORM = { name: '', slug: '', description: '', icon: '', parent_id: '' }
 
@@ -140,7 +189,6 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
     startTransition(() => router.refresh())
   }
 
-  const topLevel = localOrder.filter((c) => !c.parent_id)
   const parentOptions = categories.filter((c) => !c.parent_id)
 
   return (
@@ -148,7 +196,9 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${
-          toast.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'
+          toast.type === 'success'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+            : 'bg-red-50 border-red-200 text-red-800'
         }`}>
           {toast.type === 'success'
             ? <svg className="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -169,17 +219,24 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
               </button>
             </div>
             <div className="p-5 space-y-4">
+
               {/* Icon picker */}
               <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Icon (emoji)</label>
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {ICONS.map((ic) => (
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Icon</label>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {ICON_OPTIONS.map((opt) => (
                     <button
-                      key={ic}
-                      onClick={() => setForm((f) => ({ ...f, icon: ic }))}
-                      className={`text-xl p-1.5 rounded-lg transition-all ${form.icon === ic ? 'bg-[#1D4ED8]/10 ring-2 ring-[#1D4ED8]' : 'hover:bg-gray-100'}`}
+                      key={opt.key}
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, icon: opt.key }))}
+                      title={opt.label}
+                      className={`flex flex-col items-center gap-1 p-2 rounded-xl border-2 transition-all text-xs
+                        ${form.icon === opt.key
+                          ? 'border-[#1D4ED8] bg-blue-50 text-[#1D4ED8]'
+                          : 'border-gray-100 hover:border-gray-300 text-gray-500'}`}
                     >
-                      {ic}
+                      {opt.icon}
+                      <span className="text-[10px] leading-none truncate w-full text-center">{opt.label}</span>
                     </button>
                   ))}
                 </div>
@@ -227,13 +284,16 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                 >
                   <option value="">None (top-level)</option>
                   {parentOptions.filter((c) => c.id !== editId).map((c) => (
-                    <option key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</option>
+                    <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
                 </select>
               </div>
             </div>
+
             <div className="p-5 border-t border-gray-100 flex gap-3 justify-end">
-              <button onClick={closeForm} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium">Cancel</button>
+              <button onClick={closeForm} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium">
+                Cancel
+              </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
@@ -261,7 +321,9 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
             onClick={openCreate}
             className="px-4 py-2 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
             New Category
           </button>
         </div>
@@ -271,7 +333,9 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
         {localOrder.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-2xl">🏷️</div>
+            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <Tag className="w-6 h-6 text-gray-400" />
+            </div>
             <p className="text-gray-500 font-medium">No categories yet</p>
             <p className="text-gray-400 text-sm mt-1">Create your first category to get started.</p>
             <button onClick={openCreate} className="mt-4 px-4 py-2 bg-[#0A1F44] text-white text-sm font-semibold rounded-xl">
@@ -307,15 +371,21 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        {cat.icon && <span className="text-xl">{cat.icon}</span>}
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center flex-shrink-0">
+                          {getCategoryIcon(cat.icon, cat.slug)}
+                        </div>
                         <div>
                           <p className="font-semibold text-[#0A1F44]">{cat.name}</p>
-                          {cat.description && <p className="text-xs text-gray-400 truncate max-w-[200px]">{cat.description}</p>}
+                          {cat.description && (
+                            <p className="text-xs text-gray-400 truncate max-w-[200px]">{cat.description}</p>
+                          )}
                         </div>
                       </div>
                     </td>
                     <td className="px-5 py-3 hidden sm:table-cell font-mono text-xs text-gray-500">{cat.slug}</td>
-                    <td className="px-5 py-3 hidden md:table-cell text-gray-500 text-xs">{parent ? parent.name : <span className="text-gray-300">—</span>}</td>
+                    <td className="px-5 py-3 hidden md:table-cell text-gray-500 text-xs">
+                      {parent ? parent.name : <span className="text-gray-300">—</span>}
+                    </td>
                     <td className="px-5 py-3 hidden md:table-cell">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${(productCounts[cat.id] ?? 0) > 0 ? 'bg-[#1D4ED8]/10 text-[#1D4ED8]' : 'bg-gray-100 text-gray-400'}`}>
                         {productCounts[cat.id] ?? 0}

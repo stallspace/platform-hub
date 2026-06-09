@@ -34,10 +34,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Marketplace</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/marketplace/products" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/marketplace/vendors" className="hover:text-white transition-colors">Vendors</Link></li>
+              <li><Link href="/marketplace/products"   className="hover:text-white transition-colors">All Products</Link></li>
+              <li><Link href="/marketplace/vendors"    className="hover:text-white transition-colors">Vendors</Link></li>
               <li><Link href="/marketplace/categories" className="hover:text-white transition-colors">Categories</Link></li>
-              <li><Link href="/marketplace/compare" className="hover:text-white transition-colors">Compare Products</Link></li>
+              <li><Link href="/marketplace/compare"    className="hover:text-white transition-colors">Compare Products</Link></li>
             </ul>
           </div>
 
@@ -45,10 +45,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">For Vendors</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/vendor/register" className="hover:text-white transition-colors">Start Selling</Link></li>
-              <li><Link href="/auth/login" className="hover:text-white transition-colors">Vendor Login</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Pricing Plans</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Vendor FAQ</Link></li>
+              <li><Link href="/join"   className="hover:text-white transition-colors">Become a Vendor</Link></li>
+              <li><Link href="/join#pricing" className="hover:text-white transition-colors">Pricing Plans</Link></li>
+              <li><Link href="/auth/login"    className="hover:text-white transition-colors">Vendor Login</Link></li>
+              <li><Link href="/join#faq" className="hover:text-white transition-colors">Vendor FAQ</Link></li>
             </ul>
           </div>
 
@@ -72,7 +72,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
           <p>© {new Date().getFullYear()} MARCRTE. All rights reserved.</p>
           <div className="flex gap-5">

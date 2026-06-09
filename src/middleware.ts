@@ -24,29 +24,42 @@ export async function middleware(request: NextRequest) {
   )
 
   const { data: { user } } = await supabase.auth.getUser()
-
   const path = request.nextUrl.pathname
 
-  // Protect vendor routes
-  if (path.startsWith('/vendor/dashboard') ||
-      path.startsWith('/vendor/products') ||
-      path.startsWith('/vendor/storefront') ||
-      path.startsWith('/vendor/enquiries') ||
-      path.startsWith('/vendor/analytics') ||
-      path.startsWith('/vendor/payments') ||
-      path.startsWith('/vendor/subscription') ||
-      path.startsWith('/vendor/settings')) {
+  // Protect vendor dashboard routes
+  if (
+    path.startsWith('/vendor/dashboard') ||
+    path.startsWith('/vendor/products') ||
+    path.startsWith('/vendor/storefront') ||
+    path.startsWith('/vendor/enquiries') ||
+    path.startsWith('/vendor/analytics') ||
+    path.startsWith('/vendor/payments') ||
+    path.startsWith('/vendor/subscription') ||
+    path.startsWith('/vendor/settings')
+  ) {
     if (!user) {
-      return NextResponse.redirect(new URL('/auth/login', request.url))
+      const url = new URL('/auth/login', request.url)
+      url.searchParams.set('next', path)
+      return NextResponse.redirect(url)
     }
   }
 
   // Protect admin routes
   if (path.startsWith('/admin')) {
     if (!user) {
-      return NextResponse.redirect(new URL('/auth/login', request.url))
+      const url = new URL('/auth/login', request.url)
+      url.searchParams.set('next', path)
+      return NextResponse.redirect(url)
     }
-    // Additional role check handled in admin layout
+  }
+
+  // Protect customer account routes
+  if (path.startsWith('/account')) {
+    if (!user) {
+      const url = new URL('/auth/login', request.url)
+      url.searchParams.set('next', path)
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse
@@ -56,5 +69,6 @@ export const config = {
   matcher: [
     '/vendor/:path*',
     '/admin/:path*',
+    '/account/:path*',
   ],
 }
