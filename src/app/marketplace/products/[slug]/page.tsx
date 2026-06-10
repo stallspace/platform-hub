@@ -7,6 +7,7 @@ import {
   ChevronRight, MessageSquare, Clock, AlertCircle, CheckCircle2, Tag
 } from 'lucide-react'
 import AddToCartButton from '@/components/marketplace/AddToCartButton'
+import ReviewForm from '@/components/storefront/ReviewForm'
 
 interface PageProps {
   params: { slug: string }
@@ -475,6 +476,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* ── WRITE A REVIEW ──────────────────────────── */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-9 lg:col-start-1">
+            <ReviewForm vendorId={vendor.id} productId={product.id} productName={product.name} />
           </div>
         </div>
 

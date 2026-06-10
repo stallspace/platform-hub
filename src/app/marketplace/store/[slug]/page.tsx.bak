@@ -6,7 +6,6 @@ import {
   Package, Star, ShieldCheck, ChevronRight, Clock
 } from 'lucide-react'
 import EnquiryForm from '@/components/storefront/EnquiryForm'
-import ReviewForm from '@/components/storefront/ReviewForm'
 
 export default async function MarketplaceStorefrontPage({ params }: { params: { slug: string } }) {
   const supabase = await createClient()
@@ -73,7 +72,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Vendor header */}
-        <div className="relative -mt-8 mb-6 flex items-end gap-4 pt-2">
+        <div className="relative -mt-12 mb-6 flex items-end gap-4">
           <div className="w-24 h-24 rounded-2xl border-4 border-white bg-white shadow-md overflow-hidden flex-shrink-0">
             {vendor.logo_url ? (
               <img src={vendor.logo_url} alt="" className="w-full h-full object-cover" />
@@ -256,9 +255,6 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
                 </div>
               </div>
             )}
-            <div className="mt-8">
-              <ReviewForm vendorId={vendor.id} />
-            </div>
           </main>
         </div>
       </div>

@@ -25,6 +25,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
   const [reviews, setReviews] = useState(initial)
   const [filter, setFilter] = useState<'all' | 'approved' | 'pending'>('all')
   const [toast, setToast] = useState<string | null>(null)
+  const [toggling, setToggling] = useState<string | null>(null)
 
   function showToast(msg: string) {
     setToast(msg)
@@ -32,10 +33,12 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
   }
 
   async function toggleApproval(id: string, current: boolean) {
+    setToggling(id)
     const { error } = await supabase.from('reviews').update({ is_approved: !current }).eq('id', id)
-    if (error) { showToast('Failed to update review'); return }
+    if (error) { showToast('Failed to update review'); setToggling(null); return }
     setReviews(prev => prev.map(r => r.id === id ? { ...r, is_approved: !current } : r))
     showToast(!current ? 'Review approved' : 'Review hidden')
+    setToggling(null)
   }
 
   const filtered = reviews.filter(r => {
@@ -44,7 +47,9 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
     return true
   })
 
-  const avgRating = reviews.length > 0 ? reviews.filter(r => r.is_approved).reduce((sum, r) => sum + r.rating, 0) / Math.max(reviews.filter(r => r.is_approved).length, 1) : 0
+  const avgRating = reviews.length > 0
+    ? reviews.filter(r => r.is_approved).reduce((sum, r) => sum + r.rating, 0) / Math.max(reviews.filter(r => r.is_approved).length, 1)
+    : 0
 
   return (
     <div>
@@ -62,6 +67,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
           ))}
         </div>
       </div>
+
       {filtered.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-100 p-16 text-center text-gray-400">
           <Star className="w-10 h-10 opacity-30 mx-auto mb-3" />
@@ -70,7 +76,11 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map(review => (
-            <div key={review.id} className={"bg-white rounded-xl border p-5 " + (review.is_approved ? 'border-gray-100' : 'border-amber-100 bg-amber-50/30')}>
+            <div
+              key={review.id}
+              onClick={() => toggleApproval(review.id, review.is_approved)}
+              className={"bg-white rounded-xl border p-5 cursor-pointer transition-all hover:shadow-md select-none " + (review.is_approved ? 'border-gray-100 hover:border-green-200' : 'border-amber-100 bg-amber-50/30 hover:border-amber-300') + (toggling === review.id ? ' opacity-60' : '')}
+            >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-brand-navy flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
@@ -85,9 +95,9 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
                     </div>
                   </div>
                 </div>
-                <button onClick={() => toggleApproval(review.id, review.is_approved)} className={"flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg font-medium transition-colors " + (review.is_approved ? 'bg-green-50 text-green-700 hover:bg-red-50 hover:text-red-700' : 'bg-amber-50 text-amber-700 hover:bg-green-50 hover:text-green-700')}>
+                <div className={"flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg font-medium pointer-events-none " + (review.is_approved ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700')}>
                   {review.is_approved ? <><CheckCircle className="w-3.5 h-3.5" /> Approved</> : <><XCircle className="w-3.5 h-3.5" /> Pending</>}
-                </button>
+                </div>
               </div>
               {review.products && (
                 <div className="flex items-center gap-1 text-xs text-brand-accent mb-2">
@@ -97,6 +107,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
               )}
               {review.comment && <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>}
               <p className="text-xs text-gray-400 mt-3">{new Date(review.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p className="text-xs text-gray-400 mt-1">{review.is_approved ? 'Click to hide' : 'Click to approve'}</p>
             </div>
           ))}
         </div>
