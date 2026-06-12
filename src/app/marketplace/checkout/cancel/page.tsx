@@ -34,7 +34,7 @@ export default async function CheckoutCancelPage({ searchParams }: PageProps) {
           <div className="flex flex-col gap-2">
             <Link
               href="/marketplace/cart"
-              className="w-full flex items-center justify-center gap-2 bg-brand-accent text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-brand-mint text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
             >
               <ShoppingCart className="w-4 h-4" /> Return to Cart
             </Link>

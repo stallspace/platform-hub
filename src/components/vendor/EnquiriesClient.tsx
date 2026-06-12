@@ -117,13 +117,13 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
               onClick={() => setFilter(f)}
               className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
                 filter === f
-                  ? 'bg-brand-navy text-white'
+                  ? 'bg-brand-forest text-white'
                   : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
               {f === 'unread' && unreadCount > 0 && (
-                <span className="ml-1.5 bg-brand-accent text-white text-xs rounded-full px-1.5 py-0.5">
+                <span className="ml-1.5 bg-brand-mint text-white text-xs rounded-full px-1.5 py-0.5">
                   {unreadCount}
                 </span>
               )}
@@ -146,13 +146,13 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
                   key={enquiry.id}
                   onClick={() => openEnquiry(enquiry)}
                   className={`w-full text-left px-4 py-3.5 hover:bg-gray-50 transition-colors ${
-                    selected?.id === enquiry.id ? 'bg-blue-50 border-r-2 border-brand-accent' : ''
+                    selected?.id === enquiry.id ? 'bg-blue-50 border-r-2 border-brand-mint' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex items-center gap-2 min-w-0">
                       {!enquiry.is_read && (
-                        <span className="w-2 h-2 bg-brand-accent rounded-full flex-shrink-0 mt-1" />
+                        <span className="w-2 h-2 bg-brand-mint rounded-full flex-shrink-0 mt-1" />
                       )}
                       <span className={`text-sm truncate ${!enquiry.is_read ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
                         {enquiry.customer_name}
@@ -161,7 +161,7 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
                     <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(enquiry.created_at)}</span>
                   </div>
                   {enquiry.products && (
-                    <div className="flex items-center gap-1 text-xs text-brand-accent mb-1 ml-4">
+                    <div className="flex items-center gap-1 text-xs text-brand-mint mb-1 ml-4">
                       <Package className="w-3 h-3" />
                       <span className="truncate">{enquiry.products.name}</span>
                     </div>
@@ -191,7 +191,7 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
                 <div>
                   <h2 className="font-semibold text-gray-900 text-lg">{selected.customer_name}</h2>
                   <div className="flex flex-wrap items-center gap-3 mt-1">
-                    <a href={`mailto:${selected.customer_email}`} className="flex items-center gap-1 text-sm text-brand-accent hover:underline">
+                    <a href={`mailto:${selected.customer_email}`} className="flex items-center gap-1 text-sm text-brand-mint hover:underline">
                       <Mail className="w-3.5 h-3.5" />
                       {selected.customer_email}
                     </a>
@@ -235,13 +235,13 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
                       onChange={e => setReplyText(e.target.value)}
                       placeholder={`Reply to ${selected.customer_name}...`}
                       rows={3}
-                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent"
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint"
                     />
                   </div>
                   <button
                     onClick={sendReply}
                     disabled={!replyText.trim() || sending}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Reply className="w-4 h-4" />
                     {sending ? 'Sending…' : 'Send Reply'}

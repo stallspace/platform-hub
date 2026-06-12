@@ -181,7 +181,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={`px-5 py-3 text-sm font-medium border-b-2 transition-all ${
-              activeTab === tab.key ? 'border-[#1D4ED8] text-[#1D4ED8]' : 'border-transparent text-gray-500 hover:text-gray-700'
+              activeTab === tab.key ? 'border-[#2ECC8E] text-[#2ECC8E]' : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             {tab.label}
@@ -197,12 +197,12 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
             return (
               <div key={section} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                 <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-                  <h3 className="font-semibold text-[#0A1F44]">{BANNER_LABELS[section]}</h3>
+                  <h3 className="font-semibold text-[#0D3B2E]">{BANNER_LABELS[section]}</h3>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <span className="text-xs text-gray-500">{b.is_active ? 'Active' : 'Inactive'}</span>
                     <div
                       onClick={() => updateBanner(section, 'is_active', !b.is_active)}
-                      className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${b.is_active ? 'bg-[#1D4ED8]' : 'bg-gray-200'}`}
+                      className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${b.is_active ? 'bg-[#2ECC8E]' : 'bg-gray-200'}`}
                     >
                       <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${b.is_active ? 'translate-x-5' : 'translate-x-0.5'}`} />
                     </div>
@@ -223,7 +223,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
                         value={b[field]}
                         onChange={(e) => updateBanner(section, field, e.target.value)}
                         placeholder={placeholder}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8] transition-colors"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E] transition-colors"
                       />
                     </div>
                   ))}
@@ -232,7 +232,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
                   <button
                     onClick={() => saveBanner(section)}
                     disabled={saving === section}
-                    className="px-5 py-2.5 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                    className="px-5 py-2.5 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
                   >
                     {saving === section ? 'Saving...' : 'Save Banner'}
                   </button>
@@ -248,13 +248,13 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-100 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-[#0A1F44]">Featured Vendors</h3>
+              <h3 className="font-semibold text-[#0D3B2E]">Featured Vendors</h3>
               <p className="text-xs text-gray-400 mt-0.5">{selectedVendorIds.length} selected — shown on the homepage</p>
             </div>
             <button
               onClick={saveFeaturedVendors}
               disabled={saving === 'vendors'}
-              className="px-5 py-2 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+              className="px-5 py-2 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
             >
               {saving === 'vendors' ? 'Saving...' : 'Save Selection'}
             </button>
@@ -266,7 +266,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
               value={vendorSearch}
               onChange={(e) => setVendorSearch(e.target.value)}
               placeholder="Search vendors..."
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8]"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E]"
             />
           </div>
 
@@ -280,9 +280,9 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
                 <div
                   key={vendor.id}
                   onClick={() => toggleVendor(vendor.id)}
-                  className={`flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-colors ${selected ? 'bg-[#1D4ED8]/5' : 'hover:bg-gray-50'}`}
+                  className={`flex items-center gap-3 px-5 py-3.5 cursor-pointer transition-colors ${selected ? 'bg-[#2ECC8E]/5' : 'hover:bg-gray-50'}`}
                 >
-                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? 'bg-[#1D4ED8] border-[#1D4ED8]' : 'border-gray-300'}`}>
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? 'bg-[#2ECC8E] border-[#2ECC8E]' : 'border-gray-300'}`}>
                     {selected && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                   </div>
                   <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -303,7 +303,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
       {activeTab === 'products' && (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-100">
-            <h3 className="font-semibold text-[#0A1F44]">Featured Products</h3>
+            <h3 className="font-semibold text-[#0D3B2E]">Featured Products</h3>
             <p className="text-xs text-gray-400 mt-0.5">{featuredProducts.length} products currently featured</p>
           </div>
 
@@ -313,7 +313,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
               value={productSearch}
               onChange={(e) => setProductSearch(e.target.value)}
               placeholder="Search products or vendors..."
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8]"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E]"
             />
           </div>
 

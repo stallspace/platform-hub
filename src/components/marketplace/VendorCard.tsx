@@ -15,7 +15,7 @@ export default function VendorCard({ vendor, productCount }: VendorCardProps) {
       className="card group overflow-hidden block hover:-translate-y-0.5 transition-transform duration-200"
     >
       {/* Banner */}
-      <div className="relative h-24 bg-gradient-to-r from-brand-navy to-brand-accent">
+      <div className="relative h-24 bg-gradient-to-r from-brand-forest to-brand-mint">
         {vendor.banner_url && (
           <Image
             src={vendor.banner_url}
@@ -39,7 +39,7 @@ export default function VendorCard({ vendor, productCount }: VendorCardProps) {
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-brand-navy flex items-center justify-center">
+              <div className="w-full h-full bg-brand-forest flex items-center justify-center">
                 <span className="text-white font-bold text-xl">
                   {vendor.business_name[0]}
                 </span>
@@ -49,7 +49,7 @@ export default function VendorCard({ vendor, productCount }: VendorCardProps) {
         </div>
 
         {/* Info */}
-        <h3 className="font-bold text-gray-900 group-hover:text-brand-accent transition-colors text-sm">
+        <h3 className="font-bold text-gray-900 group-hover:text-brand-mint transition-colors text-sm">
           {vendor.business_name}
         </h3>
 

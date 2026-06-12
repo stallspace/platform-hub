@@ -35,16 +35,16 @@ export default async function CategoriesPage() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <nav className="flex items-center gap-1.5 text-sm text-gray-400 mb-4">
-            <Link href="/marketplace" className="hover:text-brand-accent transition-colors">Home</Link>
+            <Link href="/marketplace" className="hover:text-brand-mint transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-gray-600">Categories</span>
           </nav>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-navy flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-brand-forest flex items-center justify-center">
               <LayoutGrid className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-brand-navy">All Categories</h1>
+              <h1 className="text-2xl font-bold text-brand-forest">All Categories</h1>
               <p className="text-gray-500 text-sm mt-0.5">
                 {categories?.length ?? 0} categories across the marketplace
               </p>
@@ -66,13 +66,13 @@ export default async function CategoriesPage() {
                 key={cat.slug}
                 href={`/marketplace/products?category=${cat.slug}`}
                 className="group bg-white rounded-2xl border border-gray-100 p-6
-                           hover:border-brand-accent hover:shadow-md transition-all duration-200"
+                           hover:border-brand-mint hover:shadow-md transition-all duration-200"
               >
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-brand-accent flex items-center justify-center mb-4
-                                group-hover:bg-brand-accent group-hover:text-white transition-colors">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-brand-mint flex items-center justify-center mb-4
+                                group-hover:bg-brand-mint group-hover:text-white transition-colors">
                   {getCategoryIcon(cat.slug)}
                 </div>
-                <h3 className="font-bold text-gray-900 group-hover:text-brand-accent transition-colors mb-1">
+                <h3 className="font-bold text-gray-900 group-hover:text-brand-mint transition-colors mb-1">
                   {cat.name}
                 </h3>
                 {cat.description && (
@@ -82,7 +82,7 @@ export default async function CategoriesPage() {
                   <span className="text-xs text-gray-400">
                     {cat.product_count ?? 0} product{(cat.product_count ?? 0) !== 1 ? 's' : ''}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-brand-accent transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-brand-mint transition-colors" />
                 </div>
               </Link>
             ))}

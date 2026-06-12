@@ -87,7 +87,7 @@ export default function ReviewForm({ vendorId, productId, productName }: Props) 
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="e.g. John Smith"
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint"
           />
         </div>
 
@@ -98,7 +98,7 @@ export default function ReviewForm({ vendorId, productId, productName }: Props) 
             onChange={e => setComment(e.target.value)}
             placeholder="Tell others about your experience..."
             rows={3}
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent resize-none"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint resize-none"
           />
         </div>
 
@@ -107,7 +107,7 @@ export default function ReviewForm({ vendorId, productId, productName }: Props) 
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full py-2.5 bg-brand-navy text-white text-sm font-semibold rounded-xl hover:bg-brand-accent transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full py-2.5 bg-brand-forest text-white text-sm font-semibold rounded-xl hover:bg-brand-mint transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
           {submitting ? 'Submitting...' : 'Submit Review'}

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ShieldCheck, Store, TrendingUp, Users, Package,
   CreditCard, ArrowRight, CheckCircle2, Clock,
@@ -82,7 +83,7 @@ const HOW_IT_WORKS = [
   },
 ]
 
-const WHY_MARCRTE = [
+const WHY_Stallspace = [
   {
     icon: <Users className="w-5 h-5" />,
     title: 'Reach Real Customers',
@@ -101,7 +102,7 @@ const WHY_MARCRTE = [
   {
     icon: <Globe className="w-5 h-5" />,
     title: 'Your Own Storefront',
-    description: 'A dedicated page at marcrte.co.za/store/yourbusiness — your mini website on the marketplace.',
+    description: 'A dedicated page at Stallspace.co.za/store/yourbusiness — your mini website on the marketplace.',
   },
   {
     icon: <BarChart3 className="w-5 h-5" />,
@@ -120,13 +121,10 @@ export default function VendorJoinPage() {
     <div className="min-h-screen bg-white">
 
       {/* ── NAVBAR ──────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-brand-navy border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-brand-forest border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/marketplace" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-accent rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">M</span>
-            </div>
-            <span className="text-white font-bold text-xl tracking-tight">MARCRTE</span>
+            <Image src="/logo-white.png" alt="Stallspace" width={120} height={36} className="h-9 w-auto object-contain" priority /><span className="text-white font-bold text-xl tracking-tight ml-2">Stallspace</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link
@@ -143,7 +141,7 @@ export default function VendorJoinPage() {
             </Link>
             <Link
               href="/join/register"
-              className="bg-brand-accent hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+              className="bg-brand-mint hover:bg-[#22a370] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
             >
               Apply Now
             </Link>
@@ -152,12 +150,12 @@ export default function VendorJoinPage() {
       </header>
 
       {/* ── HERO ────────────────────────────────────── */}
-      <section className="relative bg-brand-navy overflow-hidden">
+      <section className="relative bg-brand-forest overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}
         />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-accent opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-mint opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-3xl">
@@ -168,13 +166,13 @@ export default function VendorJoinPage() {
 
             <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
               Sell on South Africa&apos;s <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2ECC8E] to-[#5dd9a8]">
                 Trusted Marketplace
               </span>
             </h1>
 
             <p className="text-gray-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
-              MARCRTE connects verified local businesses with customers across South Africa.
+              Stallspace connects verified local businesses with customers across South Africa.
               No commission fees. No middlemen. Just a flat monthly subscription and your
               products in front of real buyers.
             </p>
@@ -182,7 +180,7 @@ export default function VendorJoinPage() {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Link
                 href="/join/register"
-                className="inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-blue-700
+                className="inline-flex items-center justify-center gap-2 bg-brand-mint hover:bg-[#22a370]
                            text-white font-semibold px-8 py-4 rounded-xl transition-colors shadow-lg text-base"
               >
                 Apply to Become a Vendor <ArrowRight className="w-5 h-5" />
@@ -214,15 +212,15 @@ export default function VendorJoinPage() {
         </div>
       </section>
 
-      {/* ── WHY MARCRTE ─────────────────────────────── */}
+      {/* ── WHY Stallspace ─────────────────────────────── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-3">
-              <Zap className="w-5 h-5 text-brand-accent" />
-              <span className="text-brand-accent text-sm font-semibold uppercase tracking-wider">Why MARCRTE</span>
+              <Zap className="w-5 h-5 text-brand-mint" />
+              <span className="text-brand-mint text-sm font-semibold uppercase tracking-wider">Why Stallspace</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">
               Built for South African Vendors
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
@@ -231,9 +229,9 @@ export default function VendorJoinPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {WHY_MARCRTE.map((item) => (
+            {WHY_Stallspace.map((item) => (
               <div key={item.title} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-xl bg-brand-accent/10 text-brand-accent flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-xl bg-brand-mint/10 text-brand-mint flex items-center justify-center mb-4">
                   {item.icon}
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
@@ -248,7 +246,7 @@ export default function VendorJoinPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy">How It Works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">How It Works</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               From application to your first sale in four simple steps.
             </p>
@@ -261,9 +259,9 @@ export default function VendorJoinPage() {
                   <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gray-100 -z-0 -translate-x-6" />
                 )}
                 <div className="relative z-10">
-                  <div className="w-20 h-20 rounded-2xl bg-brand-navy text-white flex items-center justify-center mb-5 shadow-lg relative">
+                  <div className="w-20 h-20 rounded-2xl bg-brand-forest text-white flex items-center justify-center mb-5 shadow-lg relative">
                     {step.icon}
-                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-brand-accent text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-brand-mint text-white text-xs font-bold rounded-full flex items-center justify-center">
                       {i + 1}
                     </span>
                   </div>
@@ -274,8 +272,8 @@ export default function VendorJoinPage() {
             ))}
           </div>
 
-          <div className="mt-12 bg-blue-50 border border-blue-100 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Clock className="w-8 h-8 text-brand-accent flex-shrink-0" />
+          <div className="mt-12 bg-[#F8FAF3] border border-[#2ECC8E]/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <Clock className="w-8 h-8 text-brand-mint flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900">Billing only starts after approval</p>
               <p className="text-sm text-gray-500 mt-0.5">
@@ -290,7 +288,7 @@ export default function VendorJoinPage() {
       <section id="pricing" className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy">Simple, Flat Pricing</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">Simple, Flat Pricing</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               One monthly fee. No commission. No hidden costs. Cancel anytime.
             </p>
@@ -301,11 +299,11 @@ export default function VendorJoinPage() {
               <div
                 key={plan.id}
                 className={`relative bg-white rounded-2xl border-2 p-8 flex flex-col
-                  ${plan.popular ? 'border-brand-accent shadow-xl shadow-brand-accent/10' : 'border-gray-100 shadow-sm'}`}
+                  ${plan.popular ? 'border-brand-mint shadow-xl shadow-brand-mint/10' : 'border-gray-100 shadow-sm'}`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="bg-brand-accent text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">
+                    <span className="bg-brand-mint text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">
                       Most Popular
                     </span>
                   </div>
@@ -315,10 +313,10 @@ export default function VendorJoinPage() {
                   <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
                   <p className="text-sm text-gray-500 mt-1">{plan.description}</p>
                   <div className="mt-4 flex items-end gap-1">
-                    <span className="text-4xl font-bold text-brand-navy">R{plan.price}</span>
+                    <span className="text-4xl font-bold text-brand-forest">R{plan.price}</span>
                     <span className="text-gray-400 mb-1">/month</span>
                   </div>
-                  <p className="text-sm text-brand-accent font-medium mt-1">{plan.limit}</p>
+                  <p className="text-sm text-brand-mint font-medium mt-1">{plan.limit}</p>
                 </div>
 
                 <ul className="space-y-3 flex-1 mb-8">
@@ -334,8 +332,8 @@ export default function VendorJoinPage() {
                   href={`/join/register?plan=${plan.id}`}
                   className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-colors
                     ${plan.popular
-                      ? 'bg-brand-accent hover:bg-blue-700 text-white'
-                      : 'bg-brand-navy hover:bg-blue-900 text-white'}`}
+                      ? 'bg-brand-mint hover:bg-[#22a370] text-white'
+                      : 'bg-brand-forest hover:bg-[#081f18] text-white'}`}
                 >
                   Get Started <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -353,12 +351,12 @@ export default function VendorJoinPage() {
       {/* ── FAQ ─────────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-brand-navy text-center mb-10">Common Questions</h2>
+          <h2 className="text-3xl font-bold text-brand-forest text-center mb-10">Common Questions</h2>
           <div className="space-y-4">
             {[
               {
-                q: 'Does MARCRTE take a commission on my sales?',
-                a: 'No. MARCRTE charges a flat monthly subscription fee only. Every rand from a customer sale goes directly to you via your chosen payment gateway.',
+                q: 'Does Stallspace take a commission on my sales?',
+                a: 'No. Stallspace charges a flat monthly subscription fee only. Every rand from a customer sale goes directly to you via your chosen payment gateway.',
               },
               {
                 q: 'Which payment providers are supported?',
@@ -383,7 +381,7 @@ export default function VendorJoinPage() {
             ].map(({ q, a }) => (
               <div key={q} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                 <h4 className="font-semibold text-gray-900 mb-2 flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 text-brand-accent flex-shrink-0 mt-0.5" />
+                  <ChevronRight className="w-4 h-4 text-brand-mint flex-shrink-0 mt-0.5" />
                   {q}
                 </h4>
                 <p className="text-sm text-gray-500 leading-relaxed pl-6">{a}</p>
@@ -394,12 +392,12 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── FINAL CTA ───────────────────────────────── */}
-      <section className="py-16 bg-brand-navy relative overflow-hidden">
+      <section className="py-16 bg-brand-forest relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}
         />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-accent opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-mint opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ShieldCheck className="w-12 h-12 text-green-400 mx-auto mb-4" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -410,7 +408,7 @@ export default function VendorJoinPage() {
           </p>
           <Link
             href="/join/register"
-            className="inline-flex items-center gap-2 bg-brand-accent hover:bg-blue-700
+            className="inline-flex items-center gap-2 bg-brand-mint hover:bg-[#22a370]
                        text-white font-bold px-10 py-4 rounded-xl transition-colors shadow-lg text-base"
           >
             Apply Now — It&apos;s Free to Apply <ArrowRight className="w-5 h-5" />
@@ -428,7 +426,7 @@ export default function VendorJoinPage() {
           &larr; Back to Marketplace
         </Link>
         <span className="mx-3 text-gray-700">·</span>
-        <span>© {new Date().getFullYear()} MARCRTE. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Stallspace. All rights reserved.</span>
       </footer>
     </div>
   )

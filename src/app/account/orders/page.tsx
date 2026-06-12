@@ -31,7 +31,7 @@ export default async function OrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-brand-navy">My Orders</h1>
+        <h1 className="text-2xl font-bold text-brand-forest">My Orders</h1>
         <p className="text-gray-500 text-sm mt-1">
           {orders?.length ?? 0} order{(orders?.length ?? 0) !== 1 ? 's' : ''} placed
         </p>
@@ -44,7 +44,7 @@ export default async function OrdersPage() {
           <p className="text-gray-500 text-sm mb-5">When you place orders they will appear here.</p>
           <Link
             href="/marketplace/products"
-            className="inline-flex items-center gap-2 bg-brand-accent text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-brand-mint text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
           >
             Start Shopping
           </Link>
@@ -66,7 +66,7 @@ export default async function OrdersPage() {
                       <p className="text-xs text-gray-400 mt-0.5">
                         {new Date(order.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
                         {order.vendor && (
-                          <> · <Link href={`/marketplace/store/${order.vendor.slug}`} className="hover:text-brand-accent transition-colors">{order.vendor.business_name}</Link></>
+                          <> · <Link href={`/marketplace/store/${order.vendor.slug}`} className="hover:text-brand-mint transition-colors">{order.vendor.business_name}</Link></>
                         )}
                       </p>
                     </div>
@@ -76,7 +76,7 @@ export default async function OrdersPage() {
                       {status.icon}
                       {status.label}
                     </span>
-                    <span className="font-bold text-brand-navy text-sm">
+                    <span className="font-bold text-brand-forest text-sm">
                       R{Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                     </span>
                   </div>

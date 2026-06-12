@@ -60,7 +60,7 @@ export default async function AuditLogPage({
     <div>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0A1F44]">Audit Log</h1>
+          <h1 className="text-2xl font-bold text-[#0D3B2E]">Audit Log</h1>
           <p className="text-gray-500 mt-1 text-sm">Complete record of all admin actions on the platform.</p>
         </div>
         <span className="text-sm text-gray-400">{(count ?? 0).toLocaleString('en-ZA')} total events</span>
@@ -74,7 +74,7 @@ export default async function AuditLogPage({
             href={`/admin/audit?resource=${res}&page=1`}
             className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all capitalize ${
               resourceFilter === res
-                ? 'bg-[#0A1F44] text-white border-[#0A1F44]'
+                ? 'bg-[#0D3B2E] text-white border-[#0D3B2E]'
                 : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
             }`}
           >

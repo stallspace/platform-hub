@@ -3,10 +3,10 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: "MARCRTE — South Africa's Vetted Marketplace",
-    template: '%s | MARCRTE',
+    default: "Stallspace — South Africa's Vetted Marketplace",
+    template: '%s | Stallspace',
   },
-  description: 'MARCRTE is a vetted online marketplace connecting South African small businesses with customers.',
+  description: 'Stallspace is a vetted online marketplace connecting South African small businesses with customers.',
 }
 
 export default function RootLayout({

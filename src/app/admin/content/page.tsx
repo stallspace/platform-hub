@@ -43,7 +43,7 @@ export default async function ContentPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#0A1F44]">Content Management</h1>
+        <h1 className="text-2xl font-bold text-[#0D3B2E]">Content Management</h1>
         <p className="text-gray-500 mt-1 text-sm">Manage homepage banners, featured vendors and featured products.</p>
       </div>
 

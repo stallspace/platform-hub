@@ -108,7 +108,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
     <div className="bg-gray-50 min-h-screen">
 
       {/* Search header */}
-      <div className="bg-brand-navy">
+      <div className="bg-brand-forest">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <form action="/marketplace/search" method="GET" className="max-w-2xl">
             <label className="block text-white/70 text-sm mb-2">
@@ -123,12 +123,12 @@ export default async function SearchPage({ searchParams }: PageProps) {
                   defaultValue={q}
                   placeholder="Search products, vendors, categories..."
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-white text-gray-900 placeholder:text-gray-400
-                             focus:outline-none focus:ring-2 focus:ring-brand-accent text-sm shadow-lg"
+                             focus:outline-none focus:ring-2 focus:ring-brand-mint text-sm shadow-lg"
                 />
               </div>
               <button
                 type="submit"
-                className="px-5 py-3 bg-brand-accent hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors"
+                className="px-5 py-3 bg-brand-mint hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors"
               >
                 Search
               </button>
@@ -179,7 +179,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                     name="min_price"
                     defaultValue={minPrice ?? ''}
                     placeholder="Min"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-mint"
                   />
                   <span className="text-gray-400 text-sm">—</span>
                   <input
@@ -187,12 +187,12 @@ export default async function SearchPage({ searchParams }: PageProps) {
                     name="max_price"
                     defaultValue={maxPrice ?? ''}
                     placeholder="Max"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-mint"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 bg-brand-navy text-white text-xs font-semibold rounded-lg hover:bg-blue-900 transition-colors"
+                  className="w-full py-2 bg-brand-forest text-white text-xs font-semibold rounded-lg hover:bg-blue-900 transition-colors"
                 >
                   Apply
                 </button>
@@ -204,7 +204,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <div className="space-y-1">
                   <Link
                     href={buildUrl({ category: undefined, page: undefined })}
-                    className={`flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors ${!category ? 'bg-brand-accent/10 text-brand-accent font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors ${!category ? 'bg-brand-mint/10 text-brand-mint font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     All
                   </Link>
@@ -212,7 +212,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                     <Link
                       key={cat.slug}
                       href={buildUrl({ category: cat.slug, page: undefined })}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors ${category === cat.slug ? 'bg-brand-accent/10 text-brand-accent font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors ${category === cat.slug ? 'bg-brand-mint/10 text-brand-mint font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                     >
                       <span>{cat.name}</span>
                       {cat.product_count !== undefined && (
@@ -228,9 +228,9 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <h4 className="text-sm font-semibold text-gray-800 mb-3">Availability</h4>
                 <Link
                   href={buildUrl({ in_stock: inStock ? undefined : 'true', page: undefined })}
-                  className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm transition-colors ${inStock ? 'bg-brand-accent/10 text-brand-accent font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+                  className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm transition-colors ${inStock ? 'bg-brand-mint/10 text-brand-mint font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                 >
-                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${inStock ? 'bg-brand-accent border-brand-accent' : 'border-gray-300'}`}>
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${inStock ? 'bg-brand-mint border-brand-mint' : 'border-gray-300'}`}>
                     {inStock && <X className="w-2.5 h-2.5 text-white" />}
                   </div>
                   In Stock Only
@@ -250,7 +250,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                   <Link
                     key={opt.value}
                     href={buildUrl({ sort: opt.value, page: undefined })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${sort === opt.value ? 'bg-brand-navy text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${sort === opt.value ? 'bg-brand-forest text-white' : 'text-gray-600 hover:bg-gray-100'}`}
                   >
                     {opt.label}
                   </Link>
@@ -262,22 +262,22 @@ export default async function SearchPage({ searchParams }: PageProps) {
             {activeFilters > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {category && (
-                  <Link href={buildUrl({ category: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-accent text-xs px-3 py-1 rounded-full hover:bg-blue-100">
+                  <Link href={buildUrl({ category: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-mint text-xs px-3 py-1 rounded-full hover:bg-blue-100">
                     {categories?.find(c => c.slug === category)?.name} <X className="w-3 h-3" />
                   </Link>
                 )}
                 {minPrice !== null && (
-                  <Link href={buildUrl({ min_price: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-accent text-xs px-3 py-1 rounded-full hover:bg-blue-100">
+                  <Link href={buildUrl({ min_price: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-mint text-xs px-3 py-1 rounded-full hover:bg-blue-100">
                     From R{minPrice} <X className="w-3 h-3" />
                   </Link>
                 )}
                 {maxPrice !== null && (
-                  <Link href={buildUrl({ max_price: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-accent text-xs px-3 py-1 rounded-full hover:bg-blue-100">
+                  <Link href={buildUrl({ max_price: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-mint text-xs px-3 py-1 rounded-full hover:bg-blue-100">
                     Up to R{maxPrice} <X className="w-3 h-3" />
                   </Link>
                 )}
                 {inStock && (
-                  <Link href={buildUrl({ in_stock: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-accent text-xs px-3 py-1 rounded-full hover:bg-blue-100">
+                  <Link href={buildUrl({ in_stock: undefined, page: undefined })} className="inline-flex items-center gap-1 bg-blue-50 text-brand-mint text-xs px-3 py-1 rounded-full hover:bg-blue-100">
                     In Stock <X className="w-3 h-3" />
                   </Link>
                 )}
@@ -295,7 +295,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <Package className="w-12 h-12 text-gray-200 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">No results found</h3>
                 <p className="text-gray-500 text-sm mb-4">Try different keywords or remove some filters.</p>
-                <Link href="/marketplace/search" className="text-brand-accent text-sm font-medium hover:underline">
+                <Link href="/marketplace/search" className="text-brand-mint text-sm font-medium hover:underline">
                   Clear all filters
                 </Link>
               </div>
@@ -330,12 +330,12 @@ export default async function SearchPage({ searchParams }: PageProps) {
                         </div>
                         <div className="p-3">
                           {product.vendor && (
-                            <Link href={`/marketplace/store/${product.vendor.slug}`} className="text-xs text-brand-accent font-medium hover:underline">
+                            <Link href={`/marketplace/store/${product.vendor.slug}`} className="text-xs text-brand-mint font-medium hover:underline">
                               {product.vendor.business_name}
                             </Link>
                           )}
                           <Link href={`/marketplace/products/${product.slug}`}>
-                            <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-accent transition-colors leading-snug">
+                            <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-mint transition-colors leading-snug">
                               {product.name}
                             </h3>
                           </Link>
@@ -347,7 +347,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                           )}
                           <div className="flex items-center justify-between">
                             <div>
-                              <span className="font-bold text-brand-navy">
+                              <span className="font-bold text-brand-forest">
                                 R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                               </span>
                               {product.compare_at_price && (
@@ -358,7 +358,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                             </div>
                             <Link
                               href={`/marketplace/products/${product.slug}`}
-                              className="text-xs font-semibold bg-brand-accent text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
+                              className="text-xs font-semibold bg-brand-mint text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
                             >
                               View
                             </Link>
@@ -372,7 +372,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 {totalPages > 1 && (
                   <div className="flex items-center justify-center gap-2 mt-8">
                     {page > 1 && (
-                      <Link href={buildUrl({ page: String(page - 1) })} className="px-4 py-2 rounded-lg border border-gray-200 text-sm hover:border-brand-accent hover:text-brand-accent transition-colors">
+                      <Link href={buildUrl({ page: String(page - 1) })} className="px-4 py-2 rounded-lg border border-gray-200 text-sm hover:border-brand-mint hover:text-brand-mint transition-colors">
                         Previous
                       </Link>
                     )}
@@ -382,14 +382,14 @@ export default async function SearchPage({ searchParams }: PageProps) {
                         <Link
                           key={p}
                           href={buildUrl({ page: String(p) })}
-                          className={`w-9 h-9 rounded-lg text-sm font-medium flex items-center justify-center transition-colors ${p === page ? 'bg-brand-navy text-white' : 'border border-gray-200 text-gray-600 hover:border-brand-accent hover:text-brand-accent'}`}
+                          className={`w-9 h-9 rounded-lg text-sm font-medium flex items-center justify-center transition-colors ${p === page ? 'bg-brand-forest text-white' : 'border border-gray-200 text-gray-600 hover:border-brand-mint hover:text-brand-mint'}`}
                         >
                           {p}
                         </Link>
                       )
                     })}
                     {page < totalPages && (
-                      <Link href={buildUrl({ page: String(page + 1) })} className="px-4 py-2 rounded-lg border border-gray-200 text-sm hover:border-brand-accent hover:text-brand-accent transition-colors">
+                      <Link href={buildUrl({ page: String(page + 1) })} className="px-4 py-2 rounded-lg border border-gray-200 text-sm hover:border-brand-mint hover:text-brand-mint transition-colors">
                         Next
                       </Link>
                     )}

@@ -116,13 +116,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex items-center gap-1.5 text-sm text-gray-400">
-            <Link href="/marketplace" className="hover:text-brand-accent transition-colors">Home</Link>
+            <Link href="/marketplace" className="hover:text-brand-mint transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <Link href="/marketplace/products" className="hover:text-brand-accent transition-colors">Products</Link>
+            <Link href="/marketplace/products" className="hover:text-brand-mint transition-colors">Products</Link>
             {category && (
               <>
                 <ChevronRight className="w-3.5 h-3.5" />
-                <Link href={`/marketplace/products?category=${category.slug}`} className="hover:text-brand-accent transition-colors">
+                <Link href={`/marketplace/products?category=${category.slug}`} className="hover:text-brand-mint transition-colors">
                   {category.name}
                 </Link>
               </>
@@ -159,7 +159,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {product.images.map((img: string, i: number) => (
                     <div
                       key={i}
-                      className={`flex-shrink-0 w-16 h-16 rounded-xl border-2 overflow-hidden cursor-pointer transition-colors ${i === 0 ? 'border-brand-accent' : 'border-gray-200 hover:border-gray-400'}`}
+                      className={`flex-shrink-0 w-16 h-16 rounded-xl border-2 overflow-hidden cursor-pointer transition-colors ${i === 0 ? 'border-brand-mint' : 'border-gray-200 hover:border-gray-400'}`}
                     >
                       <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
                     </div>
@@ -176,7 +176,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               {category && (
                 <Link
                   href={`/marketplace/products?category=${category.slug}`}
-                  className="text-xs text-brand-accent font-medium bg-blue-50 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
+                  className="text-xs text-brand-mint font-medium bg-blue-50 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
                 >
                   {category.name}
                 </Link>
@@ -187,7 +187,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </span>
               )}
               {product.is_featured && (
-                <span className="text-xs font-bold text-white bg-brand-accent px-2.5 py-1 rounded-full">
+                <span className="text-xs font-bold text-white bg-brand-mint px-2.5 py-1 rounded-full">
                   Featured
                 </span>
               )}
@@ -212,7 +212,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {/* Price */}
             <div className="space-y-1">
               <div className="flex items-end gap-3">
-                <span className="text-3xl font-bold text-brand-navy">
+                <span className="text-3xl font-bold text-brand-forest">
                   R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                 </span>
                 {hasDiscount && product.compare_at_price && (
@@ -266,7 +266,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     <button
                       key={opt.id}
                       className="px-3 py-1.5 border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700
-                                 hover:border-brand-accent hover:text-brand-accent transition-colors"
+                                 hover:border-brand-mint hover:text-brand-mint transition-colors"
                     >
                       {opt.value}
                       {opt.price_modifier !== 0 && (
@@ -324,13 +324,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     {vendor.logo_url ? (
                       <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-brand-navy flex items-center justify-center">
+                      <div className="w-full h-full bg-brand-forest flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{vendor.business_name[0]}</span>
                       </div>
                     )}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900 group-hover:text-brand-accent transition-colors">
+                    <p className="text-sm font-semibold text-gray-900 group-hover:text-brand-mint transition-colors">
                       {vendor.business_name}
                     </p>
                     <div className="flex items-center gap-1 mt-0.5">
@@ -352,7 +352,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Fulfilment</p>
                 {deliveryOffered && (
                   <div className="flex items-start gap-2.5">
-                    <Truck className="w-4 h-4 text-brand-accent mt-0.5 flex-shrink-0" />
+                    <Truck className="w-4 h-4 text-brand-mint mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium text-gray-800">Delivery Available</p>
                       {vendor.delivery_cost !== null && (
@@ -370,7 +370,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 )}
                 {collectionOffered && (
                   <div className="flex items-start gap-2.5">
-                    <StoreIcon className="w-4 h-4 text-brand-accent mt-0.5 flex-shrink-0" />
+                    <StoreIcon className="w-4 h-4 text-brand-mint mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium text-gray-800">Collection Available</p>
                       {vendor.collection_hours && (
@@ -406,8 +406,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
               {/* Ask vendor */}
               <Link
                 href={`/marketplace/store/${vendor.slug}?enquiry=true&product=${product.id}`}
-                className="w-full mt-2 py-2.5 rounded-xl border-2 border-brand-navy text-brand-navy font-semibold text-sm
-                           hover:bg-brand-navy hover:text-white transition-all flex items-center justify-center gap-2"
+                className="w-full mt-2 py-2.5 rounded-xl border-2 border-brand-forest text-brand-forest font-semibold text-sm
+                           hover:bg-brand-forest hover:text-white transition-all flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
                 Ask Vendor a Question
@@ -417,7 +417,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div className="bg-gray-50 rounded-xl p-3 space-y-2">
                 {[
                   { icon: <ShieldCheck className="w-3.5 h-3.5 text-green-500" />, text: 'Verified vendor' },
-                  { icon: <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" />, text: 'Secure payment via PayFast, Yoco, or Peach' },
+                  { icon: <CheckCircle2 className="w-3.5 h-3.5 text-brand-mint" />, text: 'Secure payment via PayFast, Yoco, or Peach' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs text-gray-500">
                     {icon}
@@ -446,7 +446,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </div>
                 <Link
                   href={`/marketplace/store/${vendor.slug}#reviews`}
-                  className="text-sm text-brand-accent font-medium hover:underline"
+                  className="text-sm text-brand-mint font-medium hover:underline"
                 >
                   View all vendor reviews
                 </Link>
@@ -462,7 +462,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {reviews.map((review) => (
                     <div key={review.id} className="bg-gray-50 rounded-xl p-4">
                       <div className="flex items-center gap-2.5 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-brand-forest flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                           {review.customer_name.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -513,20 +513,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     </div>
                     <div className="p-3">
                       {(p.vendor as any) && (
-                        <p className="text-xs text-brand-accent font-medium">{(p.vendor as any).business_name}</p>
+                        <p className="text-xs text-brand-mint font-medium">{(p.vendor as any).business_name}</p>
                       )}
                       <Link href={`/marketplace/products/${p.slug}`}>
-                        <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-accent transition-colors">
+                        <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-mint transition-colors">
                           {p.name}
                         </h3>
                       </Link>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-brand-navy text-sm">
+                        <span className="font-bold text-brand-forest text-sm">
                           R{Number(p.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                         </span>
                         <Link
                           href={`/marketplace/products/${p.slug}`}
-                          className="text-xs font-semibold bg-brand-accent text-white px-2.5 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
+                          className="text-xs font-semibold bg-brand-mint text-white px-2.5 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
                         >
                           View
                         </Link>
@@ -546,7 +546,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <h2 className="text-xl font-bold text-gray-900">More from {vendor.business_name}</h2>
               <Link
                 href={`/marketplace/store/${vendor.slug}`}
-                className="text-sm text-brand-accent font-medium hover:underline flex items-center gap-1"
+                className="text-sm text-brand-mint font-medium hover:underline flex items-center gap-1"
               >
                 View store <ChevronRight className="w-4 h-4" />
               </Link>
@@ -565,11 +565,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   </div>
                   <div className="p-3">
                     <Link href={`/marketplace/products/${p.slug}`}>
-                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-brand-accent transition-colors">
+                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-brand-mint transition-colors">
                         {p.name}
                       </h3>
                     </Link>
-                    <span className="font-bold text-brand-navy text-sm mt-1 block">
+                    <span className="font-bold text-brand-forest text-sm mt-1 block">
                       R{Number(p.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                     </span>
                   </div>

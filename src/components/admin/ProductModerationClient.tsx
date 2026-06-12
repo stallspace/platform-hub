@@ -84,7 +84,7 @@ export default function ProductModerationClient({ products, activeFilter, counts
         <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
             <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="font-bold text-[#0A1F44] truncate">{selected.name}</h3>
+              <h3 className="font-bold text-[#0D3B2E] truncate">{selected.name}</h3>
               <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -126,7 +126,7 @@ export default function ProductModerationClient({ products, activeFilter, counts
                   className={`flex-1 py-2.5 text-sm font-semibold rounded-xl border transition-colors disabled:opacity-50 ${
                     selected.is_featured
                       ? 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200'
-                      : 'bg-[#1D4ED8]/10 text-[#1D4ED8] border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/20'
+                      : 'bg-[#2ECC8E]/10 text-[#2ECC8E] border-[#2ECC8E]/20 hover:bg-[#2ECC8E]/20'
                   }`}
                 >
                   {selected.is_featured ? '★ Unfeature' : '☆ Feature'}
@@ -157,7 +157,7 @@ export default function ProductModerationClient({ products, activeFilter, counts
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && navigate({ search, status: activeFilter })}
               placeholder="Search by product name…"
-              className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#1D4ED8] transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#2ECC8E] transition-colors"
             />
             {search && (
               <button onClick={() => { setSearch(''); navigate({ search: '', status: activeFilter }) }}
@@ -173,11 +173,11 @@ export default function ProductModerationClient({ products, activeFilter, counts
               return (
                 <button key={tab.key} onClick={() => navigate({ status: tab.key, search })}
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-t-lg whitespace-nowrap border-b-2 transition-all ${
-                    active ? 'border-[#1D4ED8] text-[#1D4ED8]' : 'border-transparent text-gray-500 hover:text-gray-700'
+                    active ? 'border-[#2ECC8E] text-[#2ECC8E]' : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}>
                   {tab.label}
                   {count > 0 && (
-                    <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${active ? 'bg-[#1D4ED8]/10 text-[#1D4ED8]' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${active ? 'bg-[#2ECC8E]/10 text-[#2ECC8E]' : 'bg-gray-100 text-gray-500'}`}>
                       {count}
                     </span>
                   )}
@@ -218,7 +218,7 @@ export default function ProductModerationClient({ products, activeFilter, counts
                           }
                         </div>
                         <div>
-                          <p className="font-semibold text-[#0A1F44] line-clamp-1">{product.name}</p>
+                          <p className="font-semibold text-[#0D3B2E] line-clamp-1">{product.name}</p>
                           <p className="text-gray-400 text-xs">R {product.price.toFixed(2)}</p>
                         </div>
                       </div>
@@ -231,13 +231,13 @@ export default function ProductModerationClient({ products, activeFilter, counts
                         {product.is_archived && <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200 font-semibold">Archived</span>}
                         {!product.is_archived && product.is_available && <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold">Available</span>}
                         {!product.is_archived && !product.is_available && <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200 font-semibold">Hidden</span>}
-                        {product.is_featured && <span className="text-xs px-2 py-0.5 rounded-full bg-[#1D4ED8]/10 text-[#1D4ED8] border border-[#1D4ED8]/20 font-semibold">★ Featured</span>}
+                        {product.is_featured && <span className="text-xs px-2 py-0.5 rounded-full bg-[#2ECC8E]/10 text-[#2ECC8E] border border-[#2ECC8E]/20 font-semibold">★ Featured</span>}
                       </div>
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center justify-end gap-2">
                         <button onClick={() => setSelected(product)}
-                          className="text-gray-400 hover:text-[#1D4ED8] transition-colors p-1.5 rounded-lg hover:bg-blue-50" title="View & manage">
+                          className="text-gray-400 hover:text-[#2ECC8E] transition-colors p-1.5 rounded-lg hover:bg-blue-50" title="View & manage">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

@@ -133,10 +133,10 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
       {error && <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg flex items-center gap-2"><AlertCircle className="w-4 h-4" />{error}</div>}
       <div className="space-y-5">
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4"><Truck className="w-4 h-4 text-brand-accent" /><h2 className="font-semibold text-gray-900">Fulfilment Options</h2></div>
+          <div className="flex items-center gap-2 mb-4"><Truck className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Fulfilment Options</h2></div>
           <div className="grid grid-cols-3 gap-3 mb-4">
             {['delivery','collection','both'].map(f => (
-              <button key={f} onClick={() => setFulfilment(f)} className={"text-center p-3 rounded-xl border-2 text-sm font-medium transition-all " + (fulfilment === f ? 'border-brand-accent bg-blue-50 text-brand-accent' : 'border-gray-100 text-gray-600 hover:border-gray-200')}>
+              <button key={f} onClick={() => setFulfilment(f)} className={"text-center p-3 rounded-xl border-2 text-sm font-medium transition-all " + (fulfilment === f ? 'border-brand-mint bg-blue-50 text-brand-mint' : 'border-gray-100 text-gray-600 hover:border-gray-200')}>
                 {f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
@@ -146,21 +146,21 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
               <p className="text-sm font-medium text-gray-700">Delivery Settings</p>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Delivery Areas <span className="text-gray-400">(comma separated)</span></label>
-                <input type="text" value={deliveryAreas} onChange={e => setDeliveryAreas(e.target.value)} placeholder="Cape Town, Stellenbosch, Paarl" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={deliveryAreas} onChange={e => setDeliveryAreas(e.target.value)} placeholder="Cape Town, Stellenbosch, Paarl" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">Delivery Cost (R)</label>
-                  <input type="number" value={deliveryCost} onChange={e => setDeliveryCost(e.target.value)} min="0" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                  <input type="number" value={deliveryCost} onChange={e => setDeliveryCost(e.target.value)} min="0" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 </div>
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">Free Delivery Over (R)</label>
-                  <input type="number" value={freeThreshold} onChange={e => setFreeThreshold(e.target.value)} min="0" placeholder="0 = no free delivery" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                  <input type="number" value={freeThreshold} onChange={e => setFreeThreshold(e.target.value)} min="0" placeholder="0 = no free delivery" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 </div>
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Estimated Delivery Time</label>
-                <input type="text" value={deliveryTime} onChange={e => setDeliveryTime(e.target.value)} placeholder="e.g. 2-3 business days" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={deliveryTime} onChange={e => setDeliveryTime(e.target.value)} placeholder="e.g. 2-3 business days" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
             </div>
           )}
@@ -169,21 +169,21 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
               <p className="text-sm font-medium text-gray-700">Collection Settings</p>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Collection Address</label>
-                <input type="text" value={collectionAddress} onChange={e => setCollectionAddress(e.target.value)} placeholder="123 Main Street, Cape Town" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={collectionAddress} onChange={e => setCollectionAddress(e.target.value)} placeholder="123 Main Street, Cape Town" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Collection Hours</label>
-                <input type="text" value={collectionHours} onChange={e => setCollectionHours(e.target.value)} placeholder="Mon-Fri 08:00-17:00, Sat 09:00-13:00" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={collectionHours} onChange={e => setCollectionHours(e.target.value)} placeholder="Mon-Fri 08:00-17:00, Sat 09:00-13:00" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Collection Instructions</label>
-                <textarea value={collectionInstructions} onChange={e => setCollectionInstructions(e.target.value)} rows={2} placeholder="e.g. Enter via the side gate, ask for reception" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <textarea value={collectionInstructions} onChange={e => setCollectionInstructions(e.target.value)} rows={2} placeholder="e.g. Enter via the side gate, ask for reception" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
             </div>
           )}
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4"><Clock className="w-4 h-4 text-brand-accent" /><h2 className="font-semibold text-gray-900">Operating Hours</h2></div>
+          <div className="flex items-center gap-2 mb-4"><Clock className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Operating Hours</h2></div>
           <div className="space-y-2">
             {DAYS.map(day => (
               <div key={day} className="flex items-center gap-3">
@@ -194,9 +194,9 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
                 </label>
                 {!hours[day]?.closed && (
                   <div className="flex items-center gap-2 flex-1">
-                    <input type="time" value={hours[day]?.open ?? '08:00'} onChange={e => updateHours(day, 'open', e.target.value)} className="text-sm border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-accent/30" />
+                    <input type="time" value={hours[day]?.open ?? '08:00'} onChange={e => updateHours(day, 'open', e.target.value)} className="text-sm border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-mint/30" />
                     <span className="text-gray-400 text-xs">to</span>
-                    <input type="time" value={hours[day]?.close ?? '17:00'} onChange={e => updateHours(day, 'close', e.target.value)} className="text-sm border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-accent/30" />
+                    <input type="time" value={hours[day]?.close ?? '17:00'} onChange={e => updateHours(day, 'close', e.target.value)} className="text-sm border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-mint/30" />
                   </div>
                 )}
                 {hours[day]?.closed && <span className="text-xs text-gray-400">Closed</span>}
@@ -205,7 +205,7 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
           </div>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4"><Package className="w-4 h-4 text-brand-accent" /><h2 className="font-semibold text-gray-900">Product & Tax Settings</h2></div>
+          <div className="flex items-center gap-2 mb-4"><Package className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Product & Tax Settings</h2></div>
           <div className="space-y-3">
             <label className="flex items-center gap-3 cursor-pointer">
               <input type="checkbox" checked={vatRegistered} onChange={e => setVatRegistered(e.target.checked)} className="rounded" />
@@ -215,7 +215,7 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
               <div className="grid grid-cols-2 gap-3 pl-6">
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">VAT Number</label>
-                  <input type="text" value={vatNumber} onChange={e => setVatNumber(e.target.value)} placeholder="4123456789" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                  <input type="text" value={vatNumber} onChange={e => setVatNumber(e.target.value)} placeholder="4123456789" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 </div>
                 <div className="flex items-end">
                   <label className="flex items-center gap-2 cursor-pointer pb-2">
@@ -236,20 +236,20 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
           </div>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4"><Building className="w-4 h-4 text-brand-accent" /><h2 className="font-semibold text-gray-900">Banking Details</h2></div>
+          <div className="flex items-center gap-2 mb-4"><Building className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Banking Details</h2></div>
           <p className="text-xs text-gray-500 mb-4">Used for verification and subscription refunds only. Not shared publicly.</p>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Bank Name</label>
-                <select value={bankName} onChange={e => setBankName(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent">
+                <select value={bankName} onChange={e => setBankName(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
                   <option value="">Select bank...</option>
                   {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Account Type</label>
-                <select value={accountType} onChange={e => setAccountType(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent">
+                <select value={accountType} onChange={e => setAccountType(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
                   <option value="cheque">Cheque / Current</option>
                   <option value="savings">Savings</option>
                   <option value="transmission">Transmission</option>
@@ -258,17 +258,17 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Account Holder Name</label>
-              <input type="text" value={accountHolder} onChange={e => setAccountHolder(e.target.value)} placeholder="As it appears on your bank account" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+              <input type="text" value={accountHolder} onChange={e => setAccountHolder(e.target.value)} placeholder="As it appears on your bank account" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Account Number</label>
-              <input type="text" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} placeholder="Your bank account number" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+              <input type="text" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} placeholder="Your bank account number" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
             </div>
           </div>
         </div>
         <div className="flex items-center justify-between pt-2 pb-6">
           <p className="text-xs text-gray-400">Settings apply to your storefront immediately</p>
-          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-5 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50">
+          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-5 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50">
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             {saved && <Check className="w-4 h-4" />}
             {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Settings'}

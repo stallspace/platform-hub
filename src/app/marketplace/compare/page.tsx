@@ -45,11 +45,11 @@ export default function ComparePage() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-navy flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-brand-forest flex items-center justify-center">
               <GitCompare className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-brand-navy">Compare Products</h1>
+              <h1 className="text-2xl font-bold text-brand-forest">Compare Products</h1>
               <p className="text-gray-500 text-sm mt-0.5">Compare up to {MAX_PRODUCTS} products side-by-side</p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export default function ComparePage() {
               <p className="text-gray-400 text-xs mb-6">You can compare up to {MAX_PRODUCTS} products at once.</p>
               <Link
                 href="/marketplace/products"
-                className="inline-flex items-center gap-2 bg-brand-accent text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-brand-mint text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
               >
                 Browse Products <ArrowRight className="w-4 h-4" />
               </Link>
@@ -102,16 +102,16 @@ export default function ComparePage() {
                             </div>
                           )}
                         </div>
-                        <Link href={`/marketplace/store/${product.vendor_slug}`} className="text-xs text-brand-accent font-medium hover:underline block">
+                        <Link href={`/marketplace/store/${product.vendor_slug}`} className="text-xs text-brand-mint font-medium hover:underline block">
                           {product.vendor_name}
                         </Link>
                         <Link href={`/marketplace/products/${product.slug}`}>
-                          <h3 className="text-sm font-bold text-gray-900 mt-1 hover:text-brand-accent transition-colors line-clamp-2">
+                          <h3 className="text-sm font-bold text-gray-900 mt-1 hover:text-brand-mint transition-colors line-clamp-2">
                             {product.name}
                           </h3>
                         </Link>
                         <div className="mt-2">
-                          <span className="text-lg font-bold text-brand-navy">
+                          <span className="text-lg font-bold text-brand-forest">
                             R{product.price.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                           </span>
                           {product.compare_at_price && (
@@ -122,7 +122,7 @@ export default function ComparePage() {
                         </div>
                         <Link
                           href={`/marketplace/products/${product.slug}`}
-                          className="mt-3 w-full flex items-center justify-center py-2 bg-brand-accent text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                          className="mt-3 w-full flex items-center justify-center py-2 bg-brand-mint text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors"
                         >
                           View Product
                         </Link>
@@ -136,10 +136,10 @@ export default function ComparePage() {
                       <Link
                         href="/marketplace/products"
                         className="flex flex-col items-center justify-center h-full min-h-[200px] bg-white rounded-2xl border-2 border-dashed border-gray-200
-                                   hover:border-brand-accent hover:bg-blue-50 transition-all p-6 group"
+                                   hover:border-brand-mint hover:bg-blue-50 transition-all p-6 group"
                       >
-                        <Plus className="w-8 h-8 text-gray-300 group-hover:text-brand-accent transition-colors mb-2" />
-                        <span className="text-sm text-gray-400 group-hover:text-brand-accent font-medium transition-colors">
+                        <Plus className="w-8 h-8 text-gray-300 group-hover:text-brand-mint transition-colors mb-2" />
+                        <span className="text-sm text-gray-400 group-hover:text-brand-mint font-medium transition-colors">
                           Add product
                         </span>
                       </Link>
@@ -223,7 +223,7 @@ export default function ComparePage() {
 
         {/* Info note */}
         <div className="mt-8 flex items-start gap-2 text-xs text-gray-400 bg-white rounded-xl border border-gray-100 p-4">
-          <Info className="w-4 h-4 flex-shrink-0 mt-0.5 text-brand-accent" />
+          <Info className="w-4 h-4 flex-shrink-0 mt-0.5 text-brand-mint" />
           Use the <strong className="text-gray-600">Compare</strong> button on any product page or product card to add it to this comparison. Products are stored in your browser session.
         </div>
       </div>

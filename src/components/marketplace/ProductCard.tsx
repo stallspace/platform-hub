@@ -36,7 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span className="badge bg-red-500 text-white text-xs">-{discount}%</span>
           )}
           {product.is_featured && (
-            <span className="badge bg-brand-accent text-white text-xs">Featured</span>
+            <span className="badge bg-brand-mint text-white text-xs">Featured</span>
           )}
           {!product.is_available || (product.track_inventory && (product.stock_quantity ?? 0) === 0) ? (
             <span className="badge bg-gray-500 text-white text-xs">Out of Stock</span>
@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {product.vendor && (
           <Link
             href={`/marketplace/store/${product.vendor.slug}`}
-            className="text-xs text-brand-accent font-medium hover:underline"
+            className="text-xs text-brand-mint font-medium hover:underline"
           >
             {product.vendor.business_name}
           </Link>
@@ -65,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Name */}
         <Link href={`/marketplace/products/${product.id}`}>
-          <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-accent transition-colors">
+          <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-mint transition-colors">
             {product.name}
           </h3>
         </Link>
@@ -81,7 +81,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Price */}
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-lg font-bold text-brand-navy">
+            <span className="text-lg font-bold text-brand-forest">
               {formatCurrency(product.price)}
             </span>
             {product.compare_at_price && (
@@ -93,8 +93,8 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <Link
             href={`/marketplace/products/${product.id}`}
-            className="flex items-center gap-1.5 bg-brand-accent text-white text-xs font-semibold 
-                       px-3 py-2 rounded-lg hover:bg-brand-accent-dark transition-colors"
+            className="flex items-center gap-1.5 bg-brand-mint text-white text-xs font-semibold 
+                       px-3 py-2 rounded-lg hover:bg-brand-mint-dark transition-colors"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             Buy

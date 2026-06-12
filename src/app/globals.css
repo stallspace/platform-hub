@@ -3,14 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --color-navy: #0A1F44;
-  --color-navy-light: #132a5e;
-  --color-navy-dark: #060f22;
-  --color-black: #000000;
+  --color-forest: #0D3B2E;
+  --color-forest-light: #1a5c3e;
+  --color-forest-dark: #081f18;
+  --color-ink: #111111;
   --color-white: #FFFFFF;
-  --color-accent: #1D4ED8;
-  --color-accent-light: #3b6ef0;
-  --color-accent-dark: #1640b0;
+  --color-mint: #2ECC8E;
+  --color-mint-light: #5dd9a8;
+  --color-mint-dark: #22a370;
+  --color-mint-tint: #F8FAF3;
+  --color-warm: #F7F5F0;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -34,7 +36,7 @@
 
   body {
     font-family: var(--font-geist-sans), system-ui, sans-serif;
-    color: var(--color-gray-900);
+    color: var(--color-ink);
     background: var(--color-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -43,21 +45,21 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-accent text-white px-6 py-3 rounded-lg font-semibold
-           hover:bg-brand-accent-dark transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2
+    @apply bg-brand-mint text-white px-6 py-3 rounded-lg font-semibold
+           hover:bg-brand-mint-dark transition-all duration-200 
+           focus:outline-none focus:ring-2 focus:ring-brand-mint focus:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-transparent text-brand-navy border-2 border-brand-navy px-6 py-3 rounded-lg font-semibold
-           hover:bg-brand-navy hover:text-white transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
+    @apply bg-transparent text-brand-forest border-2 border-brand-forest px-6 py-3 rounded-lg font-semibold
+           hover:bg-brand-forest hover:text-white transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand-forest focus:ring-offset-2;
   }
 
   .btn-outline-white {
     @apply bg-transparent text-white border-2 border-white px-6 py-3 rounded-lg font-semibold
-           hover:bg-white hover:text-brand-navy transition-all duration-200;
+           hover:bg-white hover:text-brand-forest transition-all duration-200;
   }
 
   .card {
@@ -66,7 +68,7 @@
 
   .input {
     @apply w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900
-           placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-accent
+           placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-mint
            focus:border-transparent transition-all duration-200;
   }
 
@@ -95,7 +97,7 @@
   }
 
   .section-title {
-    @apply text-3xl font-bold text-brand-navy;
+    @apply text-3xl font-bold text-brand-forest;
   }
 
   .section-subtitle {
@@ -116,12 +118,12 @@
   background: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #0A1F44;
+  background: #0D3B2E;
   border-radius: 3px;
 }
 
 /* Focus ring for accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-mint);
   outline-offset: 2px;
 }

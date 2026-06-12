@@ -12,7 +12,7 @@ import {
   subscriptionCancelledEmail,
 } from '@/lib/email/templates'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://marcrte.co.za'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://Stallspace.co.za'
 
 export async function POST(req: NextRequest) {
   try {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
           userId: vendor.user_id,
           type: 'account',
           title: 'Application approved!',
-          message: `${vendor.business_name} is now live on MARCRTE.`,
+          message: `${vendor.business_name} is now live on Stallspace.`,
           actionUrl: '/vendor/dashboard',
         })
         break
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
           userId: vendor.user_id,
           type: 'account',
           title: 'Application not approved',
-          message: 'Your MARCRTE vendor application was not approved.',
+          message: 'Your Stallspace vendor application was not approved.',
           actionUrl: '/vendor/register',
         })
         break
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
           userId: vendor.user_id,
           type: 'account',
           title: 'Account suspended',
-          message: 'Your MARCRTE vendor account has been suspended.',
+          message: 'Your Stallspace vendor account has been suspended.',
         })
         break
       }
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
           userId: vendor.user_id,
           type: 'account',
           title: 'Account reactivated',
-          message: `${vendor.business_name} is back live on MARCRTE.`,
+          message: `${vendor.business_name} is back live on Stallspace.`,
           actionUrl: '/vendor/dashboard',
         })
         break
@@ -217,7 +217,7 @@ export async function POST(req: NextRequest) {
           userId: vendor.user_id,
           type: 'subscription',
           title: 'Subscription cancelled',
-          message: 'Your MARCRTE subscription has been cancelled.',
+          message: 'Your Stallspace subscription has been cancelled.',
           actionUrl: '/vendor/subscription',
         })
         break

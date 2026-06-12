@@ -18,7 +18,7 @@ export default function CartPage() {
       <div className="bg-gray-50 min-h-screen">
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <h1 className="text-2xl font-bold text-brand-navy">Your Cart</h1>
+            <h1 className="text-2xl font-bold text-brand-forest">Your Cart</h1>
           </div>
         </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -28,7 +28,7 @@ export default function CartPage() {
             <p className="text-gray-500 text-sm mb-6">Browse the marketplace and add products to your cart.</p>
             <Link
               href="/marketplace/products"
-              className="inline-flex items-center gap-2 bg-brand-accent text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-brand-mint text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
             >
               Browse Products <ArrowRight className="w-4 h-4" />
             </Link>
@@ -43,13 +43,13 @@ export default function CartPage() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-brand-navy">
+            <h1 className="text-2xl font-bold text-brand-forest">
               Your Cart
               <span className="text-gray-400 font-normal text-lg ml-3">
                 {totalItems} item{totalItems !== 1 ? 's' : ''}
               </span>
             </h1>
-            <Link href="/marketplace/products" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-brand-accent transition-colors">
+            <Link href="/marketplace/products" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-brand-mint transition-colors">
               <ArrowLeft className="w-4 h-4" /> Continue Shopping
             </Link>
           </div>
@@ -67,7 +67,7 @@ export default function CartPage() {
                   <ShieldCheck className="w-4 h-4 text-green-500" />
                   <Link
                     href={`/marketplace/store/${vendorItems[0].vendor_slug}`}
-                    className="text-sm font-semibold text-gray-800 hover:text-brand-accent transition-colors"
+                    className="text-sm font-semibold text-gray-800 hover:text-brand-mint transition-colors"
                   >
                     {vendorItems[0].vendor_name}
                   </Link>
@@ -87,7 +87,7 @@ export default function CartPage() {
                     <div className="flex-1 min-w-0">
                       <Link
                         href={`/marketplace/products/${item.product_slug}`}
-                        className="text-sm font-semibold text-gray-900 hover:text-brand-accent transition-colors line-clamp-2"
+                        className="text-sm font-semibold text-gray-900 hover:text-brand-mint transition-colors line-clamp-2"
                       >
                         {item.product_name}
                       </Link>
@@ -100,20 +100,20 @@ export default function CartPage() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:border-brand-accent hover:text-brand-accent transition-colors"
+                            className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:border-brand-mint hover:text-brand-mint transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
                           <span className="text-sm font-semibold w-6 text-center">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:border-brand-accent hover:text-brand-accent transition-colors"
+                            className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center hover:border-brand-mint hover:text-brand-mint transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="font-bold text-brand-navy text-sm">
+                          <span className="font-bold text-brand-forest text-sm">
                             R{(item.price * item.quantity).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                           </span>
                           <button
@@ -151,7 +151,7 @@ export default function CartPage() {
               </div>
               <Link
                 href="/marketplace/checkout"
-                className="w-full flex items-center justify-center gap-2 bg-brand-accent text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-brand-mint text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
               >
                 Proceed to Checkout <ArrowRight className="w-4 h-4" />
               </Link>
@@ -161,7 +161,7 @@ export default function CartPage() {
                   Payments go directly to verified vendors
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Truck className="w-3.5 h-3.5 text-brand-accent" />
+                  <Truck className="w-3.5 h-3.5 text-brand-mint" />
                   Delivery arranged by each vendor
                 </div>
               </div>

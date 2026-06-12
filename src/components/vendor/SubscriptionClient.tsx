@@ -39,10 +39,10 @@ export default function SubscriptionClient({ vendor }: Props) {
     <div className="max-w-4xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Subscription</h1>
-        <p className="text-gray-500 text-sm mt-0.5">Manage your MARCRTE subscription plan</p>
+        <p className="text-gray-500 text-sm mt-0.5">Manage your Stallspace subscription plan</p>
       </div>
 
-      <div className="bg-gradient-to-r from-brand-navy to-brand-accent rounded-2xl p-6 mb-6 text-white">
+      <div className="bg-gradient-to-r from-brand-forest to-brand-mint rounded-2xl p-6 mb-6 text-white">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -87,7 +87,7 @@ export default function SubscriptionClient({ vendor }: Props) {
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900">Available Plans</h2>
-        <p className="text-gray-500 text-sm mt-0.5">To change your plan, contact us at billing@marcrte.co.za</p>
+        <p className="text-gray-500 text-sm mt-0.5">To change your plan, contact us at billing@Stallspace.co.za</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
@@ -97,11 +97,11 @@ export default function SubscriptionClient({ vendor }: Props) {
           const planIdx = PLANS.findIndex(p => p.id === plan.id)
           const label = currentIdx < planIdx ? 'Upgrade' : 'Switch'
           const mailBody = 'Hi, I would like to change my plan to ' + plan.name + '. My business: ' + vendor.business_name
-          const mailHref = 'mailto:billing@marcrte.co.za?subject=Plan Change&body=' + encodeURIComponent(mailBody)
+          const mailHref = 'mailto:billing@Stallspace.co.za?subject=Plan Change&body=' + encodeURIComponent(mailBody)
           return (
-            <div key={plan.id} className={"relative rounded-2xl border-2 p-5 " + (isCurrent ? 'border-brand-accent bg-blue-50' : 'border-gray-100 bg-white')}>
+            <div key={plan.id} className={"relative rounded-2xl border-2 p-5 " + (isCurrent ? 'border-brand-mint bg-blue-50' : 'border-gray-100 bg-white')}>
               {plan.popular && !isCurrent && (
-                <span className="absolute -top-3 left-4 text-xs font-semibold bg-brand-accent text-white px-3 py-1 rounded-full">Most Popular</span>
+                <span className="absolute -top-3 left-4 text-xs font-semibold bg-brand-mint text-white px-3 py-1 rounded-full">Most Popular</span>
               )}
               {isCurrent && (
                 <span className="absolute -top-3 left-4 text-xs font-semibold bg-green-500 text-white px-3 py-1 rounded-full">Current Plan</span>
@@ -110,7 +110,7 @@ export default function SubscriptionClient({ vendor }: Props) {
                 <h3 className="font-bold text-gray-900 text-lg">{plan.name}</h3>
                 <p className="text-gray-500 text-xs mt-0.5">{plan.limit}</p>
                 <div className="mt-3">
-                  <span className="text-3xl font-bold text-brand-navy">R{plan.price}</span>
+                  <span className="text-3xl font-bold text-brand-forest">R{plan.price}</span>
                   <span className="text-gray-400 text-sm">/month</span>
                 </div>
               </div>
@@ -123,9 +123,9 @@ export default function SubscriptionClient({ vendor }: Props) {
                 ))}
               </ul>
               {isCurrent ? (
-                <div className="w-full text-center text-sm font-medium text-brand-accent py-2">Your current plan</div>
+                <div className="w-full text-center text-sm font-medium text-brand-mint py-2">Your current plan</div>
               ) : (
-                <a href={mailHref} className="flex items-center justify-center gap-2 w-full py-2 px-4 text-sm font-medium border border-brand-navy text-brand-navy rounded-lg hover:bg-brand-navy hover:text-white transition-colors">
+                <a href={mailHref} className="flex items-center justify-center gap-2 w-full py-2 px-4 text-sm font-medium border border-brand-forest text-brand-forest rounded-lg hover:bg-brand-forest hover:text-white transition-colors">
                   {label} to {plan.name}
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
@@ -138,9 +138,9 @@ export default function SubscriptionClient({ vendor }: Props) {
       <div className="bg-white rounded-xl border border-gray-100 p-5">
         <h2 className="font-semibold text-gray-900 mb-3">Billing Support</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-          <a href="mailto:billing@marcrte.co.za" className="flex items-center gap-2 text-brand-accent hover:underline"><ArrowUpRight className="w-4 h-4" />Contact billing support</a>
-          <a href="mailto:billing@marcrte.co.za?subject=Cancel Subscription" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Request cancellation</a>
-          <a href="mailto:billing@marcrte.co.za?subject=Reactivate Account" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Reactivate account</a>
+          <a href="mailto:billing@Stallspace.co.za" className="flex items-center gap-2 text-brand-mint hover:underline"><ArrowUpRight className="w-4 h-4" />Contact billing support</a>
+          <a href="mailto:billing@Stallspace.co.za?subject=Cancel Subscription" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Request cancellation</a>
+          <a href="mailto:billing@Stallspace.co.za?subject=Reactivate Account" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Reactivate account</a>
         </div>
       </div>
     </div>

@@ -94,7 +94,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
       <div className="space-y-5">
         <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-50 flex items-center gap-2">
-            <User className="w-4 h-4 text-brand-accent" />
+            <User className="w-4 h-4 text-brand-mint" />
             <h2 className="font-semibold text-gray-900">Business Profile</h2>
           </div>
           <div className="p-5 space-y-4">
@@ -112,7 +112,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Owner Name</label>
-                <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -123,19 +123,19 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Phone Number</label>
-                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Business Address</label>
-              <input type="text" value={address} onChange={e => setAddress(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+              <input type="text" value={address} onChange={e => setAddress(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Company Registration Number <span className="text-gray-400">(Optional)</span></label>
-              <input type="text" value={companyReg} onChange={e => setCompanyReg(e.target.value)} placeholder="2024/000000/07" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+              <input type="text" value={companyReg} onChange={e => setCompanyReg(e.target.value)} placeholder="2024/000000/07" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
             </div>
             <div className="flex justify-end pt-2">
-              <button onClick={handleSaveProfile} disabled={savingProfile} className="flex items-center gap-2 px-5 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50">
+              <button onClick={handleSaveProfile} disabled={savingProfile} className="flex items-center gap-2 px-5 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50">
                 {savingProfile && <Loader2 className="w-4 h-4 animate-spin" />}
                 {savedProfile && <Check className="w-4 h-4" />}
                 {savingProfile ? 'Saving...' : savedProfile ? 'Saved!' : 'Save Profile'}
@@ -146,7 +146,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
 
         <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-50 flex items-center gap-2">
-            <Lock className="w-4 h-4 text-brand-accent" />
+            <Lock className="w-4 h-4 text-brand-mint" />
             <h2 className="font-semibold text-gray-900">Change Password</h2>
           </div>
           <div className="p-5 space-y-4">
@@ -165,7 +165,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Current Password</label>
               <div className="relative">
-                <input type={showCurrent ? 'text' : 'password'} value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} placeholder="Enter current password" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type={showCurrent ? 'text' : 'password'} value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} placeholder="Enter current password" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 <button type="button" onClick={() => setShowCurrent(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -174,7 +174,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
             <div>
               <label className="text-xs text-gray-500 mb-1 block">New Password</label>
               <div className="relative">
-                <input type={showNew ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Min 8 characters" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type={showNew ? 'text' : 'password'} value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Min 8 characters" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 <button type="button" onClick={() => setShowNew(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -183,14 +183,14 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Confirm New Password</label>
               <div className="relative">
-                <input type={showConfirm ? 'text' : 'password'} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Repeat new password" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type={showConfirm ? 'text' : 'password'} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Repeat new password" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 <button type="button" onClick={() => setShowConfirm(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                   {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
             <div className="flex justify-end pt-2">
-              <button onClick={handleChangePassword} disabled={savingPassword} className="flex items-center gap-2 px-5 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50">
+              <button onClick={handleChangePassword} disabled={savingPassword} className="flex items-center gap-2 px-5 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50">
                 {savingPassword && <Loader2 className="w-4 h-4 animate-spin" />}
                 {savingPassword ? 'Updating...' : 'Update Password'}
               </button>
@@ -206,7 +206,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
               <p className="text-sm font-medium text-gray-900">Close Account</p>
               <p className="text-xs text-gray-500 mt-0.5">Permanently close your vendor account and remove your storefront</p>
             </div>
-            <a href="mailto:support@marcrte.co.za?subject=Close Account Request" className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap">
+            <a href="mailto:support@Stallspace.co.za?subject=Close Account Request" className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap">
               Request Closure
             </a>
           </div>

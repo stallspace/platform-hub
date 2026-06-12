@@ -8,10 +8,10 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-brand-navy rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-forest rounded-xl flex items-center justify-center">
               <span className="text-white font-bold">M</span>
             </div>
-            <span className="text-2xl font-bold text-brand-navy">MARCRTE</span>
+            <span className="text-2xl font-bold text-brand-forest">Stallspace</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Sign in to your account</h1>
           <p className="text-gray-500 text-sm mt-1">Welcome back</p>
@@ -26,7 +26,7 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="label mb-0">Password</label>
-                <Link href="/auth/forgot-password" className="text-xs text-brand-accent hover:underline">
+                <Link href="/auth/forgot-password" className="text-xs text-brand-mint hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -41,8 +41,8 @@ export default function LoginPage() {
 
           <div className="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
             New vendor?{' '}
-            <Link href="/vendor/register" className="text-brand-accent font-medium hover:underline">
-              Apply to sell on MARCRTE
+            <Link href="/vendor/register" className="text-brand-mint font-medium hover:underline">
+              Apply to sell on Stallspace
             </Link>
           </div>
         </div>

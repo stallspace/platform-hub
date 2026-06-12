@@ -124,7 +124,7 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && navigate({ search, status: activeStatus })}
               placeholder="Search by business name, owner or email…"
-              className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#1D4ED8] transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#2ECC8E] transition-colors"
             />
             {search && (
               <button onClick={() => { setSearch(''); navigate({ search: '', status: activeStatus }) }}
@@ -143,12 +143,12 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
               return (
                 <button key={tab.key} onClick={() => navigate({ status: tab.key, search })}
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-t-lg whitespace-nowrap border-b-2 transition-all ${
-                    active ? 'border-[#1D4ED8] text-[#1D4ED8]' : 'border-transparent text-gray-500 hover:text-gray-700'
+                    active ? 'border-[#2ECC8E] text-[#2ECC8E]' : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}>
                   {tab.label}
                   {count > 0 && (
                     <span className={`text-xs rounded-full px-1.5 py-0.5 font-semibold ${
-                      active ? 'bg-[#1D4ED8]/10 text-[#1D4ED8]' : 'bg-gray-100 text-gray-500'
+                      active ? 'bg-[#2ECC8E]/10 text-[#2ECC8E]' : 'bg-gray-100 text-gray-500'
                     }`}>{count}</span>
                   )}
                 </button>
@@ -187,14 +187,14 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
                   <tr key={vendor.id} className="hover:bg-gray-50/60 transition-colors">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-[#0A1F44]/5 border border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <div className="w-9 h-9 rounded-lg bg-[#0D3B2E]/5 border border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                           {vendor.logo_url
                             ? <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" />
-                            : <span className="text-[#0A1F44] font-bold text-sm">{vendor.business_name.charAt(0).toUpperCase()}</span>
+                            : <span className="text-[#0D3B2E] font-bold text-sm">{vendor.business_name.charAt(0).toUpperCase()}</span>
                           }
                         </div>
                         <div>
-                          <a href={`/admin/vendors/${vendor.id}`} className="font-semibold text-[#0A1F44] hover:text-[#1D4ED8] transition-colors">
+                          <a href={`/admin/vendors/${vendor.id}`} className="font-semibold text-[#0D3B2E] hover:text-[#2ECC8E] transition-colors">
                             {vendor.business_name}
                           </a>
                           <p className="text-gray-400 text-xs">{vendor.email}</p>
@@ -214,7 +214,7 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
                     <td className="px-5 py-4">
                       <div className="flex items-center justify-end gap-2">
                         <button onClick={() => setSelectedVendor(vendor)}
-                          className="text-gray-400 hover:text-[#1D4ED8] transition-colors p-1.5 rounded-lg hover:bg-blue-50" title="View details">
+                          className="text-gray-400 hover:text-[#2ECC8E] transition-colors p-1.5 rounded-lg hover:bg-blue-50" title="View details">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

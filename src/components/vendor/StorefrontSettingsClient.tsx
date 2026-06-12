@@ -104,7 +104,7 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
           <h1 className="text-2xl font-bold text-gray-900">My Storefront</h1>
           <p className="text-gray-500 text-sm mt-0.5">Manage your public-facing store profile</p>
         </div>
-        <a href={'/store/' + vendor.slug} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-brand-accent hover:underline">
+        <a href={'/store/' + vendor.slug} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-brand-mint hover:underline">
           <ExternalLink className="w-4 h-4" /> View storefront
         </a>
       </div>
@@ -113,7 +113,7 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
         <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-50"><h2 className="font-semibold text-gray-900">Store Banner</h2><p className="text-xs text-gray-500 mt-0.5">Recommended: 1200 x 300px</p></div>
           <div className="p-5">
-            <div className="relative h-36 rounded-xl overflow-hidden bg-gradient-to-r from-brand-navy to-brand-accent cursor-pointer group" onClick={() => bannerRef.current?.click()}>
+            <div className="relative h-36 rounded-xl overflow-hidden bg-gradient-to-r from-brand-forest to-brand-mint cursor-pointer group" onClick={() => bannerRef.current?.click()}>
               {bannerUrl && <img src={bannerUrl} alt="" className="w-full h-full object-cover" />}
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 {uploadingBanner ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <Upload className="w-6 h-6 text-white" />}
@@ -125,8 +125,8 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <h2 className="font-semibold text-gray-900 mb-4">Store Logo</h2>
           <div className="flex items-center gap-5">
-            <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-gray-200 overflow-hidden cursor-pointer hover:border-brand-accent transition-colors flex-shrink-0 relative group" onClick={() => logoRef.current?.click()}>
-              {logoUrl ? <img src={logoUrl} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-brand-navy flex items-center justify-center"><span className="text-white text-xl font-bold">{initials}</span></div>}
+            <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-gray-200 overflow-hidden cursor-pointer hover:border-brand-mint transition-colors flex-shrink-0 relative group" onClick={() => logoRef.current?.click()}>
+              {logoUrl ? <img src={logoUrl} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-brand-forest flex items-center justify-center"><span className="text-white text-xl font-bold">{initials}</span></div>}
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
                 {uploadingLogo ? <Loader2 className="w-5 h-5 text-white animate-spin" /> : <Upload className="w-5 h-5 text-white" />}
               </div>
@@ -143,24 +143,24 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
           <div className="space-y-3">
             <div>
               <label className="text-xs text-gray-500 mb-1 block">Business Category</label>
-              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent">
+              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
                 <option value="">Select a category...</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
               <label className="text-xs text-gray-500 mb-1 block">About Your Store</label>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} maxLength={500} placeholder="Tell customers about your business..." className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} maxLength={500} placeholder="Tell customers about your business..." className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               <p className="text-xs text-gray-400 mt-1 text-right">{description.length}/500</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs text-gray-500 mb-1 block"><MapPin className="w-3 h-3 inline mr-1" />City</label>
-                <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="Cape Town" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="Cape Town" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
               </div>
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Province</label>
-                <select value={province} onChange={e => setProvince(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent">
+                <select value={province} onChange={e => setProvince(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
                   <option value="">Select province...</option>
                   {SA_PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
@@ -173,33 +173,33 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><Globe className="w-4 h-4 text-gray-400" /></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Website</label><input type="text" value={website} onChange={e => setWebsite(e.target.value)} placeholder="https://yourwebsite.co.za" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Website</label><input type="text" value={website} onChange={e => setWebsite(e.target.value)} placeholder="https://yourwebsite.co.za" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><Instagram className="w-4 h-4 text-gray-400" /></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Instagram</label><input type="text" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="username (without @)" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Instagram</label><input type="text" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="username (without @)" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><Facebook className="w-4 h-4 text-gray-400" /></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Facebook</label><input type="text" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="https://facebook.com/yourpage" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">Facebook</label><input type="text" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="https://facebook.com/yourpage" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><span className="text-xs font-bold text-gray-400">TK</span></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">TikTok</label><input type="text" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="username (without @)" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">TikTok</label><input type="text" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="username (without @)" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><span className="text-xs font-bold text-gray-400">in</span></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">LinkedIn</label><input type="text" value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/company/yourpage" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">LinkedIn</label><input type="text" value={linkedin} onChange={e => setLinkedin(e.target.value)} placeholder="https://linkedin.com/company/yourpage" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0"><span className="text-xs font-bold text-gray-400">WA</span></div>
-              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">WhatsApp</label><input type="text" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="27821234567" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" /></div>
+              <div className="flex-1"><label className="text-xs text-gray-500 mb-1 block">WhatsApp</label><input type="text" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="27821234567" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" /></div>
             </div>
           </div>
         </div>
         <div className="flex items-center justify-between pt-2 pb-6">
           <p className="text-xs text-gray-400">Changes reflect immediately on your public storefront</p>
-          <button onClick={handleSave} disabled={saving || uploadingLogo || uploadingBanner} className="flex items-center gap-2 px-5 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <button onClick={handleSave} disabled={saving || uploadingLogo || uploadingBanner} className="flex items-center gap-2 px-5 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             {saved && <Check className="w-4 h-4" />}
             {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Changes'}

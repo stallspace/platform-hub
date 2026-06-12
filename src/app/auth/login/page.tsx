@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Lock, Loader2, Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -11,11 +12,11 @@ export default function LoginPage() {
   const searchParams = useSearchParams()
   const next = searchParams.get('next') ?? ''
 
-  const [email, setEmail]           = useState('')
-  const [password, setPassword]     = useState('')
+  const [email, setEmail]               = useState('')
+  const [password, setPassword]         = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading]       = useState(false)
-  const [error, setError]           = useState<string | null>(null)
+  const [loading, setLoading]           = useState(false)
+  const [error, setError]               = useState<string | null>(null)
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault()
@@ -52,20 +53,27 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F8FAF3] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+
+        {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/marketplace" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-brand-navy rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">M</span>
-            </div>
-            <span className="text-2xl font-bold text-brand-navy">MARCRTE</span>
+          <Link href="/marketplace" className="inline-block mb-6">
+            <Image
+              src="/logo.png"
+              alt="Stallspace"
+              width={160}
+              height={48}
+              className="h-12 w-auto object-contain mx-auto"
+              priority
+            />
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Sign in to your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Welcome back</p>
+          <h1 className="text-2xl font-bold text-[#0D3B2E]">Sign in to your account</h1>
+          <p className="text-[#6B7280] text-sm mt-1">Welcome back</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        {/* Form card */}
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm p-8">
           <form onSubmit={handleSignIn} className="space-y-4">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
@@ -89,7 +97,7 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="label mb-0">Password</label>
-                <Link href="/auth/forgot-password" className="text-xs text-brand-accent hover:underline">
+                <Link href="/auth/forgot-password" className="text-xs text-[#2ECC8E] hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -123,23 +131,23 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-100 space-y-3 text-center text-sm text-gray-500">
+          <div className="mt-6 pt-6 border-t border-[#F3F4F6] space-y-3 text-center text-sm text-[#6B7280]">
             <p>
               New customer?{' '}
-              <Link href="/auth/register" className="text-brand-accent font-medium hover:underline">
+              <Link href="/auth/register" className="text-[#2ECC8E] font-medium hover:underline">
                 Create a free account
               </Link>
             </p>
             <p>
               Vendor application?{' '}
-              <Link href="/join" className="text-brand-accent font-medium hover:underline">
-                Apply to sell on MARCRTE
+              <Link href="/join" className="text-[#2ECC8E] font-medium hover:underline">
+                Apply to sell on Stallspace
               </Link>
             </p>
           </div>
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-[#9CA3AF] mt-6">
           By signing in you agree to our{' '}
           <Link href="#" className="underline">Terms of Service</Link>{' '}
           and{' '}

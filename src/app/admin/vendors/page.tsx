@@ -59,9 +59,9 @@ export default async function VendorApplicationsPage({
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#0A1F44]">Vendor Applications</h1>
+        <h1 className="text-2xl font-bold text-[#0D3B2E]">Vendor Applications</h1>
         <p className="text-gray-500 mt-1 text-sm">
-          Review, approve, or reject vendor applications to the MARCRTE marketplace.
+          Review, approve, or reject vendor applications to the Stallspace marketplace.
         </p>
       </div>
 
@@ -69,7 +69,7 @@ export default async function VendorApplicationsPage({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
           { label: 'Pending',      key: 'pending',      color: 'text-amber-600',   bg: 'bg-amber-50 border-amber-100' },
-          { label: 'Under Review', key: 'under_review', color: 'text-blue-600',    bg: 'bg-blue-50 border-blue-100' },
+          { label: 'Under Review', key: 'under_review', color: 'text-brand-mint',    bg: 'bg-blue-50 border-blue-100' },
           { label: 'Approved',     key: 'approved',     color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
           { label: 'Rejected',     key: 'rejected',     color: 'text-red-600',     bg: 'bg-red-50 border-red-100' },
         ].map((stat) => (

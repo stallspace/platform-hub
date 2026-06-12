@@ -49,7 +49,7 @@ export default function ProfileClient({ profile, userId }: { profile: Profile | 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-brand-navy">My Profile</h1>
+        <h1 className="text-2xl font-bold text-brand-forest">My Profile</h1>
         <p className="text-gray-500 text-sm mt-1">Manage your personal information</p>
       </div>
 
@@ -57,14 +57,14 @@ export default function ProfileClient({ profile, userId }: { profile: Profile | 
         {/* Avatar */}
         <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
           <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-brand-navy flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-brand-forest flex items-center justify-center">
               {profile?.avatar_url ? (
                 <img src={profile.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
                 <span className="text-white font-bold text-xl">{initials}</span>
               )}
             </div>
-            <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-brand-accent rounded-full flex items-center justify-center
+            <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-brand-mint rounded-full flex items-center justify-center
                                hover:bg-blue-700 transition-colors">
               <Camera className="w-3 h-3 text-white" />
             </button>

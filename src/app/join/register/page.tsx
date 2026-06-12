@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import {
   ShieldCheck, Store, CreditCard, CheckCircle,
@@ -93,7 +94,7 @@ function StepIndicator({ current }: { current: number }) {
           <div className="flex flex-col items-center">
             <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all
               ${current > step.n ? 'bg-green-500 text-white' :
-                current === step.n ? 'bg-brand-accent text-white ring-4 ring-brand-accent/20' :
+                current === step.n ? 'bg-brand-mint text-white ring-4 ring-brand-mint/20' :
                 'bg-white/20 text-gray-400'}`}>
               {current > step.n ? <CheckCircle className="w-5 h-5" /> : step.n}
             </div>
@@ -316,17 +317,17 @@ export default function VendorRegisterPage() {
           <p className="text-gray-500 mb-8 text-sm">
             Our team will review your application and contact you at <strong>{stepOne.email}</strong> within 2–3 business days.
           </p>
-          <div className="bg-brand-navy/5 rounded-xl p-5 mb-8 text-left">
+          <div className="bg-brand-forest/5 rounded-xl p-5 mb-8 text-left">
             <h3 className="font-semibold text-gray-900 mb-3 text-sm">What happens next?</h3>
             <ol className="space-y-2">
               {[
                 'Our team reviews your application & documents',
                 'We verify your business details',
                 'You receive approval & billing setup email',
-                'Your storefront goes live on MARCRTE',
+                'Your storefront goes live on Stallspace',
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600">
-                  <span className="w-5 h-5 bg-brand-accent text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+                  <span className="w-5 h-5 bg-brand-mint text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
                     {i + 1}
                   </span>
                   {item}
@@ -345,13 +346,10 @@ export default function VendorRegisterPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-brand-navy py-10 px-4">
+      <div className="bg-brand-forest py-10 px-4">
         <div className="max-w-2xl mx-auto text-center">
           <Link href="/marketplace" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-8 h-8 bg-brand-accent rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">M</span>
-            </div>
-            <span className="text-white font-bold text-xl">MARCRTE</span>
+            <Image src="/logo-white.png" alt="Stallspace" width={120} height={36} className="h-9 w-auto object-contain" priority />
           </Link>
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Register as a Vendor</h1>
           <p className="text-gray-300 text-sm">Join South Africa&apos;s vetted marketplace</p>
@@ -390,7 +388,7 @@ export default function VendorRegisterPage() {
                   />
                   {stepOne.business_name && (
                     <p className="text-xs text-gray-400 mt-1">
-                      Storefront: marcrte.co.za/store/{slugify(stepOne.business_name)}
+                      Storefront: Stallspace.co.za/store/{slugify(stepOne.business_name)}
                     </p>
                   )}
                 </div>
@@ -498,7 +496,7 @@ export default function VendorRegisterPage() {
               {/* Logo */}
               <div>
                 <label className="label">Business Logo <span className="text-gray-400 font-normal">(Recommended)</span></label>
-                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-accent transition-colors cursor-pointer group">
+                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-mint transition-colors cursor-pointer group">
                   <input type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
                   {stepTwo.logo ? (
                     <div className="flex items-center justify-center gap-3">
@@ -510,7 +508,7 @@ export default function VendorRegisterPage() {
                     </div>
                   ) : (
                     <>
-                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-accent transition-colors" />
+                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-mint transition-colors" />
                       <p className="text-sm font-medium text-gray-700">Click to upload logo</p>
                       <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB · Square format recommended</p>
                     </>
@@ -521,7 +519,7 @@ export default function VendorRegisterPage() {
               {/* Banner */}
               <div>
                 <label className="label">Store Banner <span className="text-gray-400 font-normal">(Optional)</span></label>
-                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-accent transition-colors cursor-pointer group">
+                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-mint transition-colors cursor-pointer group">
                   <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
                   {stepTwo.banner ? (
                     <div className="flex items-center justify-center gap-3">
@@ -533,7 +531,7 @@ export default function VendorRegisterPage() {
                     </div>
                   ) : (
                     <>
-                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-accent transition-colors" />
+                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-mint transition-colors" />
                       <p className="text-sm font-medium text-gray-700">Click to upload banner</p>
                       <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 10MB · 1200×400px recommended</p>
                     </>
@@ -545,9 +543,9 @@ export default function VendorRegisterPage() {
               <div>
                 <label className="label">Supporting Documents <span className="text-gray-400 font-normal">(Optional but recommended)</span></label>
                 <p className="text-xs text-gray-500 mb-2">Upload CIPCs, ID documents, proof of address, or any other relevant business documents</p>
-                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-accent transition-colors cursor-pointer group">
+                <label className="block border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-brand-mint transition-colors cursor-pointer group">
                   <input type="file" accept=".pdf,.jpg,.jpeg,.png" multiple className="hidden" onChange={handleDocumentsChange} />
-                  <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-accent transition-colors" />
+                  <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2 group-hover:text-brand-mint transition-colors" />
                   <p className="text-sm font-medium text-gray-700">Click to upload documents</p>
                   <p className="text-xs text-gray-400 mt-1">PDF, JPG, PNG up to 10MB each · Max 5 files</p>
                 </label>
@@ -588,11 +586,11 @@ export default function VendorRegisterPage() {
                   onClick={() => setSelectedPlan(plan.id)}
                   className={`relative bg-white rounded-2xl border-2 p-6 cursor-pointer transition-all
                     ${selectedPlan === plan.id
-                      ? 'border-brand-accent shadow-lg shadow-brand-accent/10'
+                      ? 'border-brand-mint shadow-lg shadow-brand-mint/10'
                       : 'border-gray-100 hover:border-gray-200'}`}
                 >
                   {plan.popular && (
-                    <span className="absolute -top-3 left-6 badge bg-brand-accent text-white text-xs px-3 py-1">
+                    <span className="absolute -top-3 left-6 badge bg-brand-mint text-white text-xs px-3 py-1">
                       Most Popular
                     </span>
                   )}
@@ -601,9 +599,9 @@ export default function VendorRegisterPage() {
                     <div className="flex items-start gap-4 flex-1">
                       {/* Radio */}
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all
-                        ${selectedPlan === plan.id ? 'border-brand-accent' : 'border-gray-300'}`}>
+                        ${selectedPlan === plan.id ? 'border-brand-mint' : 'border-gray-300'}`}>
                         {selectedPlan === plan.id && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-brand-accent" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-brand-mint" />
                         )}
                       </div>
 
@@ -624,7 +622,7 @@ export default function VendorRegisterPage() {
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <span className="text-2xl font-bold text-brand-navy">R{plan.price}</span>
+                      <span className="text-2xl font-bold text-brand-forest">R{plan.price}</span>
                       <span className="text-gray-400 text-sm">/mo</span>
                     </div>
                   </div>
@@ -645,7 +643,7 @@ export default function VendorRegisterPage() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-5 border-b border-gray-100 flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900">Business Details</h3>
-                <button onClick={() => setStep(1)} className="text-brand-accent text-sm hover:underline">Edit</button>
+                <button onClick={() => setStep(1)} className="text-brand-mint text-sm hover:underline">Edit</button>
               </div>
               <div className="p-5 grid grid-cols-2 gap-3 text-sm">
                 {[
@@ -671,7 +669,7 @@ export default function VendorRegisterPage() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-5 border-b border-gray-100 flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900">Files</h3>
-                <button onClick={() => setStep(2)} className="text-brand-accent text-sm hover:underline">Edit</button>
+                <button onClick={() => setStep(2)} className="text-brand-mint text-sm hover:underline">Edit</button>
               </div>
               <div className="p-5 text-sm space-y-1">
                 <p className="text-gray-600">Logo: <span className="font-medium text-gray-900">{stepTwo.logo?.name || 'Not uploaded'}</span></p>
@@ -683,7 +681,7 @@ export default function VendorRegisterPage() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-5 border-b border-gray-100 flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900">Selected Plan</h3>
-                <button onClick={() => setStep(3)} className="text-brand-accent text-sm hover:underline">Edit</button>
+                <button onClick={() => setStep(3)} className="text-brand-mint text-sm hover:underline">Edit</button>
               </div>
               <div className="p-5 flex items-center justify-between">
                 <div>
@@ -691,7 +689,7 @@ export default function VendorRegisterPage() {
                   <p className="text-gray-500 text-sm">{PLANS.find(p => p.id === selectedPlan)?.limit}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-brand-navy">R{PLANS.find(p => p.id === selectedPlan)?.price}</span>
+                  <span className="text-2xl font-bold text-brand-forest">R{PLANS.find(p => p.id === selectedPlan)?.price}</span>
                   <span className="text-gray-400 text-sm">/month</span>
                 </div>
               </div>
@@ -741,7 +739,7 @@ export default function VendorRegisterPage() {
             Secure & Encrypted
           </div>
           <div className="flex items-center gap-1.5">
-            <CreditCard className="w-4 h-4 text-blue-500" />
+            <CreditCard className="w-4 h-4 text-brand-mint" />
             Billing starts after approval
           </div>
         </div>

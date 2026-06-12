@@ -61,7 +61,7 @@ export default async function AdminProductsPage({
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#0A1F44]">Product Management</h1>
+        <h1 className="text-2xl font-bold text-[#0D3B2E]">Product Management</h1>
         <p className="text-gray-500 mt-1 text-sm">Monitor, moderate and manage all marketplace products.</p>
       </div>
 
@@ -71,7 +71,7 @@ export default async function AdminProductsPage({
           { label: 'Available',   key: 'available',   color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
           { label: 'Unavailable', key: 'unavailable', color: 'text-amber-600',   bg: 'bg-amber-50 border-amber-100' },
           { label: 'Archived',    key: 'archived',    color: 'text-gray-600',    bg: 'bg-gray-50 border-gray-200' },
-          { label: 'Featured',    key: 'featured',    color: 'text-[#1D4ED8]',   bg: 'bg-blue-50 border-blue-100' },
+          { label: 'Featured',    key: 'featured',    color: 'text-[#2ECC8E]',   bg: 'bg-blue-50 border-blue-100' },
         ].map((s) => (
           <div key={s.key} className={`${s.bg} border rounded-xl p-4`}>
             <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">{s.label}</p>

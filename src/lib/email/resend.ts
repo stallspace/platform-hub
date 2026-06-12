@@ -2,9 +2,9 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@marcrte.co.za'
-export const FROM_NAME  = process.env.RESEND_FROM_NAME  ?? 'MARCRTE'
-export const APP_URL    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://marcrte.co.za'
+export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@Stallspace.co.za'
+export const FROM_NAME  = process.env.RESEND_FROM_NAME  ?? 'Stallspace'
+export const APP_URL    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://Stallspace.co.za'
 
 export interface SendEmailOptions {
   to: string

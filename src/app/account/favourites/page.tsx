@@ -26,7 +26,7 @@ export default async function FavouritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-brand-navy">Favourites</h1>
+        <h1 className="text-2xl font-bold text-brand-forest">Favourites</h1>
         <p className="text-gray-500 text-sm mt-1">
           {favourites?.length ?? 0} saved product{(favourites?.length ?? 0) !== 1 ? 's' : ''}
         </p>
@@ -41,7 +41,7 @@ export default async function FavouritesPage() {
           </p>
           <Link
             href="/marketplace/products"
-            className="inline-flex items-center gap-2 bg-brand-accent text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-brand-mint text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
           >
             Browse Products
           </Link>
@@ -83,18 +83,18 @@ export default async function FavouritesPage() {
                 </div>
                 <div className="p-4">
                   {product.vendor && (
-                    <Link href={`/marketplace/store/${product.vendor.slug}`} className="text-xs text-brand-accent font-medium hover:underline">
+                    <Link href={`/marketplace/store/${product.vendor.slug}`} className="text-xs text-brand-mint font-medium hover:underline">
                       {product.vendor.business_name}
                     </Link>
                   )}
                   <Link href={`/marketplace/products/${product.slug}`}>
-                    <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-3 line-clamp-2 hover:text-brand-accent transition-colors">
+                    <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-3 line-clamp-2 hover:text-brand-mint transition-colors">
                       {product.name}
                     </h3>
                   </Link>
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-bold text-brand-navy">
+                      <span className="font-bold text-brand-forest">
                         R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                       </span>
                       {product.compare_at_price && (
@@ -105,7 +105,7 @@ export default async function FavouritesPage() {
                     </div>
                     <Link
                       href={`/marketplace/products/${product.slug}`}
-                      className="flex items-center gap-1.5 bg-brand-accent text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
+                      className="flex items-center gap-1.5 bg-brand-mint text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                       <ShoppingCart className="w-3.5 h-3.5" />
                       View

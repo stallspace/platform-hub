@@ -183,18 +183,18 @@ export default function VendorDetailClient({
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             {vendor.banner_url
               ? <div className="h-20 bg-cover bg-center" style={{ backgroundImage: `url(${vendor.banner_url})` }} />
-              : <div className="h-20 bg-gradient-to-br from-[#0A1F44] to-[#1D4ED8]" />
+              : <div className="h-20 bg-gradient-to-br from-[#0D3B2E] to-[#2ECC8E]" />
             }
             <div className="px-5 pb-5">
               <div className="-mt-8 mb-3">
                 <div className="w-16 h-16 rounded-xl border-2 border-white shadow bg-white flex items-center justify-center overflow-hidden">
                   {vendor.logo_url
                     ? <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" />
-                    : <span className="text-[#0A1F44] font-black text-2xl">{vendor.business_name.charAt(0)}</span>
+                    : <span className="text-[#0D3B2E] font-black text-2xl">{vendor.business_name.charAt(0)}</span>
                   }
                 </div>
               </div>
-              <h2 className="font-bold text-[#0A1F44] text-lg">{vendor.business_name}</h2>
+              <h2 className="font-bold text-[#0D3B2E] text-lg">{vendor.business_name}</h2>
               <p className="text-gray-500 text-sm">{vendor.email}</p>
               <div className="flex items-center gap-2 mt-3 flex-wrap">
                 <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${STATUS_BADGE[vendor.status] ?? ''}`}>
@@ -218,7 +218,7 @@ export default function VendorDetailClient({
               { label: 'Reviews',     value: approvedReviews.length },
             ].map((s) => (
               <div key={s.label} className="bg-white rounded-xl border border-gray-100 p-4 text-center">
-                <p className="text-2xl font-bold text-[#0A1F44]">{s.value}</p>
+                <p className="text-2xl font-bold text-[#0D3B2E]">{s.value}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
               </div>
             ))}
@@ -287,7 +287,7 @@ export default function VendorDetailClient({
               {TABS.map((tab) => (
                 <button key={tab.key} onClick={() => setActiveTab(tab.key)}
                   className={`px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-all ${
-                    activeTab === tab.key ? 'border-[#1D4ED8] text-[#1D4ED8]' : 'border-transparent text-gray-500 hover:text-gray-700'
+                    activeTab === tab.key ? 'border-[#2ECC8E] text-[#2ECC8E]' : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}>
                   {tab.label}
                 </button>
@@ -326,7 +326,7 @@ export default function VendorDetailClient({
                       <div className="flex flex-wrap gap-2">
                         {Object.entries(vendor.social_links).map(([platform, url]) => url ? (
                           <a key={platform} href={String(url)} target="_blank" rel="noopener noreferrer"
-                            className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#1D4ED8] hover:border-[#1D4ED8] transition-colors capitalize">
+                            className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#2ECC8E] hover:border-[#2ECC8E] transition-colors capitalize">
                             {platform}
                           </a>
                         ) : null)}
@@ -342,7 +342,7 @@ export default function VendorDetailClient({
                   {/* Summary stats */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {[
-                      { label: 'Store Views',  value: storeViewCount,          color: 'text-blue-600' },
+                      { label: 'Store Views',  value: storeViewCount,          color: 'text-brand-mint' },
                       { label: 'Products',     value: productCount,            color: 'text-purple-600' },
                       { label: 'Enquiries',    value: enquiryCount,            color: 'text-amber-600' },
                       { label: 'Avg Rating',   value: avgRating ? avgRating.toFixed(1) + ' ★' : 'N/A', color: 'text-emerald-600' },
@@ -373,7 +373,7 @@ export default function VendorDetailClient({
                               <p className="text-sm font-medium text-gray-800 truncate">{p.name}</p>
                               <p className="text-xs text-gray-400">R {p.price.toFixed(2)} · {p.is_available ? 'Available' : 'Unavailable'}</p>
                             </div>
-                            <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#1D4ED8]/10 text-[#1D4ED8] flex-shrink-0">
+                            <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#2ECC8E]/10 text-[#2ECC8E] flex-shrink-0">
                               {p.view_count} views
                             </span>
                           </div>
@@ -430,9 +430,9 @@ export default function VendorDetailClient({
                     <div className="space-y-2">
                       {vendor.vendor_documents.map((doc) => (
                         <a key={doc.id} href={doc.file_url} target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-[#1D4ED8] hover:bg-blue-50/30 transition-all group">
+                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-[#2ECC8E] hover:bg-blue-50/30 transition-all group">
                           <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg className="w-4 h-4 text-gray-500 group-hover:text-[#1D4ED8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 text-gray-500 group-hover:text-[#2ECC8E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                           </div>
@@ -440,7 +440,7 @@ export default function VendorDetailClient({
                             <p className="text-sm font-medium text-gray-800 truncate">{doc.file_name}</p>
                             <p className="text-xs text-gray-400 uppercase">{doc.file_type}</p>
                           </div>
-                          <svg className="w-4 h-4 text-gray-400 group-hover:text-[#1D4ED8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-gray-400 group-hover:text-[#2ECC8E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
                         </a>
@@ -497,11 +497,11 @@ export default function VendorDetailClient({
                     onChange={(e) => setAdminNotes(e.target.value)}
                     rows={8}
                     placeholder="Add internal notes about this vendor..."
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#1D4ED8] transition-colors resize-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2ECC8E] transition-colors resize-none"
                   />
                   <div className="flex justify-end">
                     <button onClick={saveNotes} disabled={savingNotes}
-                      className="px-5 py-2.5 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
+                      className="px-5 py-2.5 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50">
                       {savingNotes ? 'Saving...' : 'Save Notes'}
                     </button>
                   </div>

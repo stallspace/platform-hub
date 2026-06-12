@@ -61,7 +61,7 @@ export default function VendorDetailModal({ vendor, onClose, onStatusChange, act
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#0A1F44]/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#0D3B2E]/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -70,18 +70,18 @@ export default function VendorDetailModal({ vendor, onClose, onStatusChange, act
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-gray-100">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#0A1F44]/5 border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-[#0D3B2E]/5 border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
               {vendor.logo_url ? (
                 <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-[#0A1F44] font-black text-lg">
+                <span className="text-[#0D3B2E] font-black text-lg">
                   {vendor.business_name.charAt(0).toUpperCase()}
                 </span>
               )}
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-bold text-[#0A1F44]">{vendor.business_name}</h2>
+                <h2 className="text-lg font-bold text-[#0D3B2E]">{vendor.business_name}</h2>
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${STATUS_BADGE[vendor.status] ?? ''}`}
                 >
@@ -106,8 +106,8 @@ export default function VendorDetailModal({ vendor, onClose, onStatusChange, act
           <div className="space-y-6">
             {/* Contact Info */}
             <section>
-              <h3 className="text-xs font-bold text-[#0A1F44] uppercase tracking-widest mb-3 flex items-center gap-2">
-                <span className="w-4 h-px bg-[#1D4ED8]" />
+              <h3 className="text-xs font-bold text-[#0D3B2E] uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span className="w-4 h-px bg-[#2ECC8E]" />
                 Contact Information
               </h3>
               <dl className="grid grid-cols-2 gap-4">
@@ -120,8 +120,8 @@ export default function VendorDetailModal({ vendor, onClose, onStatusChange, act
 
             {/* Business Info */}
             <section>
-              <h3 className="text-xs font-bold text-[#0A1F44] uppercase tracking-widest mb-3 flex items-center gap-2">
-                <span className="w-4 h-px bg-[#1D4ED8]" />
+              <h3 className="text-xs font-bold text-[#0D3B2E] uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span className="w-4 h-px bg-[#2ECC8E]" />
                 Business Details
               </h3>
               <dl className="grid grid-cols-2 gap-4">

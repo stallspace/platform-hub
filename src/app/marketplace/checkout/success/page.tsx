@@ -58,7 +58,7 @@ function SuccessContent() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-brand-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-mint" />
       </div>
     )
   }
@@ -129,7 +129,7 @@ function SuccessContent() {
             "You'll receive updates on your order status",
           ].map((step, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
-              <span className="w-4 h-4 bg-brand-accent text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5 font-bold">
+              <span className="w-4 h-4 bg-brand-mint text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5 font-bold">
                 {i + 1}
               </span>
               {step}
@@ -141,7 +141,7 @@ function SuccessContent() {
       <div className="flex flex-col gap-2">
         <Link
           href="/account/orders"
-          className="w-full flex items-center justify-center gap-2 bg-brand-accent text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-brand-mint text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
         >
           <Package className="w-4 h-4" /> View My Orders
         </Link>
@@ -162,7 +162,7 @@ export default function CheckoutSuccessPage() {
       <div className="max-w-md w-full">
         <Suspense fallback={
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-brand-accent" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand-mint" />
           </div>
         }>
           <SuccessContent />

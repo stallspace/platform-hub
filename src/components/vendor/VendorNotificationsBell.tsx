@@ -91,7 +91,7 @@ export default function VendorNotificationsBell() {
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
             {unreadCount > 0 && (
-              <button onClick={markAllRead} className="text-xs text-brand-accent hover:underline flex items-center gap-1">
+              <button onClick={markAllRead} className="text-xs text-brand-mint hover:underline flex items-center gap-1">
                 <Check className="w-3 h-3" />Mark all read
               </button>
             )}
@@ -112,7 +112,7 @@ export default function VendorNotificationsBell() {
                     <div className="flex items-start justify-between gap-2">
                       <p className={"text-sm leading-tight " + (!n.is_read ? 'font-semibold text-gray-900' : 'font-medium text-gray-700')}>{n.title}</p>
                       {n.action_url && (
-                        <Link href={n.action_url} onClick={e => { e.stopPropagation(); if (!n.is_read) markRead(n.id); setOpen(false) }} className="flex-shrink-0 text-gray-400 hover:text-brand-accent">
+                        <Link href={n.action_url} onClick={e => { e.stopPropagation(); if (!n.is_read) markRead(n.id); setOpen(false) }} className="flex-shrink-0 text-gray-400 hover:text-brand-mint">
                           <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
                       )}

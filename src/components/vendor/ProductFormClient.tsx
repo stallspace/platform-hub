@@ -222,7 +222,7 @@ export default function ProductFormClient({ vendorId, categories, product }: Pro
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="w-4 h-4 accent-brand-accent"
+              className="w-4 h-4 accent-brand-mint"
               checked={form.track_inventory}
               onChange={e => set('track_inventory', e.target.checked)}
             />
@@ -237,7 +237,7 @@ export default function ProductFormClient({ vendorId, categories, product }: Pro
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="w-4 h-4 accent-brand-accent"
+              className="w-4 h-4 accent-brand-mint"
               checked={form.is_available}
               onChange={e => set('is_available', e.target.checked)}
             />
@@ -268,7 +268,7 @@ export default function ProductFormClient({ vendorId, categories, product }: Pro
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-brand-accent hover:text-brand-accent transition-colors"
+              className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-brand-mint hover:text-brand-mint transition-colors"
             >
               {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
               <span className="text-xs mt-1">{uploading ? 'Uploading' : 'Upload'}</span>
@@ -289,7 +289,7 @@ export default function ProductFormClient({ vendorId, categories, product }: Pro
         <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-gray-900">Specifications</h2>
-            <button type="button" onClick={addSpec} className="text-brand-accent text-sm flex items-center gap-1 hover:underline">
+            <button type="button" onClick={addSpec} className="text-brand-mint text-sm flex items-center gap-1 hover:underline">
               <Plus className="w-3.5 h-3.5" /> Add
             </button>
           </div>

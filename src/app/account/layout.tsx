@@ -46,7 +46,7 @@ export default async function AccountLayout({
               {/* Profile summary */}
               <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-brand-forest flex items-center justify-center flex-shrink-0">
                     <span className="text-white font-bold text-sm">{initials}</span>
                   </div>
                   <div className="min-w-0">
@@ -65,7 +65,7 @@ export default async function AccountLayout({
                     key={item.href}
                     href={item.href}
                     className={`flex items-center justify-between px-4 py-3.5 text-sm font-medium
-                                text-gray-700 hover:bg-gray-50 hover:text-brand-accent transition-colors
+                                text-gray-700 hover:bg-gray-50 hover:text-brand-mint transition-colors
                                 ${i < NAV_ITEMS.length - 1 ? 'border-b border-gray-50' : ''}`}
                   >
                     <div className="flex items-center gap-3">

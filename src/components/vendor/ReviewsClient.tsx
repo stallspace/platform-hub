@@ -61,7 +61,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
         </div>
         <div className="flex gap-2">
           {(['all', 'approved', 'pending'] as const).map(f => (
-            <button key={f} onClick={() => setFilter(f)} className={"px-3 py-1.5 text-sm rounded-lg font-medium transition-colors " + (filter === f ? 'bg-brand-navy text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300')}>
+            <button key={f} onClick={() => setFilter(f)} className={"px-3 py-1.5 text-sm rounded-lg font-medium transition-colors " + (filter === f ? 'bg-brand-forest text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300')}>
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
@@ -83,7 +83,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-brand-navy flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-brand-forest flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                     {review.customer_name.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -100,7 +100,7 @@ export default function ReviewsClient({ reviews: initial, vendorId }: Props) {
                 </div>
               </div>
               {review.products && (
-                <div className="flex items-center gap-1 text-xs text-brand-accent mb-2">
+                <div className="flex items-center gap-1 text-xs text-brand-mint mb-2">
                   <Package className="w-3 h-3" />
                   {review.products.name}
                 </div>

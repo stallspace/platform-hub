@@ -213,7 +213,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
         <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeForm}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="font-bold text-[#0A1F44]">{editId ? 'Edit Category' : 'New Category'}</h3>
+              <h3 className="font-bold text-[#0D3B2E]">{editId ? 'Edit Category' : 'New Category'}</h3>
               <button onClick={closeForm} className="text-gray-400 hover:text-gray-600">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -232,7 +232,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                       title={opt.label}
                       className={`flex flex-col items-center gap-1 p-2 rounded-xl border-2 transition-all text-xs
                         ${form.icon === opt.key
-                          ? 'border-[#1D4ED8] bg-blue-50 text-[#1D4ED8]'
+                          ? 'border-[#2ECC8E] bg-blue-50 text-[#2ECC8E]'
                           : 'border-gray-100 hover:border-gray-300 text-gray-500'}`}
                     >
                       {opt.icon}
@@ -249,7 +249,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                   value={form.name}
                   onChange={(e) => handleNameChange(e.target.value)}
                   placeholder="e.g. Electronics"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8]"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E]"
                 />
               </div>
 
@@ -260,7 +260,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                   value={form.slug}
                   onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                   placeholder="e.g. electronics"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8] font-mono"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E] font-mono"
                 />
               </div>
 
@@ -271,7 +271,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                   onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                   rows={2}
                   placeholder="Short description..."
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8] resize-none"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E] resize-none"
                 />
               </div>
 
@@ -280,7 +280,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                 <select
                   value={form.parent_id}
                   onChange={(e) => setForm((f) => ({ ...f, parent_id: e.target.value }))}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#1D4ED8]"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E]"
                 >
                   <option value="">None (top-level)</option>
                   {parentOptions.filter((c) => c.id !== editId).map((c) => (
@@ -297,7 +297,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-5 py-2 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                className="px-5 py-2 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
               >
                 {saving ? 'Saving...' : editId ? 'Save Changes' : 'Create Category'}
               </button>
@@ -319,7 +319,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
           </button>
           <button
             onClick={openCreate}
-            className="px-4 py-2 bg-[#0A1F44] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -338,7 +338,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
             </div>
             <p className="text-gray-500 font-medium">No categories yet</p>
             <p className="text-gray-400 text-sm mt-1">Create your first category to get started.</p>
-            <button onClick={openCreate} className="mt-4 px-4 py-2 bg-[#0A1F44] text-white text-sm font-semibold rounded-xl">
+            <button onClick={openCreate} className="mt-4 px-4 py-2 bg-[#0D3B2E] text-white text-sm font-semibold rounded-xl">
               New Category
             </button>
           </div>
@@ -371,11 +371,11 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#1D4ED8] flex items-center justify-center flex-shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#2ECC8E] flex items-center justify-center flex-shrink-0">
                           {getCategoryIcon(cat.icon, cat.slug)}
                         </div>
                         <div>
-                          <p className="font-semibold text-[#0A1F44]">{cat.name}</p>
+                          <p className="font-semibold text-[#0D3B2E]">{cat.name}</p>
                           {cat.description && (
                             <p className="text-xs text-gray-400 truncate max-w-[200px]">{cat.description}</p>
                           )}
@@ -387,7 +387,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                       {parent ? parent.name : <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-5 py-3 hidden md:table-cell">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${(productCounts[cat.id] ?? 0) > 0 ? 'bg-[#1D4ED8]/10 text-[#1D4ED8]' : 'bg-gray-100 text-gray-400'}`}>
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${(productCounts[cat.id] ?? 0) > 0 ? 'bg-[#2ECC8E]/10 text-[#2ECC8E]' : 'bg-gray-100 text-gray-400'}`}>
                         {productCounts[cat.id] ?? 0}
                       </span>
                     </td>
@@ -395,7 +395,7 @@ export default function CategoriesClient({ categories, productCounts }: Props) {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => openEdit(cat)}
-                          className="p-1.5 text-gray-400 hover:text-[#1D4ED8] hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-1.5 text-gray-400 hover:text-[#2ECC8E] hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>

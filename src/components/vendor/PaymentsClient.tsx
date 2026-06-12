@@ -55,7 +55,7 @@ function MaskedInput({ value, onChange, placeholder }: { value: string; onChange
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent"
+        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint"
       />
       <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -128,12 +128,12 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
                 <button
                   key={p.id}
                   onClick={() => handleProviderChange(p.id)}
-                  className={"text-left p-4 rounded-xl border-2 transition-all " + (provider === p.id ? 'border-brand-accent bg-blue-50' : 'border-gray-100 hover:border-gray-200')}
+                  className={"text-left p-4 rounded-xl border-2 transition-all " + (provider === p.id ? 'border-brand-mint bg-blue-50' : 'border-gray-100 hover:border-gray-200')}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-gray-900 text-sm">{p.name}</span>
-                    <div className={"w-4 h-4 rounded-full border-2 flex items-center justify-center " + (provider === p.id ? 'border-brand-accent' : 'border-gray-300')}>
-                      {provider === p.id && <div className="w-2 h-2 rounded-full bg-brand-accent" />}
+                    <div className={"w-4 h-4 rounded-full border-2 flex items-center justify-center " + (provider === p.id ? 'border-brand-mint' : 'border-gray-300')}>
+                      {provider === p.id && <div className="w-2 h-2 rounded-full bg-brand-mint" />}
                     </div>
                   </div>
                   <p className="text-xs text-gray-500">{p.description}</p>
@@ -146,7 +146,7 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
 
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="w-4 h-4 text-brand-accent" />
+            <CreditCard className="w-4 h-4 text-brand-mint" />
             <h2 className="font-semibold text-gray-900">{PROVIDERS.find(p => p.id === provider)?.name} Credentials</h2>
           </div>
           <div className="space-y-3">
@@ -155,7 +155,7 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
                 <label className="text-xs text-gray-500 mb-1 block">{field.label}</label>
                 {field.masked
                   ? <MaskedInput value={fields[field.key] ?? ''} onChange={v => setFields(prev => ({ ...prev, [field.key]: v }))} placeholder={field.placeholder} />
-                  : <input type="text" value={fields[field.key] ?? ''} onChange={e => setFields(prev => ({ ...prev, [field.key]: e.target.value }))} placeholder={field.placeholder} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent" />
+                  : <input type="text" value={fields[field.key] ?? ''} onChange={e => setFields(prev => ({ ...prev, [field.key]: e.target.value }))} placeholder={field.placeholder} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
                 }
               </div>
             ))}
@@ -164,12 +164,12 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
 
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex items-start gap-3">
           <Shield className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-amber-700">MARCRTE does not process, hold, or handle any customer payments. These credentials connect your storefront directly to your own merchant account. All payments go straight to you. You are solely responsible for your merchant account, compliance, and settlements.</p>
+          <p className="text-sm text-amber-700">Stallspace does not process, hold, or handle any customer payments. These credentials connect your storefront directly to your own merchant account. All payments go straight to you. You are solely responsible for your merchant account, compliance, and settlements.</p>
         </div>
 
         <div className="flex items-center justify-between pt-2 pb-6">
           <p className="text-xs text-gray-400">Customers pay directly to your merchant account</p>
-          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-5 py-2.5 bg-brand-navy text-white text-sm font-medium rounded-lg hover:bg-brand-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-5 py-2.5 bg-brand-forest text-white text-sm font-medium rounded-lg hover:bg-brand-mint transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             {saved && <Check className="w-4 h-4" />}
             {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Configuration'}

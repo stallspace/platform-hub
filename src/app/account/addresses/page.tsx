@@ -82,7 +82,7 @@ function AddressForm({
       </div>
 
       <label className="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" checked={isDefault} onChange={e => setIsDefault(e.target.checked)} className="rounded border-gray-300 text-brand-accent" />
+        <input type="checkbox" checked={isDefault} onChange={e => setIsDefault(e.target.checked)} className="rounded border-gray-300 text-brand-mint" />
         <span className="text-sm text-gray-600">Set as default address</span>
       </label>
 
@@ -164,7 +164,7 @@ export default function AddressesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-6 h-6 animate-spin text-brand-accent" />
+        <Loader2 className="w-6 h-6 animate-spin text-brand-mint" />
       </div>
     )
   }
@@ -175,13 +175,13 @@ export default function AddressesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-brand-navy">Addresses</h1>
+          <h1 className="text-2xl font-bold text-brand-forest">Addresses</h1>
           <p className="text-gray-500 text-sm mt-1">Manage your saved delivery addresses</p>
         </div>
         {!showForm && !editId && (
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 bg-brand-accent text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-brand-mint text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Address
           </button>
@@ -199,7 +199,7 @@ export default function AddressesPage() {
           <p className="text-gray-500 text-sm mb-5">Add a delivery address to speed up checkout.</p>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 bg-brand-accent text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-brand-mint text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors text-sm"
           >
             <Plus className="w-4 h-4" /> Add Your First Address
           </button>
@@ -212,13 +212,13 @@ export default function AddressesPage() {
                 <AddressForm initial={address} onSave={handleSave} onCancel={() => setEditId(null)} />
               </div>
             ) : (
-              <div key={address.id} className={`bg-white rounded-xl border-2 p-5 ${address.is_default ? 'border-brand-accent' : 'border-gray-100'}`}>
+              <div key={address.id} className={`bg-white rounded-xl border-2 p-5 ${address.is_default ? 'border-brand-mint' : 'border-gray-100'}`}>
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-brand-accent flex-shrink-0" />
+                    <MapPin className="w-4 h-4 text-brand-mint flex-shrink-0" />
                     <span className="font-semibold text-gray-900 text-sm">{address.label}</span>
                     {address.is_default && (
-                      <span className="text-xs bg-brand-accent/10 text-brand-accent font-medium px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-brand-mint/10 text-brand-mint font-medium px-2 py-0.5 rounded-full">
                         Default
                       </span>
                     )}
@@ -226,7 +226,7 @@ export default function AddressesPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => { setEditId(address.id); setShowForm(false) }}
-                      className="p-1.5 text-gray-400 hover:text-brand-accent rounded-lg hover:bg-gray-50 transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-brand-mint rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>

@@ -46,7 +46,7 @@ const STATUS_STYLES: Record<string, string> = {
 export default function AnalyticsClient({ vendorName, storeViews, productViews, totalOrders, pendingEnquiries, totalRevenue, recentOrders, topProducts, enquiries }: Props) {
   const stats = [
     { label: 'Store Visits', value: storeViews.toLocaleString(), icon: Eye, color: 'text-purple-600 bg-purple-50' },
-    { label: 'Product Views', value: productViews.toLocaleString(), icon: BarChart2, color: 'text-blue-600 bg-blue-50' },
+    { label: 'Product Views', value: productViews.toLocaleString(), icon: BarChart2, color: 'text-brand-mint bg-blue-50' },
     { label: 'Total Orders', value: totalOrders.toLocaleString(), icon: ShoppingBag, color: 'text-green-600 bg-green-50' },
     { label: 'Total Revenue', value: 'R ' + totalRevenue.toLocaleString('en-ZA', { minimumFractionDigits: 2 }), icon: DollarSign, color: 'text-emerald-600 bg-emerald-50' },
     { label: 'Unread Enquiries', value: pendingEnquiries.toLocaleString(), icon: MessageSquare, color: 'text-orange-600 bg-orange-50' },
@@ -96,7 +96,7 @@ export default function AnalyticsClient({ vendorName, storeViews, productViews, 
                     <span className="font-semibold text-gray-900 flex-shrink-0 ml-2">{product.view_count.toLocaleString()}</span>
                   </div>
                   <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-brand-accent rounded-full transition-all" style={{ width: (product.view_count / maxViews * 100) + '%' }} />
+                    <div className="h-full bg-brand-mint rounded-full transition-all" style={{ width: (product.view_count / maxViews * 100) + '%' }} />
                   </div>
                 </div>
               ))}
@@ -107,7 +107,7 @@ export default function AnalyticsClient({ vendorName, storeViews, productViews, 
         <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-50 flex items-center justify-between">
             <h2 className="font-semibold text-gray-900">Recent Orders</h2>
-            <a href="/vendor/orders" className="text-brand-accent text-sm flex items-center gap-1 hover:underline">
+            <a href="/vendor/orders" className="text-brand-mint text-sm flex items-center gap-1 hover:underline">
               View all <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>

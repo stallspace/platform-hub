@@ -71,7 +71,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
           </svg>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[#0A1F44]">{vendor.business_name}</h1>
+          <h1 className="text-2xl font-bold text-[#0D3B2E]">{vendor.business_name}</h1>
           <p className="text-gray-500 text-sm mt-0.5">Vendor detail &amp; management</p>
         </div>
       </div>

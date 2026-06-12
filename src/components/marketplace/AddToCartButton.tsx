@@ -71,7 +71,7 @@ export default function AddToCartButton({ product, vendor, outOfStock }: Props) 
     <div className="space-y-2">
       <button
         onClick={handleAddToCart}
-        className="w-full py-3 rounded-xl bg-brand-navy text-white font-semibold text-sm hover:bg-blue-900 transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-brand-forest text-white font-semibold text-sm hover:bg-blue-900 transition-colors flex items-center justify-center gap-2"
       >
         {added ? (
           <>
@@ -88,24 +88,24 @@ export default function AddToCartButton({ product, vendor, outOfStock }: Props) 
 
       <button
         onClick={handleBuyNow}
-        className="w-full py-3 rounded-xl bg-brand-accent text-white font-semibold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-brand-mint text-white font-semibold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
       >
         <Zap className="w-4 h-4" />
         Buy Now
       </button>
 
       <div className="grid grid-cols-3 gap-2">
-        <button className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-accent hover:text-brand-accent transition-colors">
+        <button className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-mint hover:text-brand-mint transition-colors">
           <Heart className="w-4 h-4" />
           Save
         </button>
-        <button className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-accent hover:text-brand-accent transition-colors">
+        <button className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-mint hover:text-brand-mint transition-colors">
           <GitCompare className="w-4 h-4" />
           Compare
         </button>
         <button
           onClick={() => navigator.share?.({ title: product.name, url: window.location.href })}
-          className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-accent hover:text-brand-accent transition-colors"
+          className="flex flex-col items-center gap-1 py-2 rounded-lg border border-gray-200 text-xs text-gray-500 hover:border-brand-mint hover:text-brand-mint transition-colors"
         >
           <Share2 className="w-4 h-4" />
           Share

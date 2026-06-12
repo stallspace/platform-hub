@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Eye, EyeOff, Loader2, UserPlus, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -58,10 +59,7 @@ export default function CustomerRegisterPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/marketplace" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-brand-navy rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">M</span>
-            </div>
-            <span className="text-2xl font-bold text-brand-navy">MARCRTE</span>
+            <Image src="/logo.png" alt="Stallspace" width={160} height={48} className="h-12 w-auto object-contain mx-auto" priority />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
           <p className="text-gray-500 text-sm mt-1">Shop from South Africa&apos;s verified vendors</p>
@@ -139,7 +137,7 @@ export default function CustomerRegisterPage() {
 
           <div className="mt-6 pt-6 border-t border-gray-100 text-center text-sm text-gray-500">
             Already have an account?{' '}
-            <Link href="/auth/login" className="text-brand-accent font-medium hover:underline">
+            <Link href="/auth/login" className="text-brand-mint font-medium hover:underline">
               Sign in
             </Link>
           </div>
@@ -148,9 +146,9 @@ export default function CustomerRegisterPage() {
         <div className="mt-4 text-center">
           <Link
             href="/join"
-            className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-brand-accent transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-brand-mint transition-colors"
           >
-            Want to sell on MARCRTE? <ArrowRight className="w-3 h-3" />
+            Want to sell on Stallspace? <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
 

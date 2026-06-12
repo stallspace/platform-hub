@@ -38,7 +38,7 @@ export default async function CategoriesPage() {
     <div>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0A1F44]">Categories</h1>
+          <h1 className="text-2xl font-bold text-[#0D3B2E]">Categories</h1>
           <p className="text-gray-500 mt-1 text-sm">Manage marketplace product categories.</p>
         </div>
       </div>

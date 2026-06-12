@@ -1,23 +1,23 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowRight, ChevronRight, ShieldCheck, Store, CreditCard,
   Search, Laptop, Shirt, Home, Leaf, ShoppingBag, Dumbbell,
   Palette, PawPrint, Zap, TrendingUp, Package, Star,
-  MapPin, Clock, Truck
+  MapPin, Truck
 } from 'lucide-react'
 import type { Category, Vendor, Product } from '@/types'
 
-// Icon map for categories — keyed by slug fragment
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  electronics:  <Laptop  className="w-5 h-5" />,
-  fashion:      <Shirt   className="w-5 h-5" />,
-  home:         <Home    className="w-5 h-5" />,
-  health:       <Leaf    className="w-5 h-5" />,
+  electronics:  <Laptop      className="w-5 h-5" />,
+  fashion:      <Shirt       className="w-5 h-5" />,
+  home:         <Home        className="w-5 h-5" />,
+  health:       <Leaf        className="w-5 h-5" />,
   food:         <ShoppingBag className="w-5 h-5" />,
-  sports:       <Dumbbell className="w-5 h-5" />,
-  arts:         <Palette className="w-5 h-5" />,
-  pet:          <PawPrint className="w-5 h-5" />,
+  sports:       <Dumbbell    className="w-5 h-5" />,
+  arts:         <Palette     className="w-5 h-5" />,
+  pet:          <PawPrint    className="w-5 h-5" />,
 }
 
 function getCategoryIcon(slug: string): React.ReactNode {
@@ -29,10 +29,7 @@ function StarRating({ rating, count }: { rating: number; count?: number }) {
   return (
     <div className="flex items-center gap-1">
       {[1,2,3,4,5].map(s => (
-        <Star
-          key={s}
-          className={`w-3 h-3 ${s <= Math.round(rating) ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}`}
-        />
+        <Star key={s} className={`w-3 h-3 ${s <= Math.round(rating) ? 'fill-[#2ECC8E] text-[#2ECC8E]' : 'text-gray-200'}`} />
       ))}
       {count !== undefined && <span className="text-xs text-gray-400 ml-0.5">({count})</span>}
     </div>
@@ -47,272 +44,183 @@ export default async function HomePage() {
     { data: featuredProducts },
     { data: featuredVendors },
     { data: trendingProducts },
+    { data: banners },
   ] = await Promise.all([
-    supabase
-      .from('categories')
-      .select('id, name, slug, icon, product_count')
-      .order('sort_order')
-      .limit(8),
-
-    supabase
-      .from('products')
-      .select(`
-        id, name, slug, price, compare_at_price, images,
-        is_featured, track_inventory, stock_quantity,
-        vendor:vendors(id, business_name, slug, city),
-        category:categories(name, slug)
-      `)
-      .eq('is_featured', true)
-      .eq('is_available', true)
-      .eq('is_archived', false)
-      .order('created_at', { ascending: false })
-      .limit(8),
-
-    supabase
-      .from('vendors')
-      .select('id, business_name, slug, logo_url, banner_url, business_description, city, province')
-      .eq('status', 'approved')
-      .order('created_at', { ascending: false })
-      .limit(4),
-
-    supabase
-      .from('products')
-      .select('id, name, slug, price, images, vendor:vendors(business_name, slug)')
-      .eq('is_available', true)
-      .eq('is_archived', false)
-      .order('view_count', { ascending: false })
-      .limit(6),
+    supabase.from('categories').select('id, name, slug, icon, product_count').order('sort_order').limit(8),
+    supabase.from('products').select(`id, name, slug, price, compare_at_price, images, is_featured, track_inventory, stock_quantity, vendor:vendors(id, business_name, slug, city), category:categories(name, slug)`).eq('is_featured', true).eq('is_available', true).eq('is_archived', false).order('created_at', { ascending: false }).limit(8),
+    supabase.from('vendors').select('id, business_name, slug, logo_url, banner_url, business_description, city, province').eq('status', 'approved').order('created_at', { ascending: false }).limit(4),
+    supabase.from('products').select('id, name, slug, price, images, vendor:vendors(business_name, slug)').eq('is_available', true).eq('is_archived', false).order('view_count', { ascending: false }).limit(6),
+    supabase.from('homepage_content').select('section, content, is_active').in('section', ['hero', 'banner_1', 'banner_2']).eq('is_active', true),
   ])
 
   return (
     <div className="bg-white">
 
-      {/* ================================================================
-          HERO
-      ================================================================ */}
-      <section className="relative bg-brand-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}
-        />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-accent opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 opacity-10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
-              <ShieldCheck className="w-4 h-4 text-green-400" />
-              <span className="text-white/90 text-sm font-medium">All vendors vetted and verified</span>
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-5">
-              South Africa&apos;s <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
-                Trusted Marketplace
+      {/* HERO */}
+      <section className="bg-[#F8FAF3] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 min-h-[500px]">
+            <div className="py-16 lg:py-24">
+              <span className="inline-flex items-center gap-2 bg-white border border-[#2ECC8E]/25 text-[#0D3B2E] text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2ECC8E]" />
+                All vendors vetted &amp; verified
               </span>
-            </h1>
-
-            <p className="text-gray-300 text-lg leading-relaxed mb-8 max-w-xl">
-              Discover verified local vendors. Browse thousands of products. Pay securely, directly to the seller.
-            </p>
-
-            {/* Search */}
-            <form action="/marketplace/search" method="GET" className="flex flex-col sm:flex-row gap-3 mb-8">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Search products, categories, or vendors..."
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-white text-gray-900 placeholder:text-gray-400
-                             focus:outline-none focus:ring-2 focus:ring-brand-accent shadow-lg text-sm"
-                />
-              </div>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-blue-700
-                           text-white font-semibold px-6 py-4 rounded-xl transition-colors shadow-lg text-sm whitespace-nowrap"
-              >
-                <Search className="w-4 h-4" />
-                Search
-              </button>
-            </form>
-
-            {/* Quick search tags */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-gray-400 text-sm">Popular:</span>
-              {['Electronics', 'Handmade', 'Food & Drink', 'Fashion', 'Skincare'].map((tag) => (
-                <Link
-                  key={tag}
-                  href={`/marketplace/search?q=${encodeURIComponent(tag)}`}
-                  className="text-sm text-blue-300 hover:text-white underline underline-offset-2 transition-colors"
-                >
-                  {tag}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Stats bar */}
-        <div className="relative border-t border-white/10 bg-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-              {[
-                { value: '20+',    label: 'Vetted Vendors' },
-                { value: '5,000+', label: 'Products Listed' },
-                { value: '1,000+', label: 'Happy Customers' },
-                { value: '100%',   label: 'Secure Payments' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-2xl font-bold text-white">{stat.value}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{stat.label}</div>
+              <h1 className="text-[42px] sm:text-5xl lg:text-[54px] font-bold text-[#0D3B2E] leading-[1.08] tracking-tight mb-5">
+                Your marketplace<br />for <span className="text-[#2ECC8E]">local stalls.</span>
+              </h1>
+              <p className="text-[#4B5563] text-lg leading-relaxed mb-8 max-w-[420px]">
+                Discover trusted vendors. Compare prices. Support local.
+              </p>
+              <form action="/marketplace/search" method="GET">
+                <div className="flex items-center bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden max-w-[500px] mb-5">
+                  <Search size={18} className="ml-4 text-[#9CA3AF] flex-shrink-0" />
+                  <input type="text" name="q" placeholder="Search products, categories, or vendors..." className="flex-1 px-3 py-4 text-sm text-[#111111] placeholder:text-[#9CA3AF] outline-none bg-transparent" />
+                  <button type="submit" className="m-1.5 bg-[#2ECC8E] hover:bg-[#22a370] transition-colors text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex-shrink-0">Search</button>
                 </div>
-              ))}
+              </form>
+              <div className="flex items-center gap-2 flex-wrap mb-8">
+                <span className="text-xs text-[#9CA3AF]">Popular:</span>
+                {['Electronics', 'Handmade', 'Food & Drink', 'Fashion', 'Skincare'].map(tag => (
+                  <Link key={tag} href={`/marketplace/search?q=${encodeURIComponent(tag)}`} className="text-xs text-[#0D3B2E] hover:text-[#2ECC8E] font-medium transition-colors underline underline-offset-2">{tag}</Link>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <Link href="/marketplace" className="bg-[#0D3B2E] hover:bg-[#081f18] text-white text-sm font-semibold px-6 py-3 rounded-lg transition-colors">Shop Now</Link>
+                <Link href="/marketplace/vendors" className="bg-white hover:bg-[#F8FAF3] text-[#0D3B2E] text-sm font-semibold px-6 py-3 rounded-lg border border-[#E5E7EB] transition-colors">Explore Vendors</Link>
+              </div>
+            </div>
+            <div className="hidden lg:flex items-end justify-center">
+              <Image src="/hero-illustration.png" alt="Market stalls" width={540} height={400} className="object-contain" priority />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          CATEGORIES
-      ================================================================ */}
-      <section className="py-14 bg-gray-50">
+      {/* STATS BAR */}
+      <section className="bg-[#0D3B2E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-brand-navy">Shop by Category</h2>
-              <p className="text-gray-500 text-sm mt-1">Find exactly what you&apos;re looking for</p>
-            </div>
-            <Link
-              href="/marketplace/products"
-              className="hidden sm:flex items-center gap-1 text-brand-accent font-medium text-sm hover:underline"
-            >
-              View all <ChevronRight className="w-4 h-4" />
-            </Link>
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+            {[
+              { value: '20+',    label: 'Vetted Vendors' },
+              { value: '5,000+', label: 'Products Listed' },
+              { value: '1,000+', label: 'Happy Customers' },
+              { value: '100%',   label: 'Secure Payments' },
+            ].map(stat => (
+              <div key={stat.label} className="py-6 px-4 text-center">
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="text-xs text-white/60 mt-0.5">{stat.label}</div>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+      {/* PROMOTIONAL BANNERS */}
+      {banners && banners.length > 0 && (
+        <section className="py-8 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            {banners.map((banner: any) => (
+              <div key={banner.section} className="relative rounded-2xl overflow-hidden min-h-[140px] flex items-center"
+                style={banner.content.image_url ? { backgroundImage: `url(${banner.content.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { backgroundColor: '#0D3B2E' }}>
+                <div className="absolute inset-0 bg-[#0D3B2E]/70" />
+                <div className="relative z-10 px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full">
+                  <div>
+                    {banner.content.title && <h3 className="text-xl font-bold text-white mb-1">{banner.content.title}</h3>}
+                    {banner.content.subtitle && <p className="text-white/70 text-sm">{banner.content.subtitle}</p>}
+                  </div>
+                  {banner.content.cta_text && banner.content.cta_url && (
+                    <a href={banner.content.cta_url} className="flex-shrink-0 bg-[#2ECC8E] hover:bg-[#22a370] text-[#0D3B2E] font-bold text-sm px-6 py-3 rounded-xl transition-colors whitespace-nowrap">
+                      {banner.content.cta_text}
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* CATEGORIES */}
+      <section className="py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-[#111111] tracking-tight">Shop by Category</h2>
+              <p className="text-[#6B7280] text-sm mt-1">Find exactly what you&apos;re looking for</p>
+            </div>
+            <Link href="/marketplace/products" className="hidden sm:flex items-center gap-1 text-sm font-semibold text-[#2ECC8E] hover:underline">View all <ChevronRight className="w-4 h-4" /></Link>
+          </div>
+          <div className="grid grid-cols-4 lg:grid-cols-8 gap-3">
             {(categories ?? []).map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/marketplace/products?category=${cat.slug}`}
-                className="group bg-white rounded-xl p-4 text-center border border-gray-100
-                           hover:border-brand-accent hover:shadow-md transition-all duration-200"
-              >
-                <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-50 text-brand-accent flex items-center justify-center
-                                group-hover:bg-brand-accent group-hover:text-white transition-colors">
+              <Link key={cat.slug} href={`/marketplace/products?category=${cat.slug}`}
+                className="group flex flex-col items-center gap-2.5 p-4 rounded-2xl border border-[#E5E7EB] bg-white hover:border-[#2ECC8E] hover:shadow-sm transition-all text-center">
+                <div className="w-11 h-11 rounded-xl bg-[#F8FAF3] text-[#0D3B2E] flex items-center justify-center group-hover:bg-[#0D3B2E] group-hover:text-white transition-colors">
                   {getCategoryIcon(cat.slug)}
                 </div>
-                <div className="text-xs font-semibold text-gray-800 group-hover:text-brand-accent transition-colors leading-tight">
-                  {cat.name}
-                </div>
-                {cat.product_count !== undefined && (
-                  <div className="text-xs text-gray-400 mt-0.5">{cat.product_count}</div>
-                )}
+                <span className="text-xs font-semibold text-[#374151] group-hover:text-[#0D3B2E] leading-tight transition-colors">{cat.name}</span>
+                {cat.product_count !== undefined && <span className="text-[10px] text-[#9CA3AF]">{cat.product_count}</span>}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FEATURED PRODUCTS
-      ================================================================ */}
-      <section className="py-14">
+      {/* FEATURED PRODUCTS */}
+      <section className="py-14 bg-[#F7F5F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-end justify-between mb-8">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Zap className="w-5 h-5 text-brand-accent" />
-                <span className="text-brand-accent text-sm font-semibold uppercase tracking-wider">Handpicked</span>
+                <Zap className="w-4 h-4 text-[#2ECC8E]" />
+                <span className="text-[#2ECC8E] text-xs font-bold uppercase tracking-wider">Handpicked</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-brand-navy">Featured Products</h2>
+              <h2 className="text-2xl font-bold text-[#111111] tracking-tight">Featured Products</h2>
             </div>
-            <Link
-              href="/marketplace/products?featured=true"
-              className="hidden sm:flex items-center gap-1 text-brand-accent font-medium text-sm hover:underline"
-            >
-              View all <ChevronRight className="w-4 h-4" />
-            </Link>
+            <Link href="/marketplace/products?featured=true" className="hidden sm:flex items-center gap-1 text-sm font-semibold text-[#2ECC8E] hover:underline">View all <ChevronRight className="w-4 h-4" /></Link>
           </div>
-
           {!featuredProducts || featuredProducts.length === 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-gray-100 overflow-hidden">
-                  <div className="aspect-square bg-gray-100 animate-pulse" />
-                  <div className="p-3 space-y-2">
-                    <div className="h-3 bg-gray-100 rounded w-1/2 animate-pulse" />
-                    <div className="h-4 bg-gray-100 rounded animate-pulse" />
-                    <div className="h-5 bg-gray-100 rounded w-1/3 animate-pulse" />
+                <div key={i} className="rounded-2xl border border-[#E5E7EB] overflow-hidden bg-white">
+                  <div className="aspect-square bg-[#F8FAF3] animate-pulse" />
+                  <div className="p-4 space-y-2">
+                    <div className="h-3 bg-[#F8FAF3] rounded w-1/2 animate-pulse" />
+                    <div className="h-4 bg-[#F8FAF3] rounded animate-pulse" />
+                    <div className="h-5 bg-[#F8FAF3] rounded w-1/3 animate-pulse" />
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {featuredProducts.map((product: any) => {
                 const discount = (product.compare_at_price && Number(product.compare_at_price) > Number(product.price))
-                  ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100)
-                  : null
+                  ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100) : null
                 const outOfStock = product.track_inventory && (product.stock_quantity ?? 0) <= 0
-
                 return (
-                  <div key={product.id} className="card group overflow-hidden">
-                    <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                  <div key={product.id} className="group bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="relative aspect-square bg-[#F8FAF3] overflow-hidden">
                       {product.images?.[0] ? (
-                        <img
-                          src={product.images[0]}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                        <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-12 h-12 text-gray-200" />
-                        </div>
+                        <div className="w-full h-full flex items-center justify-center"><Package className="w-10 h-10 text-[#D1D5DB]" /></div>
                       )}
-                      {discount && (
-                        <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-md">
-                          -{discount}%
-                        </span>
-                      )}
-                      {outOfStock && (
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                          <span className="bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">Out of Stock</span>
-                        </div>
-                      )}
+                      {discount && <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-{discount}%</span>}
+                      {outOfStock && <div className="absolute inset-0 bg-black/40 flex items-center justify-center"><span className="bg-white text-[#374151] text-xs font-semibold px-3 py-1 rounded-full">Out of Stock</span></div>}
                     </div>
-                    <div className="p-3">
-                      {product.vendor && (
-                        <Link
-                          href={`/marketplace/store/${product.vendor.slug}`}
-                          className="text-xs text-brand-accent font-medium hover:underline"
-                        >
-                          {product.vendor.business_name}
-                        </Link>
-                      )}
+                    <div className="p-4">
+                      {product.vendor && <Link href={`/marketplace/store/${product.vendor.slug}`} className="text-[11px] text-[#2ECC8E] font-semibold hover:underline uppercase tracking-wide">{product.vendor.business_name}</Link>}
                       <Link href={`/marketplace/products/${product.slug}`}>
-                        <h3 className="text-sm font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 hover:text-brand-accent transition-colors">
-                          {product.name}
-                        </h3>
+                        <h3 className="text-sm font-semibold text-[#111111] mt-1 mb-3 line-clamp-2 leading-snug hover:text-[#0D3B2E] transition-colors">{product.name}</h3>
                       </Link>
-                      <div className="mt-2 pt-2">
-                        <div className="mb-2">
-                          <span className="font-bold text-brand-navy text-base">
-                            R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
-                          </span>
-                          {(product.compare_at_price && Number(product.compare_at_price) > Number(product.price)) && (
-                            <span className="text-xs text-gray-400 line-through ml-1.5 block">
-                              Was R{Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
-                            </span>
+                      <div className="flex items-end justify-between gap-2">
+                        <div>
+                          <div className="text-base font-bold text-[#0D3B2E]">R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</div>
+                          {product.compare_at_price && Number(product.compare_at_price) > Number(product.price) && (
+                            <div className="text-xs text-[#9CA3AF] line-through">R{Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</div>
                           )}
                         </div>
-                        <Link
-                          href={`/marketplace/products/${product.slug}`}
-                          className="w-full flex items-center justify-center text-sm font-semibold bg-brand-accent text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          View Product
-                        </Link>
+                        <Link href={`/marketplace/products/${product.slug}`} className="flex-shrink-0 bg-[#0D3B2E] hover:bg-[#081f18] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors">View</Link>
                       </div>
                     </div>
                   </div>
@@ -320,49 +228,36 @@ export default async function HomePage() {
               })}
             </div>
           )}
-
-          <div className="text-center mt-8">
-            <Link
-              href="/marketplace/products"
-              className="inline-flex items-center gap-2 border-2 border-brand-navy text-brand-navy font-semibold
-                         px-8 py-3 rounded-xl hover:bg-brand-navy hover:text-white transition-all duration-200"
-            >
+          <div className="text-center mt-10">
+            <Link href="/marketplace/products" className="inline-flex items-center gap-2 border-2 border-[#0D3B2E] text-[#0D3B2E] font-semibold px-8 py-3 rounded-xl hover:bg-[#0D3B2E] hover:text-white transition-all">
               Browse All Products <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FEATURED VENDORS
-      ================================================================ */}
-      <section className="py-14 bg-gray-50">
+      {/* FEATURED VENDORS */}
+      <section className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-end justify-between mb-8">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-5 h-5 text-brand-accent" />
-                <span className="text-brand-accent text-sm font-semibold uppercase tracking-wider">Verified</span>
+                <ShieldCheck className="w-4 h-4 text-[#2ECC8E]" />
+                <span className="text-[#2ECC8E] text-xs font-bold uppercase tracking-wider">Verified</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-brand-navy">Featured Vendors</h2>
+              <h2 className="text-2xl font-bold text-[#111111] tracking-tight">Featured Vendors</h2>
             </div>
-            <Link
-              href="/marketplace/vendors"
-              className="hidden sm:flex items-center gap-1 text-brand-accent font-medium text-sm hover:underline"
-            >
-              All vendors <ChevronRight className="w-4 h-4" />
-            </Link>
+            <Link href="/marketplace/vendors" className="hidden sm:flex items-center gap-1 text-sm font-semibold text-[#2ECC8E] hover:underline">All vendors <ChevronRight className="w-4 h-4" /></Link>
           </div>
-
           {!featuredVendors || featuredVendors.length === 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="rounded-xl border border-gray-100 overflow-hidden animate-pulse">
-                  <div className="h-20 bg-gray-200" />
+                <div key={i} className="rounded-2xl border border-[#E5E7EB] overflow-hidden animate-pulse">
+                  <div className="h-20 bg-[#F8FAF3]" />
                   <div className="p-4 space-y-2">
-                    <div className="h-10 w-10 bg-gray-200 rounded-xl" />
-                    <div className="h-4 bg-gray-200 rounded w-2/3" />
-                    <div className="h-3 bg-gray-100 rounded" />
+                    <div className="h-10 w-10 bg-[#F8FAF3] rounded-xl" />
+                    <div className="h-4 bg-[#F8FAF3] rounded w-2/3" />
+                    <div className="h-3 bg-[#F8FAF3] rounded" />
                   </div>
                 </div>
               ))}
@@ -370,39 +265,29 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {featuredVendors.map((vendor: any) => (
-                <Link
-                  key={vendor.slug}
-                  href={`/marketplace/store/${vendor.slug}`}
-                  className="card group overflow-hidden hover:-translate-y-0.5 transition-transform duration-200"
-                >
-                  <div className="relative h-20 bg-gradient-to-r from-brand-navy to-brand-accent overflow-hidden">
-                    {vendor.banner_url && (
-                      <img src={vendor.banner_url} alt="" className="w-full h-full object-cover" />
+                <Link key={vendor.slug} href={`/marketplace/store/${vendor.slug}`}
+                  className="group bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                  <div className="relative h-20 bg-[#0D3B2E] overflow-hidden">
+                    {vendor.banner_url ? <img src={vendor.banner_url} alt="" className="w-full h-full object-cover" /> : (
+                      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(46,204,142,.5) 8px,rgba(46,204,142,.5) 9px)' }} />
                     )}
                   </div>
                   <div className="p-4 pt-0">
-                    <div className="relative -mt-8 mb-3">
-                      <div className="w-16 h-16 rounded-xl border-4 border-white bg-white shadow-md overflow-hidden">
-                        {vendor.logo_url ? (
-                          <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-brand-navy flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">{vendor.business_name[0]}</span>
-                          </div>
+                    <div className="relative -mt-6 mb-3">
+                      <div className="w-12 h-12 rounded-xl border-2 border-white bg-white shadow-md overflow-hidden">
+                        {vendor.logo_url ? <img src={vendor.logo_url} alt={vendor.business_name} className="w-full h-full object-cover" /> : (
+                          <div className="w-full h-full bg-[#0D3B2E] flex items-center justify-center"><span className="text-white font-bold text-lg">{vendor.business_name[0]}</span></div>
                         )}
                       </div>
                     </div>
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-bold text-gray-900 group-hover:text-brand-accent transition-colors text-sm leading-snug">
-                        {vendor.business_name}
-                      </h3>
-                      <ShieldCheck className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <h3 className="font-bold text-sm text-[#111111] group-hover:text-[#0D3B2E] transition-colors leading-snug">{vendor.business_name}</h3>
+                      <ShieldCheck className="w-4 h-4 text-[#2ECC8E] flex-shrink-0 mt-0.5" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{vendor.business_description}</p>
+                    <p className="text-xs text-[#6B7280] mt-1 line-clamp-2 leading-relaxed">{vendor.business_description}</p>
                     {(vendor.city || vendor.province) && (
-                      <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
-                        <MapPin className="w-3 h-3" />
-                        {[vendor.city, vendor.province].filter(Boolean).join(', ')}
+                      <div className="flex items-center gap-1 mt-2.5 text-xs text-[#9CA3AF]">
+                        <MapPin className="w-3 h-3" />{[vendor.city, vendor.province].filter(Boolean).join(', ')}
                       </div>
                     )}
                   </div>
@@ -413,36 +298,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ================================================================
-          TRENDING NOW
-      ================================================================ */}
+      {/* TRENDING NOW */}
       {trendingProducts && trendingProducts.length > 0 && (
-        <section className="py-14">
+        <section className="py-14 bg-[#F7F5F0]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-2 mb-8">
-              <TrendingUp className="w-6 h-6 text-brand-accent" />
-              <h2 className="text-2xl md:text-3xl font-bold text-brand-navy">Trending Now</h2>
+              <TrendingUp className="w-5 h-5 text-[#2ECC8E]" />
+              <h2 className="text-2xl font-bold text-[#111111] tracking-tight">Trending Now</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {trendingProducts.map((product: any) => (
-                <Link
-                  key={product.id}
-                  href={`/marketplace/products/${product.slug}`}
-                  className="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-100 hover:border-brand-accent hover:shadow-md transition-all"
-                >
-                  <div className="w-16 h-16 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    {product.images?.[0] ? (
-                      <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <Package className="w-6 h-6 text-gray-300" />
-                    )}
+                <Link key={product.id} href={`/marketplace/products/${product.slug}`}
+                  className="flex items-center gap-4 bg-white rounded-2xl p-3 border border-[#E5E7EB] hover:border-[#2ECC8E] hover:shadow-sm transition-all">
+                  <div className="w-16 h-16 rounded-xl bg-[#F8FAF3] flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {product.images?.[0] ? <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" /> : <Package className="w-6 h-6 text-[#D1D5DB]" />}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs text-gray-400 truncate">{(product.vendor as any)?.business_name}</p>
-                    <p className="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight mt-0.5">{product.name}</p>
-                    <p className="text-brand-accent font-bold text-sm mt-1">
-                      R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
-                    </p>
+                    <p className="text-[11px] text-[#9CA3AF] truncate">{(product.vendor as any)?.business_name}</p>
+                    <p className="text-sm font-semibold text-[#111111] line-clamp-2 leading-snug mt-0.5">{product.name}</p>
+                    <p className="text-[#0D3B2E] font-bold text-sm mt-1">R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</p>
                   </div>
                 </Link>
               ))}
@@ -451,62 +325,69 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ================================================================
-          HOW IT WORKS
-      ================================================================ */}
-      <section className="py-16 bg-gray-50">
+      {/* HOW IT WORKS */}
+      <section className="py-16 bg-[#0D3B2E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-brand-navy">How MARCRTE Works</h2>
-            <p className="text-gray-500 mt-2 max-w-xl mx-auto">
-              A simple, secure way to shop from trusted South African vendors
-            </p>
+            <h2 className="text-2xl font-bold text-white tracking-tight">How Stallspace works</h2>
+            <p className="text-white/50 text-sm mt-2">Simple, transparent, and built for South Africa</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <Search className="w-6 h-6" />,    title: 'Browse & Discover',          desc: 'Search thousands of products from vetted South African vendors.' },
-              { icon: <Store className="w-6 h-6" />,     title: 'Visit Vendor Storefronts',   desc: 'Explore dedicated stores, read reviews, and compare products.' },
-              { icon: <CreditCard className="w-6 h-6" />, title: 'Pay Directly & Securely',   desc: 'Purchase directly from the vendor via PayFast, Peach, Yoco, or Ozow.' },
+              { icon: <Search className="w-5 h-5" />,     title: 'Browse & Discover',        desc: 'Search thousands of products from vetted South African vendors.' },
+              { icon: <Store className="w-5 h-5" />,      title: 'Visit Vendor Storefronts', desc: 'Explore dedicated stores, read reviews, and compare products.' },
+              { icon: <CreditCard className="w-5 h-5" />, title: 'Pay Directly & Securely',  desc: 'Purchase directly from the vendor via PayFast, Peach, Yoco, or Ozow.' },
             ].map((step, i) => (
-              <div key={step.title} className="relative text-center">
-                {i < 2 && (
-                  <div className="hidden md:block absolute top-10 left-1/2 w-full h-0.5 bg-gray-200 -z-0" />
-                )}
-                <div className="relative z-10 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-brand-navy text-white mb-5 shadow-lg">
-                  {step.icon}
-                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-brand-accent text-white text-xs font-bold rounded-full flex items-center justify-center">
-                    {i + 1}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
+              <div key={step.title} className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#2ECC8E]/15 text-[#2ECC8E] flex items-center justify-center mb-5">{step.icon}</div>
+                <div className="text-[11px] font-bold text-[#2ECC8E]/60 uppercase tracking-wider mb-2">Step {i + 1}</div>
+                <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-white/50 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          TRUST BADGES
-      ================================================================ */}
-      <section className="py-12 border-t border-gray-100">
+      {/* TRUST BADGES */}
+      <section className="py-12 border-t border-[#E5E7EB] bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { icon: <ShieldCheck className="w-7 h-7 mx-auto text-brand-accent" />, title: 'Secure Payments',  desc: 'SSL encrypted. Pay directly to vendors.' },
-              { icon: <ShieldCheck className="w-7 h-7 mx-auto text-green-500" />,    title: 'Vetted Vendors',   desc: 'All vendors reviewed and approved.' },
-              { icon: <MapPin      className="w-7 h-7 mx-auto text-brand-accent" />, title: 'SA Business',      desc: 'Supporting local South African vendors.' },
-              { icon: <Truck       className="w-7 h-7 mx-auto text-brand-accent" />, title: 'POPIA Compliant',  desc: 'Your data is protected by law.' },
-            ].map((item) => (
+              { icon: <ShieldCheck className="w-6 h-6 mx-auto text-[#2ECC8E]" />, title: 'Secure Payments', desc: 'SSL encrypted. Pay directly to vendors.' },
+              { icon: <ShieldCheck className="w-6 h-6 mx-auto text-[#2ECC8E]" />, title: 'Vetted Vendors',  desc: 'All vendors reviewed and approved.' },
+              { icon: <MapPin      className="w-6 h-6 mx-auto text-[#2ECC8E]" />, title: 'SA Business',     desc: 'Supporting local South African vendors.' },
+              { icon: <Truck       className="w-6 h-6 mx-auto text-[#2ECC8E]" />, title: 'POPIA Compliant', desc: 'Your data is protected by law.' },
+            ].map(item => (
               <div key={item.title} className="p-4">
                 <div className="mb-3">{item.icon}</div>
-                <h4 className="font-bold text-gray-900 text-sm mb-1">{item.title}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                <h4 className="font-bold text-[#111111] text-sm mb-1">{item.title}</h4>
+                <p className="text-xs text-[#6B7280] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* VENDOR CTA */}
+      <section className="py-16 bg-[#F8FAF3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#0D3B2E] rounded-3xl px-8 py-12 md:px-14 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-[#2ECC8E]/10 pointer-events-none" />
+            <div className="absolute right-8 -bottom-12 w-48 h-48 rounded-full bg-[#2ECC8E]/6 pointer-events-none" />
+            <div className="relative z-10">
+              <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
+                Sell on Stallspace.<br /><span className="text-[#2ECC8E]">Reach more customers.</span>
+              </h3>
+              <p className="text-white/55 text-sm max-w-md">Join South Africa&apos;s fastest-growing vetted marketplace. Plans from R199/month.</p>
+            </div>
+            <Link href="/join" className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 bg-[#2ECC8E] hover:bg-[#22a370] text-[#0D3B2E] font-bold text-sm px-8 py-4 rounded-xl transition-colors whitespace-nowrap">
+              Apply as a Vendor <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
     </div>
   )
 }

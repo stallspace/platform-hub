@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
 import { MapPin, Phone, Mail, Globe, Instagram, Facebook, Package, Star } from 'lucide-react'
 import EnquiryForm from '@/components/storefront/EnquiryForm'
 
@@ -45,10 +46,7 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/marketplace" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-navy rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">M</span>
-            </div>
-            <span className="text-lg font-bold text-brand-navy">MARCRTE</span>
+            <Image src="/logo.png" alt="Stallspace" width={120} height={36} className="h-9 w-auto object-contain" priority />
           </Link>
           <Link href="/marketplace" className="text-sm text-gray-500 hover:text-gray-900">
             ← Back to Marketplace
@@ -57,7 +55,7 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
       </header>
 
       {/* Banner */}
-      <div className="relative h-48 md:h-64 bg-gradient-to-r from-brand-navy to-brand-accent overflow-hidden">
+      <div className="relative h-48 md:h-64 bg-gradient-to-r from-brand-forest to-brand-mint overflow-hidden">
         {vendor.banner_url && (
           <img src={vendor.banner_url} alt="" className="w-full h-full object-cover" />
         )}
@@ -71,7 +69,7 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
             {vendor.logo_url ? (
               <img src={vendor.logo_url} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-brand-navy flex items-center justify-center">
+              <div className="w-full h-full bg-brand-forest flex items-center justify-center">
                 <span className="text-white text-2xl font-bold">
                   {vendor.business_name.slice(0, 2).toUpperCase()}
                 </span>
@@ -105,11 +103,11 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
               <h2 className="font-semibold text-gray-900 mb-3">Contact</h2>
               <div className="flex items-start gap-2 text-sm text-gray-600">
                 <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                <a href={`mailto:${vendor.email}`} className="hover:text-brand-accent break-all">{vendor.email}</a>
+                <a href={`mailto:${vendor.email}`} className="hover:text-brand-mint break-all">{vendor.email}</a>
               </div>
               <div className="flex items-start gap-2 text-sm text-gray-600">
                 <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                <a href={`tel:${vendor.phone}`} className="hover:text-brand-accent">{vendor.phone}</a>
+                <a href={`tel:${vendor.phone}`} className="hover:text-brand-mint">{vendor.phone}</a>
               </div>
               <div className="flex items-start gap-2 text-sm text-gray-600">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
@@ -118,19 +116,19 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
               {social?.website && (
                 <div className="flex items-start gap-2 text-sm text-gray-600">
                   <Globe className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                  <a href={social.website} target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent break-all">{social.website}</a>
+                  <a href={social.website} target="_blank" rel="noopener noreferrer" className="hover:text-brand-mint break-all">{social.website}</a>
                 </div>
               )}
               {social?.instagram && (
                 <div className="flex items-start gap-2 text-sm text-gray-600">
                   <Instagram className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                  <a href={`https://instagram.com/${social.instagram}`} target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">@{social.instagram}</a>
+                  <a href={`https://instagram.com/${social.instagram}`} target="_blank" rel="noopener noreferrer" className="hover:text-brand-mint">@{social.instagram}</a>
                 </div>
               )}
               {social?.facebook && (
                 <div className="flex items-start gap-2 text-sm text-gray-600">
                   <Facebook className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                  <a href={social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Facebook</a>
+                  <a href={social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-brand-mint">Facebook</a>
                 </div>
               )}
             </div>
@@ -213,7 +211,7 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
                   {reviews.map(review => (
                     <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-brand-navy flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-brand-forest flex items-center justify-center text-white text-xs font-bold">
                           {review.customer_name.charAt(0).toUpperCase()}
                         </div>
                         <div>

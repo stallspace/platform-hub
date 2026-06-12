@@ -132,7 +132,7 @@ export default function ProductsClient({ products: initial, vendorId, subscripti
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
                 filter === f
-                  ? 'bg-brand-navy text-white'
+                  ? 'bg-brand-forest text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -209,7 +209,7 @@ export default function ProductsClient({ products: initial, vendorId, subscripti
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => router.push(`/vendor/products/${product.id}/edit`)}
-                          className="p-1.5 text-gray-400 hover:text-brand-accent hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-1.5 text-gray-400 hover:text-brand-mint hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
                         >
                           <Pencil className="w-4 h-4" />

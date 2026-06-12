@@ -1,0 +1,528 @@
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1406ms
+ ✓ Compiled /src/middleware in 324ms (126 modules)
+ ○ Compiling /vendor/storefront ...
+ ✓ Compiled /vendor/storefront in 1705ms (742 modules)
+ ✓ Compiled in 181ms (345 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (102kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (243kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled /vendor/products in 194ms (751 modules)
+ ✓ Compiled /api/vendor/notifications in 83ms (438 modules)
+ GET /api/vendor/notifications 200 in 544ms
+ ✓ Compiled /vendor/dashboard in 129ms (798 modules)
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 536ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /api/vendor/notifications 200 in 500ms
+ GET /api/vendor/notifications 200 in 1776ms
+ GET /api/vendor/notifications 200 in 481ms
+ GET /api/vendor/notifications 200 in 462ms
+ GET /api/vendor/notifications 200 in 527ms
+ GET /api/vendor/notifications 200 in 1051ms
+ GET /api/vendor/notifications 200 in 502ms
+ GET /api/vendor/notifications 200 in 463ms
+ GET /api/vendor/notifications 200 in 480ms
+ GET /api/vendor/notifications 200 in 475ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 498ms
+ GET /api/vendor/notifications 200 in 506ms
+ GET /api/vendor/notifications 200 in 487ms
+ GET /api/vendor/notifications 200 in 780ms
+ GET /api/vendor/notifications 200 in 496ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 471ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 467ms
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 484ms
+ GET /api/vendor/notifications 200 in 487ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 461ms
+ GET /api/vendor/notifications 200 in 507ms
+ GET /api/vendor/notifications 200 in 462ms
+ GET /api/vendor/notifications 200 in 815ms
+ GET /api/vendor/notifications 200 in 792ms
+ GET /api/vendor/notifications 200 in 492ms
+ GET /api/vendor/notifications 200 in 484ms
+ GET /api/vendor/notifications 200 in 493ms
+ GET /api/vendor/notifications 200 in 496ms
+ GET /api/vendor/notifications 200 in 518ms
+ GET /api/vendor/notifications 200 in 876ms
+ GET /api/vendor/notifications 200 in 469ms
+ GET /api/vendor/notifications 200 in 780ms
+ GET /api/vendor/notifications 200 in 974ms
+ GET /api/vendor/notifications 200 in 774ms
+ GET /api/vendor/notifications 200 in 543ms
+ GET /api/vendor/notifications 200 in 570ms
+ GET /api/vendor/notifications 200 in 487ms
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 468ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 463ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 465ms
+ GET /api/vendor/notifications 200 in 737ms
+ GET /api/vendor/notifications 200 in 507ms
+ GET /api/vendor/notifications 200 in 537ms
+ GET /api/vendor/notifications 200 in 479ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 475ms
+ GET /api/vendor/notifications 200 in 472ms
+ GET /api/vendor/notifications 200 in 516ms
+ GET /api/vendor/notifications 200 in 472ms
+ GET /api/vendor/notifications 200 in 722ms
+ GET /api/vendor/notifications 200 in 484ms
+ GET /api/vendor/notifications 200 in 486ms
+ GET /api/vendor/notifications 200 in 479ms
+ GET /api/vendor/notifications 200 in 494ms
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 560ms
+ GET /api/vendor/notifications 200 in 493ms
+ GET /api/vendor/notifications 200 in 484ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 476ms
+ GET /api/vendor/notifications 200 in 755ms
+ GET /api/vendor/notifications 200 in 476ms
+ GET /api/vendor/notifications 200 in 503ms
+ GET /api/vendor/notifications 200 in 488ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /api/vendor/notifications 200 in 517ms
+ GET /api/vendor/notifications 200 in 509ms
+ GET /api/vendor/notifications 200 in 469ms
+ GET /api/vendor/notifications 200 in 822ms
+ GET /api/vendor/notifications 200 in 489ms
+ GET /api/vendor/notifications 200 in 508ms
+ GET /api/vendor/notifications 200 in 464ms
+ GET /api/vendor/notifications 200 in 485ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 1272ms
+ GET /api/vendor/notifications 200 in 1063ms
+ GET /api/vendor/notifications 200 in 1426ms
+ GET /api/vendor/notifications 200 in 1029ms
+ GET /api/vendor/notifications 200 in 1676ms
+ GET /api/vendor/notifications 200 in 2033ms
+ GET /api/vendor/notifications 200 in 2510ms
+ GET /api/vendor/notifications 200 in 1203ms
+ GET /api/vendor/notifications 200 in 1804ms
+ GET /api/vendor/notifications 200 in 3382013ms
+ GET /api/vendor/notifications 200 in 1168ms
+ GET /api/vendor/notifications 200 in 2126ms
+ GET /api/vendor/notifications 200 in 2439ms
+[TypeError: fetch failed] {
+  [cause]: Error: getaddrinfo ENOTFOUND sfqsouwkbarivbximozj.supabase.co
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'sfqsouwkbarivbximozj.supabase.co'
+  }
+}
+ GET /api/vendor/notifications 401 in 28ms
+ GET /api/vendor/notifications 200 in 1653ms
+ GET /api/vendor/notifications 200 in 1122ms
+ GET /api/vendor/notifications 200 in 472ms
+ GET /api/vendor/notifications 200 in 967ms
+ GET /api/vendor/notifications 200 in 509ms
+ GET /api/vendor/notifications 200 in 526ms
+ GET /api/vendor/notifications 200 in 544ms
+ GET /api/vendor/notifications 200 in 497ms
+ GET /api/vendor/notifications 200 in 1196ms
+ GET /api/vendor/notifications 200 in 935ms
+ GET /api/vendor/notifications 200 in 537ms
+ ✓ Compiled /marketplace in 392ms (754 modules)
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 1102ms
+ GET /api/vendor/notifications 200 in 558ms
+ GET /api/vendor/notifications 200 in 523ms
+ GET /api/vendor/notifications 200 in 481ms
+ GET /api/vendor/notifications 200 in 545ms
+ GET /api/vendor/notifications 200 in 509ms
+ GET /api/vendor/notifications 200 in 668ms
+ GET /api/vendor/notifications 200 in 543ms
+ GET /api/vendor/notifications 200 in 506ms
+ GET /api/vendor/notifications 200 in 2898ms
+ GET /api/vendor/notifications 200 in 499ms
+ GET /api/vendor/notifications 200 in 519ms
+ GET /api/vendor/notifications 200 in 495ms
+ GET /api/vendor/notifications 200 in 494ms
+ GET /api/vendor/notifications 200 in 567ms
+ GET /api/vendor/notifications 200 in 499ms
+ GET /api/vendor/notifications 200 in 489ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 1127ms
+ GET /api/vendor/notifications 200 in 497ms
+ GET /api/vendor/notifications 200 in 482ms
+ ✓ Compiled in 237ms (376 modules)
+ GET /api/vendor/notifications 200 in 506ms
+ GET /api/vendor/notifications 200 in 497ms
+ GET /api/vendor/notifications 200 in 497ms
+ GET /api/vendor/notifications 200 in 502ms
+ ✓ Compiled in 226ms (376 modules)
+ GET /api/vendor/notifications 200 in 873ms
+ ✓ Compiled in 165ms (492 modules)
+ ✓ Compiled in 64ms (604 modules)
+ GET /api/vendor/notifications 200 in 568ms
+ ○ Compiling /marketplace ...
+ ⨯ ./src/lib/supabase/server.ts
+Error: 
+  [31mx[0m You're importing a component that needs next/headers. That only works in a Server Component which is not supported in the pages/ directory. Read more: https://nextjs.org/docs/getting-started/
+  [31m|[0m react-essentials#server-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/lib/supabase/server.ts[0m:1:1]
+ [2m1[0m | import { createServerClient } from '@supabase/ssr'
+ [2m2[0m | import { cookies } from 'next/headers'
+   : [31;1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m3[0m | 
+ [2m4[0m | export async function createClient() {
+ [2m5[0m |   const cookieStore = await cookies()
+   `----
+
+Import trace for requested module:
+./src/lib/supabase/server.ts
+./src/app/marketplace/page.tsx
+ ⨯ ./src/lib/supabase/server.ts
+Error: 
+  [31mx[0m You're importing a component that needs next/headers. That only works in a Server Component which is not supported in the pages/ directory. Read more: https://nextjs.org/docs/getting-started/
+  [31m|[0m react-essentials#server-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/lib/supabase/server.ts[0m:1:1]
+ [2m1[0m | import { createServerClient } from '@supabase/ssr'
+ [2m2[0m | import { cookies } from 'next/headers'
+   : [31;1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m3[0m | 
+ [2m4[0m | export async function createClient() {
+ [2m5[0m |   const cookieStore = await cookies()
+   `----
+
+Import trace for requested module:
+./src/lib/supabase/server.ts
+./src/app/marketplace/page.tsx
+ ⨯ ./src/lib/supabase/server.ts
+Error: 
+  [31mx[0m You're importing a component that needs next/headers. That only works in a Server Component which is not supported in the pages/ directory. Read more: https://nextjs.org/docs/getting-started/
+  [31m|[0m react-essentials#server-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/lib/supabase/server.ts[0m:1:1]
+ [2m1[0m | import { createServerClient } from '@supabase/ssr'
+ [2m2[0m | import { cookies } from 'next/headers'
+   : [31;1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m3[0m | 
+ [2m4[0m | export async function createClient() {
+ [2m5[0m |   const cookieStore = await cookies()
+   `----
+
+Import trace for requested module:
+./src/lib/supabase/server.ts
+./src/app/marketplace/page.tsx
+ GET /marketplace 500 in 1564ms
+ GET /api/vendor/notifications 500 in 39ms
+ ✓ Compiled /_error in 423ms (1017 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /marketplace 200 in 80ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 96ms
+ GET /marketplace 200 in 719ms
+ GET /hero-illustration.png 404 in 10ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 495ms
+ GET /api/vendor/notifications 200 in 569ms
+ GET /api/vendor/notifications 200 in 513ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 477ms (1028 modules)
+ ⨯ src/components/marketplace/Navbar.tsx (73:14) @ Image
+ ⨯ ReferenceError: Image is not defined
+    at Navbar (./src/components/marketplace/Navbar.tsx:115:119)
+digest: "328888848"
+[0m [90m 71 |[39m           {[90m/* Logo */[39m}[0m
+[0m [90m 72 |[39m           [33m<[39m[33mLink[39m href[33m=[39m[32m"/marketplace"[39m className[33m=[39m[32m"flex-shrink-0 flex items-center"[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 73 |[39m             [33m<[39m[33mImage[39m[0m
+[0m [90m    |[39m              [31m[1m^[22m[39m[0m
+[0m [90m 74 |[39m               src[33m=[39m[32m"/logo.jpeg"[39m[0m
+[0m [90m 75 |[39m               alt[33m=[39m[32m"Stallspace"[39m[0m
+[0m [90m 76 |[39m               width[33m=[39m{[35m140[39m}[0m
+ GET /marketplace 500 in 575ms
+ GET /api/vendor/notifications 200 in 500ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 238ms (1032 modules)
+ GET /marketplace 200 in 403ms
+ ✓ Compiled /_not-found in 93ms (1021 modules)
+ GET /hero-illustration.png 404 in 131ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 1158ms
+ GET /api/vendor/notifications 200 in 505ms
+ GET /api/vendor/notifications 200 in 486ms
+ ✓ Compiled in 345ms (1032 modules)
+ GET /api/vendor/notifications 200 in 521ms
+ GET /api/vendor/notifications 200 in 519ms
+ GET /api/vendor/notifications 200 in 831ms
+ GET /api/vendor/notifications 200 in 976ms
+ ✓ Compiled in 301ms (1032 modules)
+ GET /api/vendor/notifications 200 in 495ms
+ ○ Compiling /account ...
+ ✓ Compiled /account in 505ms (1100 modules)
+ ✓ Compiled /marketplace/cart in 288ms (1122 modules)
+ ✓ Compiled /_not-found in 129ms (1125 modules)
+ GET /marketplace/favourites 404 in 32ms
+ GET /marketplace/cart 200 in 76ms
+ ✓ Compiled /marketplace/compare in 166ms (1137 modules)
+ ✓ Compiled /marketplace/vendors in 148ms (1143 modules)
+ ✓ Compiled /marketplace/store/[slug] in 205ms (1164 modules)
+ GET /api/vendor/notifications 200 in 462ms
+ GET /hero-illustration.png 404 in 37ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled in 419ms (1168 modules)
+ GET /api/vendor/notifications 200 in 526ms
+ GET /api/vendor/notifications 200 in 1223ms
+ ✓ Compiled in 326ms (1159 modules)
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 461ms
+ GET /api/vendor/notifications 200 in 2251ms
+ ✓ Compiled /_not-found in 268ms (1148 modules)
+ GET /marketplace/favourites 404 in 36ms
+ GET /marketplace 200 in 439ms
+ GET /api/vendor/notifications 200 in 499ms
+ GET /marketplace/favourites 404 in 22ms
+ GET /api/vendor/notifications 200 in 499ms
+ ✓ Compiled in 360ms (1162 modules)
+ GET /marketplace/favourites 404 in 35ms
+ GET /api/vendor/notifications 200 in 953ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 16ms
+ GET /marketplace/favourites 404 in 19ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 19ms
+ GET /marketplace 200 in 2431ms
+ ✓ Compiled /account/favourites in 262ms (1153 modules)
+ ✓ Compiled /account/orders in 154ms (1159 modules)
+ GET /api/vendor/notifications 200 in 896ms
+ GET /api/vendor/notifications 200 in 526ms
+ GET /api/vendor/notifications 200 in 505ms
+ GET /api/vendor/notifications 200 in 545ms
+ GET /api/vendor/notifications 200 in 488ms
+ GET /api/vendor/notifications 200 in 500ms
+ GET /api/vendor/notifications 200 in 531ms
+ GET /api/vendor/notifications 200 in 489ms
+ GET /api/vendor/notifications 200 in 490ms
+ GET /api/vendor/notifications 200 in 522ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 1448ms
+ ✓ Compiled in 266ms (600 modules)
+ ✓ Compiled in 147ms (600 modules)
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 515ms
+ GET /api/vendor/notifications 200 in 509ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 512ms
+ GET /api/vendor/notifications 200 in 495ms
+ GET /api/vendor/notifications 200 in 495ms
+ ✓ Compiled in 347ms (1142 modules)
+ GET /api/vendor/notifications 200 in 539ms
+ GET /api/vendor/notifications 200 in 513ms
+ GET /api/vendor/notifications 200 in 494ms
+ GET /api/vendor/notifications 200 in 483ms
+ GET /api/vendor/notifications 200 in 505ms
+ GET /api/vendor/notifications 200 in 910ms
+ GET /api/vendor/notifications 200 in 1001ms
+ GET /api/vendor/notifications 200 in 493ms
+ GET /api/vendor/notifications 200 in 518ms
+ GET /api/vendor/notifications 200 in 648ms
+ GET /api/vendor/notifications 200 in 511ms
+ GET /api/vendor/notifications 200 in 1902ms
+ GET /api/vendor/notifications 200 in 1048ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 1003ms
+ GET /api/vendor/notifications 200 in 470ms
+ ✓ Compiled in 425ms (600 modules)
+ ✓ Compiled in 128ms (600 modules)
+ GET /api/vendor/notifications 200 in 454ms
+ ✓ Compiled in 111ms (600 modules)
+ ✓ Compiled /admin/orders in 265ms (1141 modules)
+ GET /admin/orders 200 in 1315ms
+ ✓ Compiled /_not-found in 199ms (1144 modules)
+ GET /logo.jpeg 404 in 240ms
+ ⨯ The requested resource isn't a valid image for /logo.jpeg received text/html; charset=utf-8
+ImageError: The requested resource isn't a valid image.
+    at imageOptimizer (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/image-optimizer.js:652:19)
+    at DevServer.imageOptimizer (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/next-server.js:651:20)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async cacheEntry.imageResponseCache.get.incrementalCache (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/next-server.js:182:65)
+    at async /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/response-cache/index.js:90:36
+    at async /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/lib/batcher.js:45:32 {
+  statusCode: 400
+}
+ GET /api/vendor/notifications 200 in 478ms
+ ✓ Compiled /vendor/dashboard in 257ms (583 modules)
+ GET /vendor/dashboard 200 in 1426ms
+ GET /api/vendor/notifications 200 in 432ms
+ GET /api/vendor/notifications 200 in 418ms
+ GET /api/vendor/notifications 200 in 417ms
+ GET /api/vendor/notifications 200 in 1682ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 491ms
+ ✓ Compiled in 229ms (604 modules)
+ GET /api/vendor/notifications 200 in 464ms
+ GET /api/vendor/notifications 200 in 489ms
+ ✓ Compiled in 416ms (1160 modules)
+ GET /api/vendor/notifications 200 in 469ms
+ ✓ Compiled in 138ms (604 modules)
+ ✓ Compiled in 144ms (604 modules)
+ GET /api/vendor/notifications 200 in 450ms
+ ✓ Compiled in 228ms (1160 modules)
+ ✓ Compiled in 172ms (1160 modules)
+ ✓ Compiled in 186ms (1160 modules)
+ GET /admin/orders 200 in 952ms
+ ✓ Compiled /_not-found in 252ms (1149 modules)
+ GET /logo.jpeg 404 in 290ms
+ ⨯ The requested resource isn't a valid image for /logo.jpeg received text/html; charset=utf-8
+ImageError: The requested resource isn't a valid image.
+    at imageOptimizer (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/image-optimizer.js:652:19)
+    at DevServer.imageOptimizer (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/next-server.js:651:20)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async cacheEntry.imageResponseCache.get.incrementalCache (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/next-server.js:182:65)
+    at async /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/server/response-cache/index.js:90:36
+    at async /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/lib/batcher.js:45:32 {
+  statusCode: 400
+}
+ GET /vendor/dashboard 200 in 786ms
+ GET /api/vendor/notifications 200 in 427ms
+ GET /api/vendor/notifications 200 in 438ms
+ GET /api/vendor/notifications 200 in 488ms
+ ✓ Compiled in 333ms (1163 modules)
+ ✓ Compiled in 174ms (1163 modules)
+ ✓ Compiled in 163ms (1163 modules)
+ ✓ Compiled in 173ms (1160 modules)
+ GET /api/vendor/notifications 200 in 480ms
+ ✓ Compiled in 229ms (1160 modules)
+ GET /api/vendor/notifications 200 in 496ms
+ GET /api/vendor/notifications 200 in 543ms
+ GET /api/vendor/notifications 200 in 1005ms
+ ✓ Compiled in 204ms (604 modules)
+[TypeError: fetch failed] {
+  [cause]: Error: getaddrinfo ENOTFOUND sfqsouwkbarivbximozj.supabase.co
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'sfqsouwkbarivbximozj.supabase.co'
+  }
+}
+ ✓ Compiled /auth/login in 449ms (1158 modules)
+ ✓ Compiled in 308ms (1140 modules)
+ ✓ Compiled in 196ms (1140 modules)
+ GET /admin/orders 200 in 930ms
+ ✓ Compiled /admin/dashboard in 236ms (1132 modules)
+ ✓ Compiled /admin/vendors in 300ms (1135 modules)
+ ✓ Compiled in 297ms (1142 modules)
+ ⨯ ./src/app/marketplace/page.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/page.tsx[0m:92:1]
+ [2m92[0m |   ])
+ [2m93[0m | 
+ [2m94[0m |   return (
+ [2m95[0m |     <div className="bg-white">
+    : [31;1m     ^^^[0m
+ [2m96[0m | 
+ [2m97[0m |       {/* ══════════════════════════════════════════════════════════════
+ [2m98[0m |           HERO
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/page.tsx
+ ⨯ ./src/app/marketplace/page.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/page.tsx[0m:92:1]
+ [2m92[0m |   ])
+ [2m93[0m | 
+ [2m94[0m |   return (
+ [2m95[0m |     <div className="bg-white">
+    : [31;1m     ^^^[0m
+ [2m96[0m | 
+ [2m97[0m |       {/* ══════════════════════════════════════════════════════════════
+ [2m98[0m |           HERO
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/page.tsx
+ GET /marketplace 500 in 8ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 358ms (1145 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 412ms
+ ✓ Compiled /marketplace in 285ms (1160 modules)
+ GET /marketplace 200 in 312ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 128ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /marketplace 200 in 156ms
+ GET /marketplace 200 in 732ms
+ GET /hero-illustration.png 404 in 13ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /marketplace/compare in 136ms (566 modules)
+ ✓ Compiled /account/favourites in 74ms (570 modules)
+ ✓ Compiled /marketplace/cart in 85ms (569 modules)
+ ✓ Compiled /account in 90ms (579 modules)
+ GET /hero-illustration.png 404 in 48ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /vendor/dashboard 200 in 1091ms
+ ✓ Compiled /api/vendor/notifications in 84ms (607 modules)
+ GET /api/vendor/notifications 200 in 559ms
+ GET /api/vendor/notifications 200 in 433ms
+ GET /api/vendor/notifications 200 in 495ms
+ ✓ Compiled in 144ms (611 modules)
+ ✓ Compiled in 99ms (611 modules)
+ GET /api/vendor/notifications 200 in 424ms
+ ✓ Compiled in 116ms (611 modules)
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 507ms
+ GET /api/vendor/notifications 200 in 465ms
+ ✓ Compiled in 393ms (1176 modules)
+ GET /api/vendor/notifications 200 in 440ms
+ ✓ Compiled in 117ms (612 modules)
+ GET /api/vendor/notifications 200 in 432ms
+ ✓ Compiled in 116ms (612 modules)
+ GET /api/vendor/notifications 200 in 427ms
+ ✓ Compiled in 101ms (612 modules)
+ GET /api/vendor/notifications 200 in 425ms
+ ✓ Compiled /marketplace/products in 258ms (1182 modules)
+ GET /api/vendor/notifications 200 in 417ms
+ ✓ Compiled /_not-found in 140ms (1185 modules)
+ GET /hero-illustration.png 404 in 185ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /marketplace/search in 145ms (1189 modules)
+ GET /marketplace/search?q=Airpods 200 in 562ms
+ ✓ Compiled /marketplace/store/[slug] in 140ms (583 modules)
+ GET /api/vendor/notifications 200 in 468ms
+ ✓ Compiled /marketplace/vendors in 92ms (586 modules)
+ ✓ Compiled /marketplace/compare in 92ms (596 modules)
+ ✓ Compiled /join in 192ms (1203 modules)
+ GET /api/vendor/notifications 200 in 501ms
+ ○ Compiling /join/register ...
+ ✓ Compiled /join/register in 586ms (1188 modules)
+ GET /api/vendor/notifications 200 in 725ms
+ ✓ Compiled in 316ms (1196 modules)
+ GET /api/vendor/notifications 200 in 451ms
+ ✓ Compiled in 188ms (1196 modules)
+ GET /api/vendor/notifications 200 in 433ms
+ GET /join 200 in 76ms
+ GET /api/vendor/notifications 200 in 507ms

@@ -72,7 +72,7 @@ export default async function ReportsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#0A1F44]">Revenue Reports</h1>
+        <h1 className="text-2xl font-bold text-[#0D3B2E]">Revenue Reports</h1>
         <p className="text-gray-500 mt-1 text-sm">Subscription revenue, billing activity and vendor financials.</p>
       </div>
 
@@ -80,7 +80,7 @@ export default async function ReportsPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[
           { label: 'Monthly Recurring Revenue', value: formatCurrency(mrr), sub: `${activeVendors.length} active subscriptions`, icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
-          { label: 'Active Vendors', value: String(activeVendors.length), sub: 'Approved & billing', icon: Users, color: 'text-blue-600 bg-blue-50' },
+          { label: 'Active Vendors', value: String(activeVendors.length), sub: 'Approved & billing', icon: Users, color: 'text-brand-mint bg-blue-50' },
           { label: 'Past Due', value: String(pastDueVendors.length), sub: 'Require follow-up', icon: AlertCircle, color: 'text-red-600 bg-red-50' },
           { label: 'Suspended', value: String(suspendedVendors.length), sub: 'Inactive accounts', icon: CreditCard, color: 'text-gray-600 bg-gray-100' },
         ].map((stat) => (
@@ -98,7 +98,7 @@ export default async function ReportsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Plan breakdown */}
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
-          <h3 className="font-semibold text-[#0A1F44] mb-4">Revenue by Plan</h3>
+          <h3 className="font-semibold text-[#0D3B2E] mb-4">Revenue by Plan</h3>
           <div className="space-y-4">
             {(['starter', 'growth', 'premium'] as const).map((plan) => {
               const data = planBreakdown[plan] ?? { count: 0, revenue: 0 }
@@ -132,7 +132,7 @@ export default async function ReportsPage() {
 
         {/* Revenue trend chart */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-5">
-          <h3 className="font-semibold text-[#0A1F44] mb-4">Revenue Trend (Last 6 Months)</h3>
+          <h3 className="font-semibold text-[#0D3B2E] mb-4">Revenue Trend (Last 6 Months)</h3>
           <div className="flex items-end gap-2 h-36">
             {monthlyRevenue.map((m) => {
               const height = maxMonthly > 0 ? Math.max((m.revenue / maxMonthly) * 100, m.revenue > 0 ? 8 : 4) : 4
@@ -140,7 +140,7 @@ export default async function ReportsPage() {
                 <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
                   <span className="text-xs text-gray-500 font-medium">{m.revenue > 0 ? formatCurrency(m.revenue) : '—'}</span>
                   <div
-                    className="w-full rounded-t-lg bg-[#1D4ED8] transition-all"
+                    className="w-full rounded-t-lg bg-[#2ECC8E] transition-all"
                     style={{ height: `${height}%` }}
                     title={`${m.month}: ${formatCurrency(m.revenue)}`}
                   />
@@ -157,7 +157,7 @@ export default async function ReportsPage() {
         {/* Vendor subscription table */}
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-100">
-            <h3 className="font-semibold text-[#0A1F44]">Active Subscriptions</h3>
+            <h3 className="font-semibold text-[#0D3B2E]">Active Subscriptions</h3>
             <p className="text-xs text-gray-400 mt-0.5">{activeVendors.length} vendors billing</p>
           </div>
           <div className="overflow-x-auto max-h-72 overflow-y-auto">
@@ -177,12 +177,12 @@ export default async function ReportsPage() {
                   {activeVendors.map((v) => (
                     <tr key={v.id} className="hover:bg-gray-50/60">
                       <td className="px-4 py-3">
-                        <a href={`/admin/vendors/${v.id}`} className="font-medium text-[#0A1F44] hover:text-[#1D4ED8] transition-colors">
+                        <a href={`/admin/vendors/${v.id}`} className="font-medium text-[#0D3B2E] hover:text-[#2ECC8E] transition-colors">
                           {v.business_name}
                         </a>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="capitalize text-xs font-semibold px-2 py-0.5 rounded-full bg-[#1D4ED8]/10 text-[#1D4ED8]">
+                        <span className="capitalize text-xs font-semibold px-2 py-0.5 rounded-full bg-[#2ECC8E]/10 text-[#2ECC8E]">
                           {v.subscription_plan ?? '—'}
                         </span>
                       </td>
@@ -203,7 +203,7 @@ export default async function ReportsPage() {
         {/* Billing log */}
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-100">
-            <h3 className="font-semibold text-[#0A1F44]">Billing Log</h3>
+            <h3 className="font-semibold text-[#0D3B2E]">Billing Log</h3>
             <p className="text-xs text-gray-400 mt-0.5">Latest 50 events</p>
           </div>
           <div className="divide-y divide-gray-50 max-h-72 overflow-y-auto">

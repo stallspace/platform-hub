@@ -57,7 +57,7 @@ export default async function AdminDashboardPage() {
       value: String(totalVendors),
       sub: `${pendingVendors.length} pending approval`,
       icon: Users,
-      color: 'text-blue-600 bg-blue-50',
+      color: 'text-brand-mint bg-blue-50',
       href: '/admin/vendors',
     },
     {
@@ -89,7 +89,7 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#0A1F44]">Admin Dashboard</h1>
+        <h1 className="text-2xl font-bold text-[#0D3B2E]">Admin Dashboard</h1>
         <p className="text-gray-500 text-sm mt-0.5">Platform overview and pending actions</p>
       </div>
 
@@ -115,7 +115,7 @@ export default async function AdminDashboardPage() {
               <Clock className="w-4 h-4 text-orange-500" />
               <h3 className="font-semibold text-gray-900">Pending Approvals</h3>
             </div>
-            <Link href="/admin/vendors?status=pending" className="text-xs text-[#1D4ED8] hover:underline">View all</Link>
+            <Link href="/admin/vendors?status=pending" className="text-xs text-[#2ECC8E] hover:underline">View all</Link>
           </div>
           {pendingVendors.length === 0 ? (
             <div className="p-8 text-center text-gray-400 text-sm">No pending applications</div>
@@ -124,10 +124,10 @@ export default async function AdminDashboardPage() {
               {pendingVendors.slice(0, 5).map((vendor) => (
                 <div key={vendor.id} className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0A1F44]/5 border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#0D3B2E]/5 border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                       {vendor.logo_url
                         ? <img src={vendor.logo_url} alt="" className="w-full h-full object-cover" />
-                        : <span className="text-[#0A1F44] font-bold text-xs">{vendor.business_name.charAt(0)}</span>
+                        : <span className="text-[#0D3B2E] font-bold text-xs">{vendor.business_name.charAt(0)}</span>
                       }
                     </div>
                     <div>
@@ -137,7 +137,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   <Link
                     href={`/admin/vendors/${vendor.id}`}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#1D4ED8]/10 text-[#1D4ED8] hover:bg-[#1D4ED8]/20 transition-colors"
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#2ECC8E]/10 text-[#2ECC8E] hover:bg-[#2ECC8E]/20 transition-colors"
                   >
                     Review
                   </Link>
@@ -154,7 +154,7 @@ export default async function AdminDashboardPage() {
               <TrendingUp className="w-4 h-4 text-emerald-500" />
               <h3 className="font-semibold text-gray-900">Subscription Revenue</h3>
             </div>
-            <Link href="/admin/reports" className="text-xs text-[#1D4ED8] hover:underline">Full report</Link>
+            <Link href="/admin/reports" className="text-xs text-[#2ECC8E] hover:underline">Full report</Link>
           </div>
           <div className="p-5 space-y-4">
             {(['starter', 'growth', 'premium'] as const).map((plan) => {
@@ -193,7 +193,7 @@ export default async function AdminDashboardPage() {
             { label: 'Approved Vendors',  value: approvedVendors.length,      color: 'text-emerald-600' },
             { label: 'Suspended Vendors', value: suspendedCount,               color: 'text-red-500' },
             { label: 'Unread Enquiries',  value: unreadEnquiries ?? 0,         color: 'text-amber-600' },
-            { label: 'Active Billing',    value: activeSubVendors.length,      color: 'text-blue-600' },
+            { label: 'Active Billing',    value: activeSubVendors.length,      color: 'text-brand-mint' },
           ].map((row) => (
             <div key={row.label} className="flex items-center justify-between">
               <span className="text-sm text-gray-600">{row.label}</span>
@@ -206,7 +206,7 @@ export default async function AdminDashboardPage() {
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 overflow-hidden">
           <div className="p-5 border-b border-gray-100 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">Recent Activity</h3>
-            <Link href="/admin/audit" className="text-xs text-[#1D4ED8] hover:underline">View audit log</Link>
+            <Link href="/admin/audit" className="text-xs text-[#2ECC8E] hover:underline">View audit log</Link>
           </div>
           {(!auditRows || auditRows.length === 0) ? (
             <div className="p-8 text-center text-gray-400 text-sm">No activity recorded yet</div>
