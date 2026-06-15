@@ -27,6 +27,7 @@ interface Props {
   storeViews: number
   productViews: number
   totalOrders: number
+  confirmedOrderCount: number
   pendingEnquiries: number
   totalRevenue: number
   recentOrders: Order[]
@@ -43,7 +44,7 @@ const STATUS_STYLES: Record<string, string> = {
   shipped: 'bg-indigo-100 text-indigo-700',
 }
 
-export default function AnalyticsClient({ vendorName, storeViews, productViews, totalOrders, pendingEnquiries, totalRevenue, recentOrders, topProducts, enquiries }: Props) {
+export default function AnalyticsClient({ vendorName, storeViews, productViews, totalOrders, confirmedOrderCount, pendingEnquiries, totalRevenue, recentOrders, topProducts, enquiries }: Props) {
   const stats = [
     { label: 'Store Visits', value: storeViews.toLocaleString(), icon: Eye, color: 'text-purple-600 bg-purple-50' },
     { label: 'Product Views', value: productViews.toLocaleString(), icon: BarChart2, color: 'text-brand-mint bg-blue-50' },
@@ -136,7 +137,7 @@ export default function AnalyticsClient({ vendorName, storeViews, productViews, 
         <h2 className="font-semibold text-gray-900 mb-4">Summary</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Avg. Order Value', value: totalOrders > 0 ? 'R ' + (totalRevenue / totalOrders).toLocaleString('en-ZA', { minimumFractionDigits: 2 }) : '—' },
+            { label: 'Avg. Order Value', value: confirmedOrderCount > 0 ? 'R ' + (totalRevenue / confirmedOrderCount).toLocaleString('en-ZA', { minimumFractionDigits: 2 }) : '—' },
             { label: 'Enquiry Rate', value: storeViews > 0 ? ((enquiries.length / storeViews) * 100).toFixed(1) + '%' : '—' },
             { label: 'Views per Order', value: totalOrders > 0 ? Math.round(storeViews / totalOrders).toLocaleString() : '—' },
             { label: 'Products Tracked', value: topProducts.length.toString() },

@@ -379,7 +379,7 @@ export default async function HomePage() {
               <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
                 Sell on Stallspace.<br /><span className="text-[#2ECC8E]">Reach more customers.</span>
               </h3>
-              <p className="text-white/55 text-sm max-w-md">Join South Africa&apos;s fastest-growing vetted marketplace. Plans from R199/month.</p>
+              <p className="text-white/55 text-sm max-w-md">Join South Africa&apos;s fastest-growing vetted marketplace. Plans from R250/month.</p>
             </div>
             <Link href="/join" className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 bg-[#2ECC8E] hover:bg-[#22a370] text-[#0D3B2E] font-bold text-sm px-8 py-4 rounded-xl transition-colors whitespace-nowrap">
               Apply as a Vendor <ArrowRight className="w-4 h-4" />

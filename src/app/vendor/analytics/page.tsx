@@ -45,6 +45,7 @@ export default async function VendorAnalyticsPage() {
       totalOrders={totalOrders ?? 0}
       pendingEnquiries={pendingEnquiries ?? 0}
       totalRevenue={totalRevenue}
+      confirmedOrderCount={orderTotals?.length ?? 0}
       recentOrders={recentOrders ?? []}
       topProducts={topProducts ?? []}
       enquiries={enquiries ?? []}

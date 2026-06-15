@@ -27,7 +27,7 @@ const PLAN_BADGE: Record<string, string> = {
   premium: 'bg-amber-50 text-amber-700 border-amber-200',
 }
 
-const PLAN_PRICES: Record<string, number> = { starter: 199, growth: 399, premium: 699 }
+const PLAN_PRICES: Record<string, number> = { starter: 250, growth: 500, premium: 1000 }
 
 interface Vendor {
   id: string

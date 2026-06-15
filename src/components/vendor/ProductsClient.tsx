@@ -27,7 +27,7 @@ interface Props {
   subscriptionPlan: string | null
 }
 
-const PLAN_LIMITS: Record<string, number> = { starter: 100, growth: 500, premium: Infinity }
+const PLAN_LIMITS: Record<string, number> = { starter: 20, growth: 50, premium: Infinity }
 
 export default function ProductsClient({ products: initial, vendorId, subscriptionPlan }: Props) {
   const router = useRouter()

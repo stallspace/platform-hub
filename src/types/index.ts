@@ -231,10 +231,10 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlanConfig[] = [
   {
     id: 'starter',
     name: 'Starter',
-    price_monthly: 199,
+    price_monthly: 250,
     product_limit: 100,
     features: [
-      'Up to 100 products',
+      'Up to 20 products',
       'Dedicated storefront',
       'Basic analytics',
       'Email support',
@@ -244,10 +244,10 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlanConfig[] = [
   {
     id: 'growth',
     name: 'Growth',
-    price_monthly: 399,
+    price_monthly: 500,
     product_limit: 500,
     features: [
-      'Up to 500 products',
+      'Up to 50 products',
       'Dedicated storefront',
       'Advanced analytics',
       'Priority support',
@@ -258,7 +258,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlanConfig[] = [
   {
     id: 'premium',
     name: 'Premium',
-    price_monthly: 699,
+    price_monthly: 1000,
     product_limit: null,
     features: [
       'Unlimited products',

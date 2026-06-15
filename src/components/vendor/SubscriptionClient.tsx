@@ -14,9 +14,9 @@ interface Vendor {
 interface Props { vendor: Vendor }
 
 const PLANS = [
-  { id: 'starter', name: 'Starter', price: 199, limit: '100 products', popular: false, features: ['Up to 100 product listings', 'Dedicated storefront page', 'Basic analytics', 'All payment providers', 'Email support'] },
-  { id: 'growth', name: 'Growth', price: 399, limit: '500 products', popular: true, features: ['Up to 500 product listings', 'Dedicated storefront page', 'Advanced analytics', 'All payment providers', 'Bulk product upload', 'Priority support'] },
-  { id: 'premium', name: 'Premium', price: 699, limit: 'Unlimited products', popular: false, features: ['Unlimited product listings', 'Dedicated storefront page', 'Full analytics suite', 'All payment providers', 'Bulk product upload', 'Featured placement priority', 'Dedicated support'] },
+  { id: 'starter', name: 'Starter', price: 250, limit: '20 products', popular: false, features: ['Up to 20 product listings', 'Dedicated storefront page', 'Basic analytics', 'All payment providers', 'Email support'] },
+  { id: 'growth', name: 'Growth', price: 500, limit: '50 products', popular: true, features: ['Up to 50 product listings', 'Dedicated storefront page', 'Advanced analytics', 'All payment providers', 'Bulk product upload', 'Priority support'] },
+  { id: 'premium', name: 'Premium', price: 1000, limit: 'Unlimited products', popular: false, features: ['Unlimited product listings', 'Dedicated storefront page', 'Full analytics suite', 'All payment providers', 'Bulk product upload', 'Featured placement priority', 'Dedicated support'] },
 ]
 
 function StatusBadge({ status }: { status: string | null }) {

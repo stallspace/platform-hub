@@ -4,7 +4,7 @@ import { Users, Package, CreditCard, AlertCircle, Clock, TrendingUp, ShoppingBag
 
 export const dynamic = 'force-dynamic'
 
-const PLAN_PRICES: Record<string, number> = { starter: 199, growth: 399, premium: 699 }
+const PLAN_PRICES: Record<string, number> = { starter: 250, growth: 500, premium: 1000 }
 
 function formatCurrency(n: number) {
   return `R ${n.toLocaleString('en-ZA')}`

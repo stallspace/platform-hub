@@ -61,7 +61,7 @@ export default async function VendorDashboardPage() {
     ? new Date(vendor.subscription_next_billing).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
-  const PLAN_PRICE: Record<string, number> = { starter: 199, growth: 399, premium: 699 }
+  const PLAN_PRICE: Record<string, number> = { starter: 250, growth: 500, premium: 1000 }
   const planPrice = vendor.subscription_plan ? PLAN_PRICE[vendor.subscription_plan] : null
 
   const STATS = [

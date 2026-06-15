@@ -4,9 +4,9 @@ import { TrendingUp, Users, Package, CreditCard, AlertCircle } from 'lucide-reac
 export const dynamic = 'force-dynamic'
 
 const PLAN_PRICES: Record<string, number> = {
-  starter: 199,
-  growth:  399,
-  premium: 699,
+  starter: 250,
+  growth:  500,
+  premium: 1000,
 }
 
 function formatCurrency(amount: number) {

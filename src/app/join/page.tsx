@@ -15,7 +15,7 @@ const PLANS = [
     limit: '20 products',
     description: 'Perfect for getting started',
     features: [
-      'Up to 100 product listings',
+      'Up to 20 product listings',
       'Dedicated storefront page',
       'Basic analytics dashboard',
       'All payment providers',
@@ -30,7 +30,7 @@ const PLANS = [
     description: 'For growing businesses',
     popular: true,
     features: [
-      'Up to 500 product listings',
+      'Up to 50 product listings',
       'Dedicated storefront page',
       'Advanced analytics',
       'All payment providers',
