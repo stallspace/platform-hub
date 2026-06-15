@@ -11,8 +11,8 @@ const PLANS = [
   {
     id: 'starter',
     name: 'Starter',
-    price: 199,
-    limit: '100 products',
+    price: 250,
+    limit: '20 products',
     description: 'Perfect for getting started',
     features: [
       'Up to 100 product listings',
@@ -25,8 +25,8 @@ const PLANS = [
   {
     id: 'growth',
     name: 'Growth',
-    price: 399,
-    limit: '500 products',
+    price: 500,
+    limit: '50 products',
     description: 'For growing businesses',
     popular: true,
     features: [
@@ -41,7 +41,7 @@ const PLANS = [
   {
     id: 'premium',
     name: 'Premium',
-    price: 699,
+    price: 1000,
     limit: 'Unlimited products',
     description: 'For established businesses',
     features: [

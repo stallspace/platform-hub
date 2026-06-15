@@ -2,10 +2,9 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Truck, MapPin, Clock, Package, CreditCard, Building, Loader2, Check, AlertCircle } from 'lucide-react'
+import { Truck, Clock, Package, Loader2, Check, AlertCircle } from 'lucide-react'
 
 const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-const BANKS = ['ABSA','Capitec Bank','FNB','Nedbank','Standard Bank','Investec','African Bank','Bidvest Bank','Discovery Bank','TymeBank']
 
 interface StoreSettings {
   id?: string
@@ -26,19 +25,9 @@ interface StoreSettings {
   operating_hours: Record<string, { open: string; close: string; closed: boolean }>
 }
 
-interface Banking {
-  id?: string
-  vendor_id: string
-  bank_name: string
-  account_holder: string
-  account_type: string
-  account_number: string
-}
-
 interface Props {
   vendorId: string
   settings: StoreSettings | null
-  banking: Banking | null
 }
 
 const DEFAULT_HOURS: Record<string, { open: string; close: string; closed: boolean }> = {
@@ -51,7 +40,7 @@ const DEFAULT_HOURS: Record<string, { open: string; close: string; closed: boole
   sunday: { open: '09:00', close: '13:00', closed: true },
 }
 
-export default function StoreSettingsClient({ vendorId, settings, banking }: Props) {
+export default function StoreSettingsClient({ vendorId, settings }: Props) {
   const supabase = createClient()
 
   const [fulfilment, setFulfilment] = useState(settings?.fulfilment_type ?? 'delivery')
@@ -68,12 +57,6 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
   const [trackStock, setTrackStock] = useState(settings?.track_stock_default ?? true)
   const [allowBackorders, setAllowBackorders] = useState(settings?.allow_backorders ?? false)
   const [hours, setHours] = useState(settings?.operating_hours && Object.keys(settings.operating_hours).length > 0 ? settings.operating_hours : DEFAULT_HOURS)
-
-  const [bankName, setBankName] = useState(banking?.bank_name ?? '')
-  const [accountHolder, setAccountHolder] = useState(banking?.account_holder ?? '')
-  const [accountType, setAccountType] = useState(banking?.account_type ?? 'cheque')
-  const [accountNumber, setAccountNumber] = useState(banking?.account_number ?? '')
-
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -111,16 +94,6 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
         const { error: e } = await supabase.from('vendor_store_settings').insert(settingsPayload)
         if (e) throw e
       }
-      if (bankName && accountNumber) {
-        const bankPayload = { vendor_id: vendorId, bank_name: bankName, account_holder: accountHolder, account_type: accountType, account_number: accountNumber, updated_at: new Date().toISOString() }
-        if (banking?.id) {
-          const { error: e } = await supabase.from('vendor_banking').update(bankPayload).eq('id', banking.id)
-          if (e) throw e
-        } else {
-          const { error: e } = await supabase.from('vendor_banking').insert(bankPayload)
-          if (e) throw e
-        }
-      }
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     } catch { setError('Failed to save settings.') }
@@ -129,7 +102,7 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-6"><h1 className="text-2xl font-bold text-gray-900">Store Settings</h1><p className="text-gray-500 text-sm mt-0.5">Configure fulfilment, hours, VAT and banking</p></div>
+      <div className="mb-6"><h1 className="text-2xl font-bold text-gray-900">Store Settings</h1><p className="text-gray-500 text-sm mt-0.5">Configure fulfilment, hours and VAT</p></div>
       {error && <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg flex items-center gap-2"><AlertCircle className="w-4 h-4" />{error}</div>}
       <div className="space-y-5">
         <div className="bg-white rounded-xl border border-gray-100 p-5">
@@ -233,37 +206,6 @@ export default function StoreSettingsClient({ vendorId, settings, banking }: Pro
               <input type="checkbox" checked={allowBackorders} onChange={e => setAllowBackorders(e.target.checked)} className="rounded" />
               <span className="text-sm text-gray-700">Allow backorders when out of stock</span>
             </label>
-          </div>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4"><Building className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Banking Details</h2></div>
-          <p className="text-xs text-gray-500 mb-4">Used for verification and subscription refunds only. Not shared publicly.</p>
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Bank Name</label>
-                <select value={bankName} onChange={e => setBankName(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
-                  <option value="">Select bank...</option>
-                  {BANKS.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">Account Type</label>
-                <select value={accountType} onChange={e => setAccountType(e.target.value)} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint">
-                  <option value="cheque">Cheque / Current</option>
-                  <option value="savings">Savings</option>
-                  <option value="transmission">Transmission</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-gray-500 mb-1 block">Account Holder Name</label>
-              <input type="text" value={accountHolder} onChange={e => setAccountHolder(e.target.value)} placeholder="As it appears on your bank account" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
-            </div>
-            <div>
-              <label className="text-xs text-gray-500 mb-1 block">Account Number</label>
-              <input type="text" value={accountNumber} onChange={e => setAccountNumber(e.target.value)} placeholder="Your bank account number" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
-            </div>
           </div>
         </div>
         <div className="flex items-center justify-between pt-2 pb-6">

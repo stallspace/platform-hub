@@ -7,6 +7,7 @@ import {
   ChevronRight, MessageSquare, Clock, AlertCircle, CheckCircle2, Tag
 } from 'lucide-react'
 import AddToCartButton from '@/components/marketplace/AddToCartButton'
+import TrackView from '@/components/marketplace/TrackView'
 import ReviewForm from '@/components/storefront/ReviewForm'
 
 interface PageProps {
@@ -111,6 +112,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <TrackView type="product_view" vendorId={vendor.id} productId={product.id} />
 
       {/* ── BREADCRUMB ─────────────────────────────── */}
       <div className="bg-white border-b border-gray-200">

@@ -6,6 +6,7 @@ import {
   Package, Star, ShieldCheck, ChevronRight, Clock
 } from 'lucide-react'
 import EnquiryForm from '@/components/storefront/EnquiryForm'
+import TrackView from '@/components/marketplace/TrackView'
 import ReviewForm from '@/components/storefront/ReviewForm'
 
 export default async function MarketplaceStorefrontPage({ params }: { params: { slug: string } }) {
@@ -50,6 +51,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <TrackView type="store_view" vendorId={vendor.id} />
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

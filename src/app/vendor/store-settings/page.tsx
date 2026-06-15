@@ -21,11 +21,5 @@ export default async function VendorStoreSettingsPage() {
     .eq('vendor_id', vendor.id)
     .single()
 
-  const { data: banking } = await supabase
-    .from('vendor_banking')
-    .select('*')
-    .eq('vendor_id', vendor.id)
-    .single()
-
-  return <StoreSettingsClient vendorId={vendor.id} settings={settings ?? null} banking={banking ?? null} />
+  return <StoreSettingsClient vendorId={vendor.id} settings={settings ?? null} />
 }

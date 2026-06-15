@@ -45,12 +45,12 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function uploadImage(file: File, type: string) {
+  async function uploadImage(file: File, bucket: string, type: string) {
     const ext = file.name.split('.').pop()
     const filePath = vendor.id + '/' + type + '-' + Date.now() + '.' + ext
-    const { error: uploadError } = await supabase.storage.from('vendor-assets').upload(filePath, file, { upsert: true })
+    const { error: uploadError } = await supabase.storage.from(bucket).upload(filePath, file, { upsert: true })
     if (uploadError) throw uploadError
-    const { data } = supabase.storage.from('vendor-assets').getPublicUrl(filePath)
+    const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
     return data.publicUrl
   }
 
@@ -59,7 +59,7 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
     if (!file) return
     setUploadingLogo(true)
     setError(null)
-    try { const url = await uploadImage(file, 'logo'); setLogoUrl(url) }
+    try { const url = await uploadImage(file, 'vendor-logos', 'logo'); setLogoUrl(url) }
     catch { setError('Failed to upload logo.') }
     finally { setUploadingLogo(false) }
   }
@@ -69,7 +69,7 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
     if (!file) return
     setUploadingBanner(true)
     setError(null)
-    try { const url = await uploadImage(file, 'banner'); setBannerUrl(url) }
+    try { const url = await uploadImage(file, 'vendor-banners', 'banner'); setBannerUrl(url) }
     catch { setError('Failed to upload banner.') }
     finally { setUploadingBanner(false) }
   }

@@ -43,10 +43,10 @@ const PLANS = [
   {
     id: 'starter' as PlanId,
     name: 'Starter',
-    price: 199,
-    limit: '100 products',
+    price: 250,
+    limit: '20 products',
     features: [
-      'Up to 100 product listings',
+      'Up to 20 product listings',
       'Dedicated storefront page',
       'Basic analytics dashboard',
       'All payment providers supported',
@@ -56,11 +56,11 @@ const PLANS = [
   {
     id: 'growth' as PlanId,
     name: 'Growth',
-    price: 399,
-    limit: '500 products',
+    price: 500,
+    limit: '50 products',
     popular: true,
     features: [
-      'Up to 500 product listings',
+      'Up to 50 product listings',
       'Dedicated storefront page',
       'Advanced analytics dashboard',
       'All payment providers supported',
@@ -71,7 +71,7 @@ const PLANS = [
   {
     id: 'premium' as PlanId,
     name: 'Premium',
-    price: 699,
+    price: 1000,
     limit: 'Unlimited products',
     features: [
       'Unlimited product listings',
