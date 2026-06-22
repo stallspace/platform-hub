@@ -53,23 +53,36 @@ export default async function HomePage() {
     supabase.from('homepage_content').select('section, content, is_active').in('section', ['hero', 'banner_1', 'banner_2']).eq('is_active', true),
   ])
 
+  const heroBanner = banners?.find((b: any) => b.section === 'hero')
+  const heroImageUrl = heroBanner?.content?.image_url || '/hero-illustration.png'
+
   return (
     <div className="bg-white">
 
       {/* HERO */}
-      <section className="bg-[#F8FAF3] overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className="relative overflow-hidden"
+        style={
+          heroBanner?.content?.image_url
+            ? { backgroundImage: `url(${heroBanner.content.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : { backgroundColor: '#F8FAF3' }
+        }
+      >
+        {heroBanner?.content?.image_url && (
+          <div className="absolute inset-0 bg-[#0D3B2E]/55" />
+        )}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 min-h-[500px]">
             <div className="py-16 lg:py-24">
-              <span className="inline-flex items-center gap-2 bg-white border border-[#2ECC8E]/25 text-[#0D3B2E] text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-6">
+              <span className={`inline-flex items-center gap-2 border text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-6 ${heroBanner?.content?.image_url ? 'bg-white/10 border-white/25 text-white' : 'bg-white border-[#2ECC8E]/25 text-[#0D3B2E]'}`}>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#2ECC8E]" />
                 All vendors vetted &amp; verified
               </span>
-              <h1 className="text-[42px] sm:text-5xl lg:text-[54px] font-bold text-[#0D3B2E] leading-[1.08] tracking-tight mb-5">
-                Your marketplace<br />for <span className="text-[#2ECC8E]">local stalls.</span>
+              <h1 className={`text-[42px] sm:text-5xl lg:text-[54px] font-bold leading-[1.08] tracking-tight mb-5 ${heroBanner?.content?.image_url ? 'text-white' : 'text-[#0D3B2E]'}`}>
+                {heroBanner?.content?.title || (<>Your marketplace<br />for <span className="text-[#2ECC8E]">local stalls.</span></>)}
               </h1>
-              <p className="text-[#4B5563] text-lg leading-relaxed mb-8 max-w-[420px]">
-                Discover trusted vendors. Compare prices. Support local.
+              <p className={`text-lg leading-relaxed mb-8 max-w-[420px] ${heroBanner?.content?.image_url ? 'text-white/80' : 'text-[#4B5563]'}`}>
+                {heroBanner?.content?.subtitle || 'Discover trusted vendors. Compare prices. Support local.'}
               </p>
               <form action="/marketplace/search" method="GET">
                 <div className="flex items-center bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden max-w-[500px] mb-5">
@@ -79,19 +92,21 @@ export default async function HomePage() {
                 </div>
               </form>
               <div className="flex items-center gap-2 flex-wrap mb-8">
-                <span className="text-xs text-[#9CA3AF]">Popular:</span>
+                <span className={`text-xs ${heroBanner?.content?.image_url ? 'text-white/60' : 'text-[#9CA3AF]'}`}>Popular:</span>
                 {['Electronics', 'Handmade', 'Food & Drink', 'Fashion', 'Skincare'].map(tag => (
-                  <Link key={tag} href={`/marketplace/search?q=${encodeURIComponent(tag)}`} className="text-xs text-[#0D3B2E] hover:text-[#2ECC8E] font-medium transition-colors underline underline-offset-2">{tag}</Link>
+                  <Link key={tag} href={`/marketplace/search?q=${encodeURIComponent(tag)}`} className={`text-xs font-medium transition-colors underline underline-offset-2 ${heroBanner?.content?.image_url ? 'text-white hover:text-[#2ECC8E]' : 'text-[#0D3B2E] hover:text-[#2ECC8E]'}`}>{tag}</Link>
                 ))}
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <Link href="/marketplace" className="bg-[#0D3B2E] hover:bg-[#081f18] text-white text-sm font-semibold px-6 py-3 rounded-lg transition-colors">Shop Now</Link>
-                <Link href="/marketplace/vendors" className="bg-white hover:bg-[#F8FAF3] text-[#0D3B2E] text-sm font-semibold px-6 py-3 rounded-lg border border-[#E5E7EB] transition-colors">Explore Vendors</Link>
+                <Link href={heroBanner?.content?.cta_url || '/marketplace'} className="bg-[#0D3B2E] hover:bg-[#081f18] text-white text-sm font-semibold px-6 py-3 rounded-lg transition-colors">{heroBanner?.content?.cta_text || 'Shop Now'}</Link>
+                <Link href="/marketplace/vendors" className={`text-sm font-semibold px-6 py-3 rounded-lg border transition-colors ${heroBanner?.content?.image_url ? 'bg-white/10 hover:bg-white/20 text-white border-white/30' : 'bg-white hover:bg-[#F8FAF3] text-[#0D3B2E] border-[#E5E7EB]'}`}>Explore Vendors</Link>
               </div>
             </div>
-            <div className="hidden lg:flex items-end justify-center">
-              <Image src="/hero-illustration.png" alt="Market stalls" width={540} height={400} className="object-contain" priority />
-            </div>
+            {!heroBanner?.content?.image_url && (
+              <div className="hidden lg:flex items-end justify-center">
+                <Image src="/hero-illustration.png" alt="Market stalls" width={540} height={400} className="object-contain" priority />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -116,10 +131,10 @@ export default async function HomePage() {
       </section>
 
       {/* PROMOTIONAL BANNERS */}
-      {banners && banners.length > 0 && (
+      {banners && banners.filter((b: any) => b.section !== 'hero').length > 0 && (
         <section className="py-8 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-            {banners.map((banner: any) => (
+            {banners.filter((b: any) => b.section !== 'hero').map((banner: any) => (
               <div key={banner.section} className="relative rounded-2xl overflow-hidden min-h-[140px] flex items-center"
                 style={banner.content.image_url ? { backgroundImage: `url(${banner.content.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { backgroundColor: '#0D3B2E' }}>
                 <div className="absolute inset-0 bg-[#0D3B2E]/70" />

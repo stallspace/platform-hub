@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Phone, Mail, Globe, Instagram, Facebook, Package, Star } from 'lucide-react'
 import EnquiryForm from '@/components/storefront/EnquiryForm'
+import ProductEnquiryToggle from '@/components/storefront/ProductEnquiryToggle'
 
 export default async function StorefrontPage({ params }: { params: { slug: string } }) {
   const supabase = await createClient()
@@ -20,7 +21,7 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
   const [{ data: products }, { data: reviews }] = await Promise.all([
     supabase
       .from('products')
-      .select('id, name, price, compare_at_price, images, is_available, stock_quantity, track_inventory, category:categories(name)')
+      .select('id, name, slug, price, compare_at_price, images, is_available, stock_quantity, track_inventory, category:categories(name)')
       .eq('vendor_id', vendor.id)
       .eq('is_available', true)
       .eq('is_archived', false)
@@ -160,42 +161,44 @@ export default async function StorefrontPage({ params }: { params: { slug: strin
                   const outOfStock = product.track_inventory && (product.stock_quantity ?? 0) <= 0
                   return (
                     <div key={product.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-                      <div className="aspect-square bg-gray-50 overflow-hidden relative">
-                        {product.images?.[0] ? (
-                          <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Package className="w-10 h-10 text-gray-300" />
-                          </div>
-                        )}
-                        {outOfStock && (
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <span className="bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">Out of Stock</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <p className="text-xs text-gray-400 mb-1">{(product.category as any)?.name}</p>
-                        <h3 className="font-medium text-gray-900 line-clamp-2 text-sm">{product.name}</h3>
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="font-bold text-gray-900">
-                            R {Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
-                          </span>
-                          {product.compare_at_price && Number(product.compare_at_price) > Number(product.price) && (
-                            <span className="text-xs text-gray-400 line-through">
-                              R {Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
-                            </span>
+                      <Link href={`/marketplace/products/${product.slug}`} className="block">
+                        <div className="aspect-square bg-gray-50 overflow-hidden relative">
+                          {product.images?.[0] ? (
+                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Package className="w-10 h-10 text-gray-300" />
+                            </div>
+                          )}
+                          {outOfStock && (
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                              <span className="bg-white text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">Out of Stock</span>
+                            </div>
                           )}
                         </div>
-                        {/* Enquire about this product */}
-                        <div className="mt-3 pt-3 border-t border-gray-50">
-                          <EnquiryForm
-                            vendorId={vendor.id}
-                            vendorEmail={vendor.email}
-                            productId={product.id}
-                            productName={product.name}
-                          />
+                        <div className="p-4 pb-0">
+                          <p className="text-xs text-gray-400 mb-1">{(product.category as any)?.name}</p>
+                          <h3 className="font-medium text-gray-900 line-clamp-2 text-sm group-hover:text-[#0D3B2E] transition-colors">{product.name}</h3>
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="font-bold text-gray-900">
+                              R {Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
+                            </span>
+                            {product.compare_at_price && Number(product.compare_at_price) > Number(product.price) && (
+                              <span className="text-xs text-gray-400 line-through">
+                                R {Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
+                              </span>
+                            )}
+                          </div>
                         </div>
+                      </Link>
+                      {/* Enquire about this product */}
+                      <div className="p-4 pt-3">
+                        <ProductEnquiryToggle
+                          vendorId={vendor.id}
+                          vendorEmail={vendor.email}
+                          productId={product.id}
+                          productName={product.name}
+                        />
                       </div>
                     </div>
                   )

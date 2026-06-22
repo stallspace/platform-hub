@@ -2716,3 +2716,260 @@ TRACK store_view error: null
  GET /api/vendor/notifications 200 in 1028ms
  GET /api/vendor/notifications 200 in 470ms
 [?25h
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1471ms
+ ○ Compiling /marketplace ...
+ ✓ Compiled /marketplace in 1866ms (686 modules)
+ ✓ Compiled in 204ms (297 modules)
+ GET /marketplace 200 in 2340ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 564ms (675 modules)
+ GET /hero-illustration.png 404 in 606ms
+ ✓ Compiled /src/middleware in 116ms (126 modules)
+ ✓ Compiled /admin/content in 391ms (802 modules)
+ GET /marketplace 200 in 347ms
+ ✓ Compiled /api/vendor/notifications in 149ms (486 modules)
+ GET /api/vendor/notifications 200 in 636ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /marketplace 200 in 374ms
+ GET /hero-illustration.png 404 in 24ms
+ GET /api/vendor/notifications 200 in 731ms
+ GET /api/vendor/notifications 200 in 1044ms
+ GET /api/vendor/notifications 200 in 563ms
+ GET /api/vendor/notifications 200 in 463ms
+ GET /api/vendor/notifications 200 in 483ms
+ GET /api/vendor/notifications 200 in 467ms
+ GET /api/vendor/notifications 200 in 494ms
+ ✓ Compiled /vendor/products in 278ms (881 modules)
+ GET /api/vendor/notifications 200 in 514ms
+ ✓ Compiled /vendor/products/new in 308ms (896 modules)
+ GET /api/vendor/notifications 200 in 523ms
+ ✓ Compiled /vendor/storefront in 179ms (913 modules)
+ ✓ Compiled /store/[slug] in 164ms (924 modules)
+ GET /store/test-business 200 in 991ms
+ GET /api/vendor/notifications 200 in 454ms
+ ✓ Compiled /vendor/enquiries in 213ms (933 modules)
+ ✓ Compiled /vendor/orders in 166ms (942 modules)
+ ✓ Compiled /vendor/reviews in 185ms (944 modules)
+ ✓ Compiled /vendor/store-settings in 167ms (955 modules)
+ ✓ Compiled /vendor/analytics in 198ms (971 modules)
+ GET /api/vendor/notifications 200 in 472ms
+ ✓ Compiled /vendor/payments in 183ms (983 modules)
+ ✓ Compiled /vendor/subscription in 181ms (981 modules)
+ GET /api/vendor/notifications 200 in 481ms
+ ✓ Compiled /vendor/settings in 177ms (965 modules)
+ ✓ Compiled /vendor/dashboard in 180ms (976 modules)
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /api/vendor/notifications 200 in 567ms
+ GET /api/vendor/notifications 200 in 539ms
+ GET /api/vendor/notifications 200 in 1216ms
+ GET /api/vendor/notifications 200 in 564ms
+ GET /api/vendor/notifications 200 in 479ms
+ GET /api/vendor/notifications 200 in 490ms
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 464ms
+ GET /api/vendor/notifications 200 in 486ms
+ GET /api/vendor/notifications 200 in 462ms
+ GET /api/vendor/notifications 200 in 866ms
+ GET /api/vendor/notifications 200 in 488ms
+ GET /api/vendor/notifications 200 in 469ms
+ GET /api/vendor/notifications 200 in 492ms
+ GET /api/vendor/notifications 200 in 467ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 457ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 493ms
+ GET /api/vendor/notifications 200 in 495ms
+ GET /api/vendor/notifications 200 in 794ms
+ GET /api/vendor/notifications 200 in 1628ms
+ GET /api/vendor/notifications 200 in 1034ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 526ms
+ GET /api/vendor/notifications 200 in 844ms
+ GET /api/vendor/notifications 200 in 870ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 692ms
+ GET /api/vendor/notifications 200 in 525ms
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 758ms
+ GET /api/vendor/notifications 200 in 533ms
+ ✓ Compiled in 503ms (922 modules)
+ ✓ Compiled /admin/content in 117ms (493 modules)
+ GET /marketplace 200 in 704ms
+ GET /marketplace 200 in 285ms
+ GET /api/vendor/notifications 200 in 502ms
+ GET /api/vendor/notifications 200 in 712ms
+ GET /marketplace 200 in 333ms
+ ✓ Compiled /_not-found in 287ms (920 modules)
+ GET /hero-illustration.png 404 in 338ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /marketplace/products/[slug] in 486ms (953 modules)
+ ✓ Compiled /api/track in 68ms (519 modules)
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 325ms
+TRACK product_view error: null
+ POST /api/track 200 in 332ms
+ ✓ Compiled /marketplace/store/[slug] in 165ms (960 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 218ms
+TRACK store_view error: null
+ POST /api/track 200 in 224ms
+ GET /api/vendor/notifications 200 in 548ms
+ ✓ Compiled /admin/vendors in 267ms (969 modules)
+ ✓ Compiled /vendor/storefront in 125ms (562 modules)
+ GET /store/test-business 200 in 576ms
+ GET /api/vendor/notifications 200 in 418ms
+ GET /api/vendor/notifications 200 in 514ms
+ GET /api/vendor/notifications 200 in 562ms
+ GET /api/vendor/notifications 200 in 469ms
+ GET /api/vendor/notifications 200 in 581ms
+ ⨯ ./src/app/store/[slug]/page.tsx:7:1
+Module not found: Can't resolve '@/components/storefront/ProductEnquiryToggle'
+[0m [90m  5 |[39m [36mimport[39m { [33mMapPin[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMail[39m[33m,[39m [33mGlobe[39m[33m,[39m [33mInstagram[39m[33m,[39m [33mFacebook[39m[33m,[39m [33mPackage[39m[33m,[39m [33mStar[39m } [36mfrom[39m [32m'lucide-react'[39m[0m
+[0m [90m  6 |[39m [36mimport[39m [33mEnquiryForm[39m [36mfrom[39m [32m'@/components/storefront/EnquiryForm'[39m[0m
+[0m[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mProductEnquiryToggle[39m [36mfrom[39m [32m'@/components/storefront/ProductEnquiryToggle'[39m[0m
+[0m [90m    |[39m [31m[1m^[22m[39m[0m
+[0m [90m  8 |[39m[0m
+[0m [90m  9 |[39m [36mexport[39m [36mdefault[39m [36masync[39m [36mfunction[39m [33mStorefrontPage[39m({ params }[33m:[39m { params[33m:[39m { slug[33m:[39m string } }) {[0m
+[0m [90m 10 |[39m   [36mconst[39m supabase [33m=[39m [36mawait[39m createClient()[0m
+
+https://nextjs.org/docs/messages/module-not-found
+ ○ Compiling /_error ...
+ ⨯ ./src/app/store/[slug]/page.tsx:7:1
+Module not found: Can't resolve '@/components/storefront/ProductEnquiryToggle'
+[0m [90m  5 |[39m [36mimport[39m { [33mMapPin[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMail[39m[33m,[39m [33mGlobe[39m[33m,[39m [33mInstagram[39m[33m,[39m [33mFacebook[39m[33m,[39m [33mPackage[39m[33m,[39m [33mStar[39m } [36mfrom[39m [32m'lucide-react'[39m[0m
+[0m [90m  6 |[39m [36mimport[39m [33mEnquiryForm[39m [36mfrom[39m [32m'@/components/storefront/EnquiryForm'[39m[0m
+[0m[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mProductEnquiryToggle[39m [36mfrom[39m [32m'@/components/storefront/ProductEnquiryToggle'[39m[0m
+[0m [90m    |[39m [31m[1m^[22m[39m[0m
+[0m [90m  8 |[39m[0m
+[0m [90m  9 |[39m [36mexport[39m [36mdefault[39m [36masync[39m [36mfunction[39m [33mStorefrontPage[39m({ params }[33m:[39m { params[33m:[39m { slug[33m:[39m string } }) {[0m
+[0m [90m 10 |[39m   [36mconst[39m supabase [33m=[39m [36mawait[39m createClient()[0m
+
+https://nextjs.org/docs/messages/module-not-found
+ GET /store/test-business 500 in 13ms
+ GET /marketplace/store/test-business 500 in 22ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/mujahidhendricks/Desktop/Stallspace/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/mujahidhendricks/Desktop/Stallspace/.next/cache/webpack/client-development-fallback/0.pack.gz'
+ ✓ Compiled /_not-found in 496ms (1182 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /store/test-business 200 in 296ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 844ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /marketplace/store/test-business 200 in 346ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 31ms
+ GET /store/test-business 200 in 892ms
+ GET /marketplace/store/test-business 200 in 875ms
+ GET /api/vendor/notifications 200 in 417ms
+ ✓ Compiled /api/track in 63ms (559 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 322ms
+TRACK store_view error: null
+ POST /api/track 200 in 333ms
+ GET /api/vendor/notifications 200 in 540ms
+ ✓ Compiled in 296ms (1191 modules)
+ ✓ Compiled /api/track in 93ms (557 modules)
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: '3okdbjx08d6mqp6p176'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: '3okdbjx08d6mqp6p176'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 347ms
+TRACK product_view error: null
+ POST /api/track 200 in 348ms
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: '3okdbjx08d6mqp6p176'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: '3okdbjx08d6mqp6p176'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 242ms
+TRACK product_view error: null
+ POST /api/track 200 in 253ms
+ GET /api/vendor/notifications 200 in 423ms
+ GET /store/test-business 200 in 581ms
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'jgmts05a5ukmqp6pr3a'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'jgmts05a5ukmqp6pr3a'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 226ms
+TRACK product_view error: null
+ POST /api/track 200 in 228ms
+ GET /api/vendor/notifications 200 in 433ms
+ ✓ Compiled /vendor/dashboard in 182ms (586 modules)
+ GET /api/vendor/notifications 200 in 540ms
+ GET /api/vendor/notifications 200 in 570ms
+ GET /api/vendor/notifications 200 in 499ms
+ PATCH /api/vendor/notifications 200 in 478ms
+ ✓ Compiled /vendor/orders in 138ms (581 modules)
+ GET /api/vendor/notifications 200 in 483ms
+ GET /api/vendor/notifications 200 in 1001ms
