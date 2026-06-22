@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
@@ -23,6 +24,38 @@ function StarRating({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md
       ))}
     </div>
   )
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const supabase = await createClient()
+
+  const { data: product } = await supabase
+    .from('products')
+    .select('name, description, images, price, vendor:vendors(business_name)')
+    .eq('slug', params.slug)
+    .eq('is_available', true)
+    .eq('is_archived', false)
+    .single()
+
+  if (!product) {
+    return { title: 'Product Not Found' }
+  }
+
+  const vendor = product.vendor as any
+  const description = product.description
+    ? product.description.slice(0, 155)
+    : `Buy ${product.name} from ${vendor?.business_name ?? 'a trusted Stallspace vendor'}. R${Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}.`
+
+  return {
+    title: product.name,
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+      type: 'website',
+    },
+  }
 }
 
 export default async function ProductDetailPage({ params }: PageProps) {

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
@@ -10,6 +11,11 @@ interface PageProps {
     q?: string
     city?: string
   }
+}
+
+export const metadata: Metadata = {
+  title: 'All Vendors',
+  description: 'Discover trusted local vendors. Browse storefronts and shop directly from independent businesses near you.',
 }
 
 export default async function VendorsPage({ searchParams }: PageProps) {

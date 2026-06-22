@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
@@ -9,6 +10,37 @@ import EnquiryForm from '@/components/storefront/EnquiryForm'
 import ProductEnquiryToggle from '@/components/storefront/ProductEnquiryToggle'
 import TrackView from '@/components/marketplace/TrackView'
 import ReviewForm from '@/components/storefront/ReviewForm'
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const supabase = await createClient()
+
+  const { data: vendor } = await supabase
+    .from('vendors')
+    .select('business_name, business_description, logo_url, banner_url, city, province')
+    .eq('slug', params.slug)
+    .eq('status', 'approved')
+    .single()
+
+  if (!vendor) {
+    return { title: 'Vendor Not Found' }
+  }
+
+  const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+  const description = vendor.business_description
+    ? vendor.business_description.slice(0, 155)
+    : (locationStr ? `Shop products from ${vendor.business_name} in ${locationStr} on Stallspace.` : `Shop products from ${vendor.business_name} on Stallspace.`)
+
+  return {
+    title: vendor.business_name,
+    description,
+    openGraph: {
+      title: vendor.business_name,
+      description,
+      images: vendor.banner_url ? [{ url: vendor.banner_url }] : (vendor.logo_url ? [{ url: vendor.logo_url }] : []),
+      type: 'website',
+    },
+  }
+}
 
 export default async function MarketplaceStorefrontPage({ params }: { params: { slug: string } }) {
   const supabase = await createClient()

@@ -3239,3 +3239,669 @@ TRACK store_view error: null
  ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
  GET /api/vendor/notifications 200 in 535ms
  GET /api/vendor/notifications 200 in 677ms
+ GET /api/vendor/notifications 200 in 998ms
+ GET /api/vendor/notifications 200 in 571ms
+ GET /api/vendor/notifications 200 in 521ms
+ ✓ Compiled in 389ms (928 modules)
+ GET /api/vendor/notifications 200 in 419ms
+ ✓ Compiled /_not-found in 133ms (917 modules)
+ GET /this-page-does-not-exist 404 in 214ms
+ GET /hero-illustration.png 404 in 17ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 517ms
+ GET /api/vendor/notifications 200 in 555ms
+ GET /api/vendor/notifications 200 in 1223ms
+ ✓ Compiled in 232ms (404 modules)
+ GET /api/vendor/notifications 200 in 851ms
+ ✓ Compiled in 112ms (404 modules)
+ GET /api/vendor/notifications 200 in 489ms
+ ✓ Compiled in 94ms (404 modules)
+ GET /api/vendor/notifications 200 in 419ms
+ ✓ Compiled in 147ms (404 modules)
+ GET /api/vendor/notifications 200 in 393ms
+ ✓ Compiled in 287ms (929 modules)
+ GET /api/vendor/notifications 200 in 415ms
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1365ms
+ ○ Compiling /marketplace ...
+ ✓ Compiled /marketplace in 1163ms (687 modules)
+ ✓ Compiled in 195ms (297 modules)
+ GET /marketplace 200 in 1616ms
+ ✓ Compiled /_not-found in 177ms (676 modules)
+ GET /hero-illustration.png 404 in 226ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /marketplace 200 in 700ms
+ GET /hero-illustration.png 404 in 22ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /src/middleware in 120ms (126 modules)
+ ✓ Compiled /admin/vendors in 371ms (807 modules)
+ GET /admin/vendors 200 in 961ms
+ ✓ Compiled /api/vendor/notifications in 167ms (490 modules)
+ GET /api/vendor/notifications 200 in 707ms
+ GET /api/vendor/notifications 200 in 531ms
+ GET /api/vendor/notifications 200 in 809ms
+ GET /api/vendor/notifications 200 in 541ms
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ ○ Compiling /_not-found ...
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /marketplace/store/test-business 500 in 11ms
+ GET /admin/vendors 500 in 19ms
+ GET /marketplace 500 in 26ms
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 344ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /legal/popia 500 in 374ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 5ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /legal/popia 500 in 16ms
+ GET /admin/vendors 500 in 7ms
+ GET /marketplace 500 in 28ms
+ GET /marketplace 500 in 24ms
+ GET /api/vendor/notifications 500 in 16ms
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 265ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 16ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /marketplace 500 in 27ms
+ GET /admin/vendors 500 in 7ms
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop trusted products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                         ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 243ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 3ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /marketplace 500 in 16ms
+ GET /admin/vendors 500 in 12ms
+ ✓ Compiled /legal/popia in 113ms (543 modules)
+ GET /marketplace 500 in 15ms
+ GET /admin/vendors 500 in 7ms
+ ✓ Compiled in 90ms (543 modules)
+ GET /marketplace 500 in 13ms
+ GET /admin/vendors 500 in 8ms
+ ✓ Compiled in 186ms (1074 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 254ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 81ms
+ GET /marketplace 200 in 435ms
+ GET /hero-illustration.png 404 in 18ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 13ms
+ GET /admin/vendors 200 in 360ms
+ GET /admin/vendors 200 in 442ms
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1314ms
+ ✓ Compiled /api/vendor/notifications in 205ms (116 modules)
+ GET /api/vendor/notifications 200 in 1168ms
+ GET /api/vendor/notifications 200 in 460ms
+ ○ Compiling /marketplace/store/[slug] ...
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                 ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                 ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                 ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /marketplace/store/test-business 500 in 12ms
+ GET /api/vendor/notifications 500 in 31ms
+ ✓ Compiled /src/middleware in 120ms (126 modules)
+ GET /api/vendor/notifications 500 in 25ms
+ ⨯ ./src/app/marketplace/store/[slug]/page.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+    ,-[[36;1;4m/Users/mujahidhendricks/Desktop/Stallspace/src/app/marketplace/store/[slug]/page.tsx[0m:28:1]
+ [2m28[0m |   const locationStr = [vendor.city, vendor.province].filter(Boolean).join(', ')
+ [2m29[0m |   const description = vendor.business_description
+ [2m30[0m |     ? vendor.business_description.slice(0, 155)
+ [2m31[0m |     : `Shop products from ${vendor.business_name}${locationStr ? \` in \${locationStr}\` : ''} on Stallspace.`
+    : [31;1m                                                                 ^[0m
+ [2m32[0m | 
+ [2m33[0m |   return {
+ [2m34[0m |     title: vendor.business_name,
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/marketplace/store/[slug]/page.tsx
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 500 in 375ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /vendor/storefront 500 in 394ms
+ GET /marketplace/store/test-business 500 in 13ms
+ ○ Compiling /vendor/storefront ...
+ ✓ Compiled /_not-found in 317ms (876 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 383ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 31ms
+ ✓ Compiled /marketplace/store/[slug] in 369ms (1057 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 54ms
+ ✓ Compiled /vendor/storefront in 66ms (528 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /marketplace/store/test-business 200 in 745ms
+ GET /_next/static/webpack/19b52ba325c702bf.webpack.hot-update.json 404 in 295ms
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+ ⨯ TypeError: Cannot read properties of null (reading 'useEffect')
+    at TrackView (./src/components/marketplace/TrackView.tsx:18:53)
+digest: "3488165815"
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162241)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+ ⨯ TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162241)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7) {
+  page: '/marketplace/store/test-business'
+}
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162241)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+ ⨯ TypeError: Cannot read properties of null (reading 'useEffect')
+    at TrackView (./src/components/marketplace/TrackView.tsx:18:53)
+digest: "3488165815"
+ GET /vendor/storefront 200 in 690ms
+ ⨯ TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162241)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/mujahidhendricks/Desktop/Stallspace/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7) {
+  page: '/marketplace/store/test-business'
+}
+ GET /marketplace/store/test-business 200 in 689ms
+ ✓ Compiled /api/track in 147ms (556 modules)
+ ✓ Compiled (558 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 548ms
+TRACK store_view error: null
+ POST /api/track 200 in 549ms
+ GET /api/vendor/notifications 200 in 778ms
+ GET /api/vendor/notifications 200 in 404ms
+ GET /vendor/storefront 200 in 821ms
+ GET /api/vendor/notifications 200 in 554ms
+ GET /api/vendor/notifications 200 in 612ms
+ ✓ Compiled /marketplace/products/[slug] in 251ms (1141 modules)
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 367ms
+TRACK product_view error: null
+ POST /api/track 200 in 369ms
+ GET /api/vendor/notifications 200 in 526ms
+ ✓ Compiled /marketplace/products in 204ms (1149 modules)
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 253ms
+TRACK product_view error: null
+ POST /api/track 200 in 259ms
+ ✓ Compiled /marketplace in 172ms (1162 modules)
+ ✓ Compiled /_not-found in 84ms (596 modules)
+ GET /hero-illustration.png 404 in 127ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 224ms
+TRACK store_view error: null
+ POST /api/track 200 in 227ms
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 224ms
+TRACK product_view error: null
+ POST /api/track 200 in 242ms
+ GET /api/vendor/notifications 200 in 653ms
+ GET /api/vendor/notifications 200 in 514ms
+ GET /api/vendor/notifications 200 in 602ms
+ GET /api/vendor/notifications 200 in 544ms
+ GET /api/vendor/notifications 200 in 570ms
+ GET /api/vendor/notifications 200 in 781ms
+[TypeError: fetch failed] {
+  [cause]: Error: getaddrinfo ENOTFOUND sfqsouwkbarivbximozj.supabase.co
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'sfqsouwkbarivbximozj.supabase.co'
+  }
+}
+ GET /api/vendor/notifications 401 in 55ms
+ GET /api/vendor/notifications 200 in 1815ms
+ GET /api/vendor/notifications 200 in 1990ms
+ GET /api/vendor/notifications 200 in 1578ms
+ GET /api/vendor/notifications 200 in 1451ms
+ GET /api/vendor/notifications 200 in 455ms
+ GET /api/vendor/notifications 200 in 650ms
+ GET /api/vendor/notifications 200 in 463ms
+ GET /api/vendor/notifications 200 in 1054ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 510ms
+ GET /api/vendor/notifications 200 in 504ms
+ GET /api/vendor/notifications 200 in 463ms
+ GET /api/vendor/notifications 200 in 478ms
+ GET /api/vendor/notifications 200 in 459ms
+ GET /api/vendor/notifications 200 in 1292ms
+ GET /api/vendor/notifications 200 in 751ms
+ GET /api/vendor/notifications 200 in 486ms
+ GET /api/vendor/notifications 200 in 683ms
+ GET /api/vendor/notifications 200 in 486ms
+ GET /api/vendor/notifications 200 in 455ms
+ GET /api/vendor/notifications 200 in 482ms
+ ✓ Compiled in 459ms (1174 modules)
+ GET /api/vendor/notifications 200 in 505ms
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1413ms
+ ✓ Compiled /src/middleware in 119ms (126 modules)
+ ○ Compiling /admin/content ...
+ ✓ Compiled /admin/content in 1120ms (733 modules)
+ ✓ Compiled in 85ms (331 modules)
+ ✓ Compiled /api/vendor/notifications in 124ms (430 modules)
+ GET /api/vendor/notifications 200 in 590ms
+ ✓ Compiled /marketplace in 259ms (828 modules)
+ ✓ Compiled /_not-found in 73ms (831 modules)
+ GET /hero-illustration.png 404 in 131ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /marketplace 200 in 665ms
+ GET /api/vendor/notifications 200 in 1769ms
+ GET /api/vendor/notifications 200 in 1329ms
+ GET /api/vendor/notifications 200 in 451ms
+ GET /marketplace 200 in 820ms
+ GET /hero-illustration.png 404 in 53ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 644ms
+ GET /api/vendor/notifications 200 in 568ms
+ GET /api/vendor/notifications 200 in 1076ms
+ GET /api/vendor/notifications 200 in 643ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 23ms
+ GET /api/vendor/notifications 200 in 576ms
+ GET /api/vendor/notifications 200 in 541ms
+ ✓ Compiled /admin/dashboard in 398ms (832 modules)
+ ✓ Compiled /_not-found in 56ms (490 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 114ms
+ GET /api/vendor/notifications 200 in 536ms
+ ✓ Compiled /vendor/dashboard in 298ms (885 modules)
+ GET /api/vendor/notifications 200 in 903ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 51ms
+ GET /api/vendor/notifications 200 in 564ms
+ GET /api/vendor/notifications 200 in 769ms
+ GET /api/vendor/notifications 200 in 1078ms
+ GET /api/vendor/notifications 200 in 765ms
+ GET /api/vendor/notifications 200 in 524ms
+ GET /api/vendor/notifications 200 in 556ms
+ ✓ Compiled in 459ms (796 modules)
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1793ms
+ ✓ Compiled /src/middleware in 124ms (126 modules)
+ ○ Compiling /vendor/dashboard ...
+ ✓ Compiled /vendor/dashboard in 1351ms (787 modules)
+ ✓ Compiled in 292ms (354 modules)
+ GET /vendor/dashboard 200 in 2610ms
+ ✓ Compiled /_not-found in 369ms (776 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 455ms
+ ✓ Compiled /api/vendor/notifications in 106ms (463 modules)
+ GET /api/vendor/notifications 200 in 798ms
+ GET /api/vendor/notifications 200 in 600ms
+ ✓ Compiled /vendor/products in 274ms (827 modules)
+ ✓ Compiled /vendor/storefront in 144ms (848 modules)
+ GET /api/vendor/notifications 200 in 459ms
+ ✓ Compiled /vendor/enquiries in 281ms (867 modules)
+ GET /api/vendor/notifications 200 in 514ms
+ GET /api/vendor/notifications 200 in 577ms
+ GET /api/vendor/notifications 200 in 730ms
+ GET /api/vendor/notifications 200 in 502ms
+ GET /api/vendor/notifications 200 in 494ms
+ GET /api/vendor/notifications 200 in 727ms
+ GET /api/vendor/notifications 200 in 525ms
+ GET /api/vendor/notifications 200 in 520ms
+ GET /api/vendor/notifications 200 in 1521ms
+ GET /api/vendor/notifications 200 in 532ms
+ GET /api/vendor/notifications 200 in 946ms
+ GET /api/vendor/notifications 200 in 597ms
+ GET /api/vendor/notifications 200 in 559ms
+ GET /api/vendor/notifications 200 in 477ms
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 474ms
+ GET /api/vendor/notifications 200 in 719ms
+ GET /api/vendor/notifications 200 in 517ms

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -34,6 +35,11 @@ function StarRating({ rating, count }: { rating: number; count?: number }) {
       {count !== undefined && <span className="text-xs text-gray-400 ml-0.5">({count})</span>}
     </div>
   )
+}
+
+export const metadata: Metadata = {
+  title: { absolute: 'Stallspace - Your Local Marketplace' },
+  description: 'Discover trusted local vendors, compare prices, and shop directly from independent businesses. No middlemen — just local sellers you can trust.',
 }
 
 export default async function HomePage() {

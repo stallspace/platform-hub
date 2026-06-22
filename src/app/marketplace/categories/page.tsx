@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
@@ -19,6 +20,11 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 function getCategoryIcon(slug: string): React.ReactNode {
   const match = Object.keys(CATEGORY_ICONS).find(k => slug.includes(k))
   return match ? CATEGORY_ICONS[match] : <Package className="w-6 h-6" />
+}
+
+export const metadata: Metadata = {
+  title: 'Categories',
+  description: 'Shop by category — from electronics to fashion, home goods, food and beverages, and more.',
 }
 
 export default async function CategoriesPage() {

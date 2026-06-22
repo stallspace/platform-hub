@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
@@ -28,6 +29,11 @@ const SORT_OPTIONS = [
 ]
 
 const PER_PAGE = 24
+
+export const metadata: Metadata = {
+  title: 'All Products',
+  description: 'Browse thousands of products from trusted local vendors. Compare prices and shop with confidence.',
+}
 
 export default async function ProductsPage({ searchParams }: PageProps) {
   const supabase = await createClient()
