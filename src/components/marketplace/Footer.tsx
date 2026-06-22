@@ -80,9 +80,9 @@ export default function Footer() {
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
           <p>© {new Date().getFullYear()} Stallspace. All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-white transition-colors">POPIA Compliance</Link>
+            <Link href="/legal/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/legal/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/legal/popia" className="hover:text-white transition-colors">POPIA Compliance</Link>
           </div>
         </div>
       </div>

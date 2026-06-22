@@ -2973,3 +2973,269 @@ TRACK product_view error: null
  ✓ Compiled /vendor/orders in 138ms (581 modules)
  GET /api/vendor/notifications 200 in 483ms
  GET /api/vendor/notifications 200 in 1001ms
+ GET /api/vendor/notifications 200 in 752ms
+ GET /api/vendor/notifications 200 in 499ms
+ GET /api/vendor/notifications 200 in 485ms
+ GET /api/vendor/notifications 200 in 468ms
+ GET /api/vendor/notifications 200 in 534ms
+ GET /api/vendor/notifications 200 in 612ms
+ ✓ Compiled /vendor/dashboard in 206ms (584 modules)
+ ✓ Compiled /vendor/products in 130ms (596 modules)
+ ✓ Compiled /vendor/storefront in 134ms (608 modules)
+ GET /api/vendor/notifications 200 in 512ms
+ GET /store/test-business 200 in 568ms
+ ✓ Compiled /_not-found in 217ms (1233 modules)
+ GET /hero-illustration.png 404 in 259ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /api/track in 128ms (611 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 416ms
+TRACK store_view error: null
+ POST /api/track 200 in 417ms
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 201ms
+TRACK product_view error: null
+ POST /api/track 200 in 204ms
+ GET /hero-illustration.png 404 in 30ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 456ms
+ GET /api/vendor/notifications 200 in 483ms
+ GET /api/vendor/notifications 200 in 602ms
+ GET /api/vendor/notifications 200 in 765ms
+ GET /api/vendor/notifications 200 in 505ms
+ GET /api/vendor/notifications 200 in 510ms
+ GET /api/vendor/notifications 200 in 657ms
+ GET /api/vendor/notifications 200 in 519ms
+ GET /api/vendor/notifications 200 in 470ms
+ GET /api/vendor/notifications 200 in 520ms
+ GET /api/vendor/notifications 200 in 513ms
+ GET /api/vendor/notifications 200 in 538ms
+ GET /api/vendor/notifications 200 in 482ms
+ GET /api/vendor/notifications 200 in 506ms
+ GET /api/vendor/notifications 200 in 503ms
+ GET /api/vendor/notifications 200 in 1055ms
+ GET /api/vendor/notifications 200 in 515ms
+ GET /api/vendor/notifications 200 in 485ms
+ GET /api/vendor/notifications 200 in 591ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /api/vendor/notifications 200 in 492ms
+ GET /api/vendor/notifications 200 in 467ms
+ GET /api/vendor/notifications 200 in 475ms
+ GET /api/vendor/notifications 200 in 513ms
+ GET /api/vendor/notifications 200 in 520ms
+ GET /api/vendor/notifications 200 in 456ms
+ GET /api/vendor/notifications 200 in 1169ms
+ GET /api/vendor/notifications 200 in 540ms
+ GET /api/vendor/notifications 200 in 509ms
+ ✓ Compiled in 633ms (1177 modules)
+ ✓ Compiled in 191ms (1186 modules)
+ ✓ Compiled in 206ms (1298 modules)
+
+> marcrte@0.1.0 dev
+> next dev -p 4000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://localhost:4000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1369ms
+ ✓ Compiled /api/vendor/notifications in 466ms (116 modules)
+ GET /api/vendor/notifications 200 in 1032ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1078ms (540 modules)
+ GET /store/test-business 404 in 1197ms
+ ✓ Compiled in 104ms (233 modules)
+ GET /store/test-business 404 in 34ms
+ GET /api/vendor/notifications 200 in 562ms
+ ○ Compiling /marketplace/store/[slug] ...
+ ✓ Compiled /marketplace/store/[slug] in 781ms (830 modules)
+ ✓ Compiled /api/track in 74ms (481 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 446ms
+TRACK store_view error: null
+ POST /api/track 200 in 456ms
+ GET /api/vendor/notifications 200 in 454ms
+ ✓ Compiled /marketplace/products/[slug] in 179ms (854 modules)
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'product_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: 'd25c1593-0833-4b65-b074-5403da92b3c2',
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK product_view error: null
+ POST /api/track 200 in 283ms
+TRACK product_view error: null
+ POST /api/track 200 in 291ms
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 221ms
+TRACK store_view error: null
+ POST /api/track 200 in 228ms
+ GET /api/vendor/notifications 200 in 490ms
+ GET /api/vendor/notifications 200 in 437ms
+ ✓ Compiled in 163ms (369 modules)
+ ✓ Compiled in 95ms (369 modules)
+ GET /api/vendor/notifications 200 in 965ms
+ ✓ Compiled /_not-found in 112ms (664 modules)
+ GET /store/test-business 404 in 179ms
+ ✓ Compiled /src/middleware in 103ms (126 modules)
+ ✓ Compiled /vendor/storefront in 301ms (825 modules)
+ GET /vendor/storefront 200 in 1049ms
+ GET /api/vendor/notifications 200 in 473ms
+ GET /api/vendor/notifications 200 in 416ms
+ ✓ Compiled /marketplace/store/[slug] in 143ms (511 modules)
+ GET /marketplace/store/test-business 200 in 667ms
+ ✓ Compiled /api/track in 53ms (513 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: '76bjn079c7wmqp83ngc'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: '76bjn079c7wmqp83ngc'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 303ms
+TRACK store_view error: null
+ POST /api/track 200 in 307ms
+ GET /api/vendor/notifications 200 in 551ms
+ GET /api/vendor/notifications 200 in 984ms
+ GET /api/vendor/notifications 200 in 616ms
+ GET /api/vendor/notifications 200 in 659ms
+ GET /api/vendor/notifications 200 in 549ms
+ ✓ Compiled in 182ms (396 modules)
+ ✓ Compiled in 107ms (396 modules)
+ ✓ Compiled in 125ms (1018 modules)
+ ✓ Compiled in 106ms (396 modules)
+ ✓ Compiled in 76ms (1018 modules)
+ GET /api/vendor/notifications 200 in 435ms
+ ✓ Compiled in 81ms (396 modules)
+ ✓ Compiled in 80ms (1018 modules)
+ ✓ Compiled in 257ms (906 modules)
+ GET /api/vendor/notifications 200 in 918ms
+ ✓ Compiled /marketplace in 221ms (912 modules)
+ GET /api/vendor/notifications 200 in 522ms
+ GET /marketplace/store/test-business 200 in 661ms
+ ✓ Compiled /api/track in 65ms (531 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'lvuklkl5hjrmqew0dih'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 336ms
+TRACK store_view error: null
+ POST /api/track 200 in 340ms
+ ✓ Compiled /_not-found in 158ms (917 modules)
+ GET /hero-illustration.png 404 in 196ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /legal/privacy-policy in 194ms (921 modules)
+ GET /api/vendor/notifications 200 in 452ms
+ GET /api/vendor/notifications 200 in 613ms
+ GET /api/vendor/notifications 200 in 520ms
+ GET /api/vendor/notifications 200 in 502ms
+ GET /api/vendor/notifications 200 in 491ms
+ GET /api/vendor/notifications 200 in 562ms
+ GET /api/vendor/notifications 200 in 450ms
+ ✓ Compiled /admin/vendors in 369ms (931 modules)
+ GET /admin/vendors 200 in 988ms
+ GET /api/vendor/notifications 200 in 471ms
+ ✓ Compiled /vendor/dashboard in 278ms (940 modules)
+ GET /vendor/dashboard 200 in 1142ms
+ GET /api/vendor/notifications 200 in 392ms
+ GET /api/vendor/notifications 200 in 426ms
+ GET /marketplace/store/test-business 200 in 506ms
+ ✓ Compiled /api/track in 61ms (553 modules)
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK: {
+  type: 'store_view',
+  vendor_id: '693b2c63-5b24-4815-9964-8628b82e2f38',
+  product_id: null,
+  session_id: 'n71eyp36m7mqp8hc0a'
+}
+TRACK store_view error: null
+ POST /api/track 200 in 305ms
+TRACK store_view error: null
+ POST /api/track 200 in 307ms
+ ✓ Compiled /_not-found in 117ms (945 modules)
+ GET /hero-illustration.png 404 in 146ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /legal/terms-of-service in 135ms (947 modules)
+ GET /api/vendor/notifications 200 in 522ms
+ GET /hero-illustration.png 404 in 31ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ ✓ Compiled /legal/popia in 120ms (949 modules)
+ GET /hero-illustration.png 404 in 23ms
+ ⨯ The requested resource isn't a valid image for /hero-illustration.png received text/html; charset=utf-8
+ GET /api/vendor/notifications 200 in 535ms
+ GET /api/vendor/notifications 200 in 677ms

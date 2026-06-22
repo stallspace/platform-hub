@@ -104,7 +104,7 @@ export default function StorefrontSettingsClient({ vendor }: Props) {
           <h1 className="text-2xl font-bold text-gray-900">My Storefront</h1>
           <p className="text-gray-500 text-sm mt-0.5">Manage your public-facing store profile</p>
         </div>
-        <a href={'/store/' + vendor.slug} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-brand-mint hover:underline">
+        <a href={'/marketplace/store/' + vendor.slug} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-brand-mint hover:underline">
           <ExternalLink className="w-4 h-4" /> View storefront
         </a>
       </div>
