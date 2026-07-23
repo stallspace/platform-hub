@@ -1,6 +1,6 @@
-# MARCRTE — Marketplace Platform
+# Stallspace — Marketplace Platform
 
-South Africa's vetted online marketplace. Built with Next.js 14, Supabase, and Tailwind CSS.
+Vetted online marketplace. Built with Next.js 14, Supabase, and Tailwind CSS.
 
 ---
 
