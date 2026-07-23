@@ -15,10 +15,6 @@ export default async function VendorPaymentsPage() {
 
   if (!vendor) redirect('/vendor/register')
 
-  const { data: configs } = await supabase
-    .from('vendor_payment_configs')
-    .select('*')
-    .eq('vendor_id', vendor.id)
-
-  return <PaymentsClient vendorId={vendor.id} configs={configs ?? []} />
+  // Credentials are loaded (masked) by the client via the secured API route.
+  return <PaymentsClient vendorId={vendor.id} />
 }

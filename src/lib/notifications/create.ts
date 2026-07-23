@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/admin'
 import type { NotificationType } from '@/types'
 
 export interface CreateNotificationInput {
@@ -10,7 +10,9 @@ export interface CreateNotificationInput {
 }
 
 export async function createNotification(input: CreateNotificationInput): Promise<void> {
-  const supabase = await createClient()
+  // Service role: we are writing a notification for another user (e.g. admin
+  // notifying a vendor), which RLS would otherwise block.
+  const supabase = createServiceClient()
   await supabase.from('notifications').insert({
     user_id: input.userId,
     type: input.type,

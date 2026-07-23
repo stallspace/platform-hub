@@ -1,4 +1,5 @@
 import { APP_URL } from './resend'
+import { escapeHtml as esc } from '@/lib/utils'
 
 // ─── Shared layout ──────────────────────────────────────────────────────────
 
@@ -101,9 +102,9 @@ export function vendorApprovedEmail(data: {
   const subject = `🎉 Welcome to Stallspace — ${data.businessName} is approved!`
   const html = layout(`
     ${heading('Your application has been approved!')}
-    ${para(`Hi ${data.ownerName}, great news — <strong>${data.businessName}</strong> has been approved on the Stallspace marketplace. Your storefront is now live and you can start listing products immediately.`)}
+    ${para(`Hi ${esc(data.ownerName)}, great news — <strong>${esc(data.businessName)}</strong> has been approved on the Stallspace marketplace. Your storefront is now live and you can start listing products immediately.`)}
     ${infoTable([
-      ['Business', data.businessName],
+      ['Business', esc(data.businessName)],
       ['Plan', data.plan.charAt(0).toUpperCase() + data.plan.slice(1)],
       ['Status', '✅ Approved & Active'],
     ])}
@@ -123,10 +124,10 @@ export function vendorRejectedEmail(data: {
   const subject = `Stallspace — Application Update for ${data.businessName}`
   const html = layout(`
     ${heading('Application not approved')}
-    ${para(`Hi ${data.ownerName}, thank you for applying to join the Stallspace marketplace.`)}
-    ${para(`After reviewing your application for <strong>${data.businessName}</strong>, we were unable to approve it at this time.`)}
+    ${para(`Hi ${esc(data.ownerName)}, thank you for applying to join the Stallspace marketplace.`)}
+    ${para(`After reviewing your application for <strong>${esc(data.businessName)}</strong>, we were unable to approve it at this time.`)}
     ${data.reason ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin:16px 0;">
-      <p style="margin:0;color:#991b1b;font-size:14px;"><strong>Reason:</strong> ${data.reason}</p>
+      <p style="margin:0;color:#991b1b;font-size:14px;"><strong>Reason:</strong> ${esc(data.reason)}</p>
     </div>` : ''}
     ${para('If you believe this was made in error or would like to reapply with additional documentation, please contact our support team.')}
     ${ctaButton('Contact Support', `${APP_URL}/contact`)}
@@ -142,9 +143,9 @@ export function vendorSuspendedEmail(data: {
   const subject = `Stallspace — ${data.businessName} account suspended`
   const html = layout(`
     ${heading('Your account has been suspended')}
-    ${para(`Hi ${data.ownerName}, your Stallspace vendor account for <strong>${data.businessName}</strong> has been temporarily suspended.`)}
+    ${para(`Hi ${esc(data.ownerName)}, your Stallspace vendor account for <strong>${esc(data.businessName)}</strong> has been temporarily suspended.`)}
     ${data.reason ? `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:16px;margin:16px 0;">
-      <p style="margin:0;color:#92400e;font-size:14px;"><strong>Reason:</strong> ${data.reason}</p>
+      <p style="margin:0;color:#92400e;font-size:14px;"><strong>Reason:</strong> ${esc(data.reason)}</p>
     </div>` : ''}
     ${para('During suspension, your storefront and products are hidden from the marketplace. Please contact support to resolve this.')}
     ${ctaButton('Contact Support', `${APP_URL}/contact`)}
@@ -160,7 +161,7 @@ export function vendorReactivatedEmail(data: {
   const subject = `Stallspace — ${data.businessName} is back online!`
   const html = layout(`
     ${heading('Your account has been reactivated')}
-    ${para(`Hi ${data.ownerName}, great news — your Stallspace vendor account for <strong>${data.businessName}</strong> has been reactivated.`)}
+    ${para(`Hi ${esc(data.ownerName)}, great news — your Stallspace vendor account for <strong>${esc(data.businessName)}</strong> has been reactivated.`)}
     ${para('Your storefront and products are now visible on the marketplace again.')}
     ${ctaButton('Go to Dashboard', data.dashboardUrl)}
   `)
@@ -180,16 +181,16 @@ export function newEnquiryEmail(data: {
   const subject = `New enquiry from ${data.customerName}${data.productName ? ` about ${data.productName}` : ''}`
   const html = layout(`
     ${heading('You have a new customer enquiry')}
-    ${para(`Hi ${data.vendorName}, a customer has sent an enquiry${data.productName ? ` about <strong>${data.productName}</strong>` : ''} on your Stallspace storefront.`)}
+    ${para(`Hi ${esc(data.vendorName)}, a customer has sent an enquiry${data.productName ? ` about <strong>${esc(data.productName)}</strong>` : ''} on your Stallspace storefront.`)}
     ${infoTable([
-      ['From', data.customerName],
-      ['Email', data.customerEmail],
-      ...(data.customerPhone ? [['Phone', data.customerPhone] as [string, string]] : []),
-      ...(data.productName ? [['Product', data.productName] as [string, string]] : []),
+      ['From', esc(data.customerName)],
+      ['Email', esc(data.customerEmail)],
+      ...(data.customerPhone ? [['Phone', esc(data.customerPhone)] as [string, string]] : []),
+      ...(data.productName ? [['Product', esc(data.productName)] as [string, string]] : []),
     ])}
     <div style="background:#f8f9fc;border:1px solid #e8ecf0;border-radius:8px;padding:16px;margin:16px 0;">
       <p style="margin:0 0 6px;color:#6b7280;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Message</p>
-      <p style="margin:0;color:#111827;font-size:14px;line-height:1.6;">${data.message}</p>
+      <p style="margin:0;color:#111827;font-size:14px;line-height:1.6;">${esc(data.message)}</p>
     </div>
     ${ctaButton('View Enquiry', data.enquiriesUrl)}
   `)
@@ -206,7 +207,7 @@ export function subscriptionPaymentFailedEmail(data: {
   const subject = `Action required — Payment failed for ${data.businessName}`
   const html = layout(`
     ${heading('Payment failed')}
-    ${para(`Hi ${data.ownerName}, we were unable to process your subscription payment for <strong>${data.businessName}</strong>.`)}
+    ${para(`Hi ${esc(data.ownerName)}, we were unable to process your subscription payment for <strong>${esc(data.businessName)}</strong>.`)}
     ${infoTable([
       ['Plan', data.plan.charAt(0).toUpperCase() + data.plan.slice(1)],
       ['Amount Due', data.amount],
@@ -214,6 +215,29 @@ export function subscriptionPaymentFailedEmail(data: {
     ])}
     ${para('Please update your payment details to avoid suspension of your Stallspace storefront. Your account will be suspended if payment is not resolved within 7 days.')}
     ${ctaButton('Update Payment', data.retryUrl)}
+  `)
+  return { subject, html }
+}
+
+export function subscriptionReminderEmail(data: {
+  ownerName: string
+  businessName: string
+  plan: string
+  amount: string
+  dueDate: string
+  payInstructions?: string
+}): { subject: string; html: string } {
+  const subject = `Payment reminder — Stallspace subscription for ${data.businessName}`
+  const html = layout(`
+    ${heading('Subscription payment reminder')}
+    ${para(`Hi ${esc(data.ownerName)}, this is a friendly reminder that your Stallspace subscription for <strong>${esc(data.businessName)}</strong> is due.`)}
+    ${infoTable([
+      ['Plan', data.plan.charAt(0).toUpperCase() + data.plan.slice(1)],
+      ['Amount Due', data.amount],
+      ['Due Date', esc(data.dueDate)],
+    ])}
+    ${para(data.payInstructions ? esc(data.payInstructions) : 'Please make your payment to keep your storefront active. If you have already paid, you can ignore this message.')}
+    ${para('<span style="color:#6b7280;font-size:13px;">Questions about your subscription? Just reply to this email.</span>')}
   `)
   return { subject, html }
 }
@@ -226,10 +250,10 @@ export function subscriptionCancelledEmail(data: {
   const subject = `Stallspace — Subscription cancelled for ${data.businessName}`
   const html = layout(`
     ${heading('Subscription cancelled')}
-    ${para(`Hi ${data.ownerName}, your Stallspace subscription for <strong>${data.businessName}</strong> has been cancelled.`)}
+    ${para(`Hi ${esc(data.ownerName)}, your Stallspace subscription for <strong>${esc(data.businessName)}</strong> has been cancelled.`)}
     ${infoTable([
-      ['Business', data.businessName],
-      ['Access Until', data.endDate],
+      ['Business', esc(data.businessName)],
+      ['Access Until', esc(data.endDate)],
       ['Status', 'Cancelled'],
     ])}
     ${para('Your storefront will remain active until the end of your current billing period. After that, your store and products will be hidden from the marketplace.')}
@@ -251,7 +275,7 @@ export function orderConfirmationEmail(data: {
   const itemRows = data.items
     .map(
       i => `<tr>
-        <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;">${i.product_name}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;">${esc(i.product_name)}</td>
         <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#6b7280;font-size:13px;text-align:center;">${i.quantity}</td>
         <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;text-align:right;">R${Number(i.total_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</td>
       </tr>`
@@ -259,10 +283,10 @@ export function orderConfirmationEmail(data: {
     .join('')
   const html = layout(`
     ${heading('Order confirmed! 🎉')}
-    ${para(`Hi ${data.customerName}, your order from <strong>${data.businessName}</strong> has been received and is being processed.`)}
+    ${para(`Hi ${esc(data.customerName)}, your order from <strong>${esc(data.businessName)}</strong> has been received and is being processed.`)}
     ${infoTable([
-      ['Order Number', data.orderNumber],
-      ['Vendor', data.businessName],
+      ['Order Number', esc(data.orderNumber)],
+      ['Vendor', esc(data.businessName)],
       ['Total', data.total],
       ['Status', '✅ Confirmed'],
     ])}
@@ -313,14 +337,14 @@ export function orderStatusUpdateEmail(data: {
   const subject = `Order ${data.orderNumber} — ${label}`
   const html = layout(`
     ${heading(`Order update: ${label}`)}
-    ${para(`Hi ${data.customerName}, there's an update on your order from <strong>${data.businessName}</strong>.`)}
+    ${para(`Hi ${esc(data.customerName)}, there's an update on your order from <strong>${esc(data.businessName)}</strong>.`)}
     ${infoTable([
-      ['Order Number', data.orderNumber],
-      ['Vendor', data.businessName],
+      ['Order Number', esc(data.orderNumber)],
+      ['Vendor', esc(data.businessName)],
       ['New Status', badge(label, color)],
     ])}
     ${data.statusMessage ? `<div style="background:#f8f9fc;border:1px solid #e8ecf0;border-radius:8px;padding:16px;margin:16px 0;">
-      <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;">${data.statusMessage}</p>
+      <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;">${esc(data.statusMessage)}</p>
     </div>` : ''}
     ${ctaButton('View Order', data.ordersUrl)}
   `)

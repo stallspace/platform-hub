@@ -1,29 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState, useEffect } from 'react'
 import { CreditCard, Shield, Eye, EyeOff, Loader2, Check } from 'lucide-react'
 
-interface PaymentConfig {
-  id?: string
-  vendor_id: string
+interface MaskedConfig {
+  id: string
   provider: string
-  config_data: Record<string, string>
   is_active: boolean
+  config_masked: Record<string, string>
 }
 
 interface Props {
   vendorId: string
-  configs: PaymentConfig[]
+  configs?: unknown // legacy prop, no longer used for values
 }
 
 type Provider = 'payfast' | 'peach' | 'yoco' | 'ozow'
 
+// Stallspace uses PayFast for all customer payments. Payments go directly to the
+// vendor's own PayFast account — Stallspace never handles the funds.
 const PROVIDERS = [
-  { id: 'payfast' as Provider, name: 'PayFast', description: 'Most popular in South Africa' },
-  { id: 'peach' as Provider, name: 'Peach Payments', description: 'Enterprise-grade payments' },
-  { id: 'yoco' as Provider, name: 'Yoco', description: 'Simple card payments' },
-  { id: 'ozow' as Provider, name: 'Ozow', description: 'Instant EFT payments' },
+  { id: 'payfast' as Provider, name: 'PayFast', description: 'Payments go straight to your PayFast account' },
 ]
 
 const FIELDS: Record<Provider, { key: string; label: string; masked: boolean; placeholder: string }[]> = {
@@ -64,20 +61,51 @@ function MaskedInput({ value, onChange, placeholder }: { value: string; onChange
   )
 }
 
-export default function PaymentsClient({ vendorId, configs }: Props) {
-  const supabase = createClient()
+const SECRET_KEYS = new Set(['merchant_key', 'passphrase', 'secret_key', 'private_key', 'access_token'])
+
+export default function PaymentsClient({ vendorId }: Props) {
   const [provider, setProvider] = useState<Provider>('payfast')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [savedConfigs, setSavedConfigs] = useState<MaskedConfig[]>([])
+  const [fields, setFields] = useState<Record<string, string>>({})
 
-  const existing = configs.find(c => c.provider === provider)
-  const [fields, setFields] = useState<Record<string, string>>(existing?.config_data ?? {})
+  const existing = savedConfigs.find(c => c.provider === provider)
+
+  // Fields the vendor has typed but not yet saved (only these get sent).
+  function prefillFor(p: Provider, list: MaskedConfig[]) {
+    const ex = list.find(c => c.provider === p)
+    if (!ex) return {}
+    // Prefill non-secret fields with their real (masked route returns real) values;
+    // leave secret fields blank so they can be kept or replaced.
+    const next: Record<string, string> = {}
+    for (const [k, v] of Object.entries(ex.config_masked)) {
+      if (!SECRET_KEYS.has(k)) next[k] = v
+    }
+    return next
+  }
+
+  async function loadConfigs() {
+    try {
+      const res = await fetch('/api/vendor/payment-config')
+      const json = await res.json()
+      const list: MaskedConfig[] = json.configs ?? []
+      setSavedConfigs(list)
+      setFields(prefillFor(provider, list))
+    } catch {
+      /* ignore */
+    }
+  }
+
+  useEffect(() => {
+    loadConfigs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function handleProviderChange(p: Provider) {
     setProvider(p)
-    const ex = configs.find(c => c.provider === p)
-    setFields(ex?.config_data ?? {})
+    setFields(prefillFor(p, savedConfigs))
     setSaved(false)
     setError(null)
   }
@@ -86,24 +114,23 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
     setSaving(true)
     setError(null)
     try {
-      const payload = {
-        vendor_id: vendorId,
-        provider,
-        config_data: fields,
-        is_active: true,
-        updated_at: new Date().toISOString(),
+      // Send only fields the vendor actually entered; blank secrets are kept server-side.
+      const config: Record<string, string> = {}
+      for (const [k, v] of Object.entries(fields)) {
+        if (v && v.trim() !== '') config[k] = v.trim()
       }
-      if (existing?.id) {
-        const { error: e } = await supabase.from('vendor_payment_configs').update(payload).eq('id', existing.id)
-        if (e) throw e
-      } else {
-        const { error: e } = await supabase.from('vendor_payment_configs').insert(payload)
-        if (e) throw e
-      }
+      const res = await fetch('/api/vendor/payment-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, config }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Failed to save')
       setSaved(true)
+      await loadConfigs()
       setTimeout(() => setSaved(false), 3000)
-    } catch {
-      setError('Failed to save payment configuration.')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save payment configuration.')
     } finally {
       setSaving(false)
     }
@@ -123,7 +150,7 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
           <h2 className="font-semibold text-gray-900 mb-4">Select Payment Provider</h2>
           <div className="grid grid-cols-2 gap-3">
             {PROVIDERS.map(p => {
-              const configured = configs.some(c => c.provider === p.id && c.is_active)
+              const configured = savedConfigs.some(c => c.provider === p.id && c.is_active)
               return (
                 <button
                   key={p.id}
@@ -145,20 +172,33 @@ export default function PaymentsClient({ vendorId, configs }: Props) {
         </div>
 
         <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-1">
             <CreditCard className="w-4 h-4 text-brand-mint" />
             <h2 className="font-semibold text-gray-900">{PROVIDERS.find(p => p.id === provider)?.name} Credentials</h2>
           </div>
+          <p className="text-xs text-gray-500 mb-4">
+            Don&apos;t have a PayFast account yet?{' '}
+            <a href="https://www.payfast.io/registration" target="_blank" rel="noopener noreferrer" className="text-brand-mint font-medium hover:underline">
+              Create one free
+            </a>
+            , then copy your <strong>Merchant ID</strong> and <strong>Merchant Key</strong> from PayFast&nbsp;→&nbsp;Settings&nbsp;→&nbsp;Integration.
+          </p>
           <div className="space-y-3">
-            {FIELDS[provider].map(field => (
-              <div key={field.key}>
-                <label className="text-xs text-gray-500 mb-1 block">{field.label}</label>
-                {field.masked
-                  ? <MaskedInput value={fields[field.key] ?? ''} onChange={v => setFields(prev => ({ ...prev, [field.key]: v }))} placeholder={field.placeholder} />
-                  : <input type="text" value={fields[field.key] ?? ''} onChange={e => setFields(prev => ({ ...prev, [field.key]: e.target.value }))} placeholder={field.placeholder} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
-                }
-              </div>
-            ))}
+            {FIELDS[provider].map(field => {
+              const savedValue = existing?.config_masked?.[field.key]
+              const placeholder = field.masked && savedValue
+                ? `${savedValue} — leave blank to keep`
+                : field.placeholder
+              return (
+                <div key={field.key}>
+                  <label className="text-xs text-gray-500 mb-1 block">{field.label}</label>
+                  {field.masked
+                    ? <MaskedInput value={fields[field.key] ?? ''} onChange={v => setFields(prev => ({ ...prev, [field.key]: v }))} placeholder={placeholder} />
+                    : <input type="text" value={fields[field.key] ?? ''} onChange={e => setFields(prev => ({ ...prev, [field.key]: e.target.value }))} placeholder={placeholder} className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
+                  }
+                </div>
+              )
+            })}
           </div>
         </div>
 

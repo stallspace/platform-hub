@@ -24,14 +24,14 @@ function SuccessContent() {
     async function confirm() {
       if (!orderId) { setLoading(false); return }
       try {
+        // Verify the payment SERVER-SIDE. The browser never sets the paid status.
+        await fetch('/api/checkout/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId }),
+        }).catch(() => {})
+
         const supabase = createClient()
-
-        await supabase
-          .from('orders')
-          .update({ status: 'confirmed' })
-          .eq('id', orderId)
-          .eq('status', 'pending')
-
         const { data, error: fetchError } = await supabase
           .from('orders')
           .select('id, order_number, total, status, vendor_id, vendor:vendors(business_name, slug)')

@@ -21,5 +21,6 @@ export default async function VendorReviewsPage() {
     .eq('vendor_id', vendor.id)
     .order('created_at', { ascending: false })
 
-  return <ReviewsClient reviews={reviews ?? []} vendorId={vendor.id} />
+  // Supabase types the to-one products join as an array; runtime shape matches the client.
+  return <ReviewsClient reviews={(reviews ?? []) as unknown as Parameters<typeof ReviewsClient>[0]['reviews']} vendorId={vendor.id} />
 }

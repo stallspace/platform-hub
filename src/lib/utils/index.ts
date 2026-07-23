@@ -26,6 +26,20 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length) + '...'
 }
 
+/**
+ * Escape a string for safe interpolation into HTML (e.g. email templates).
+ * Prevents HTML/script injection from user-supplied values like names,
+ * messages, and free-text fields.
+ */
+export function escapeHtml(input: unknown): string {
+  return String(input ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export function getInitials(name: string): string {
   return name
     .split(' ')

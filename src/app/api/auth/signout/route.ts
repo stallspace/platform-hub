@@ -4,7 +4,8 @@ import { NextResponse } from 'next/server'
 export async function POST() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  return NextResponse.redirect(new URL('/marketplace', process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4000'), {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:4000'
+  return NextResponse.redirect(new URL('/marketplace', appUrl), {
     status: 302,
   })
 }

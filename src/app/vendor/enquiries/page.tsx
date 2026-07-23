@@ -24,7 +24,8 @@ export default async function VendorEnquiriesPage() {
 
   return (
     <EnquiriesClient
-      enquiries={enquiries ?? []}
+      // Supabase types the to-one products join as an array; the runtime shape matches the client's expectations.
+      enquiries={(enquiries ?? []) as unknown as Parameters<typeof EnquiriesClient>[0]['enquiries']}
       vendorId={vendor.id}
       vendorEmail={vendor.email}
     />

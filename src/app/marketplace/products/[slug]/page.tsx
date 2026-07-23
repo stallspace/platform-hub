@@ -68,7 +68,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       id, name, slug, description, price, compare_at_price,
       images, sku, specifications, variants, tags,
       track_inventory, stock_quantity, is_available, is_archived,
-      view_count, created_at,
+      is_featured, view_count, created_at,
       vendor:vendors(
         id, business_name, slug, logo_url, banner_url,
         business_description, email, phone, business_address,

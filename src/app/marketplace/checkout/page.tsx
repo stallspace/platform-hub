@@ -10,17 +10,15 @@ import {
 } from 'lucide-react'
 import { useCartStore, groupByVendor } from '@/lib/cart/store'
 import { createClient } from '@/lib/supabase/client'
-import { buildOzowUrl } from '@/lib/payments/ozow'
 
 const PROVINCES = [
   'Eastern Cape','Free State','Gauteng','KwaZulu-Natal',
   'Limpopo','Mpumalanga','Northern Cape','North West','Western Cape',
 ]
 
-interface VendorPaymentConfig {
+interface VendorPaymentMethod {
   provider: string
-  config_data: Record<string, string>
-  is_active: boolean
+  configured: boolean
 }
 
 interface CheckoutForm {
@@ -33,28 +31,6 @@ interface CheckoutForm {
   province: string
   postal_code: string
   fulfilment: 'delivery' | 'collection'
-}
-
-function buildPayFastUrl(p: {
-  merchantId: string; merchantKey: string; passphrase: string
-  amount: number; itemName: string; orderId: string
-  returnUrl: string; cancelUrl: string; notifyUrl: string
-  email: string; name: string
-}): string {
-  const isSandbox = process.env.NEXT_PUBLIC_PAYFAST_SANDBOX !== 'false'
-  const base = isSandbox
-    ? 'https://sandbox.payfast.co.za/eng/process'
-    : 'https://www.payfast.co.za/eng/process'
-  const data = new URLSearchParams({
-    merchant_id: p.merchantId, merchant_key: p.merchantKey,
-    return_url: p.returnUrl, cancel_url: p.cancelUrl, notify_url: p.notifyUrl,
-    name_first: p.name.split(' ')[0] ?? p.name,
-    name_last: p.name.split(' ').slice(1).join(' ') || '-',
-    email_address: p.email, m_payment_id: p.orderId,
-    amount: p.amount.toFixed(2), item_name: p.itemName,
-  })
-  if (p.passphrase) data.set('passphrase', p.passphrase)
-  return `${base}?${data.toString()}`
 }
 
 export default function CheckoutPage() {
@@ -71,7 +47,7 @@ export default function CheckoutPage() {
     line1: '', line2: '', city: '', province: '', postal_code: '',
     fulfilment: 'delivery',
   })
-  const [vendorConfig, setVendorConfig] = useState<VendorPaymentConfig | null>(null)
+  const [vendorConfig, setVendorConfig] = useState<VendorPaymentMethod | null>(null)
   const [vendorInfo, setVendorInfo] = useState<{
     business_name: string; slug: string; delivery_cost: number; fulfilment_type: string
   } | null>(null)
@@ -113,12 +89,12 @@ export default function CheckoutPage() {
     if (!currentVendorId) return
     async function loadVendor() {
       const supabase = createClient()
-      const [{ data: configs }, { data: vendor }, { data: ss }] = await Promise.all([
-        supabase.from('vendor_payment_configs').select('*').eq('vendor_id', currentVendorId).eq('is_active', true).limit(1),
+      const [methodRes, { data: vendor }, { data: ss }] = await Promise.all([
+        fetch(`/api/checkout/payment-method?vendorId=${currentVendorId}`).then(r => r.json()).catch(() => null),
         supabase.from('vendors').select('business_name, slug').eq('id', currentVendorId).single(),
         supabase.from('vendor_store_settings').select('fulfilment_type, delivery_cost').eq('vendor_id', currentVendorId).single(),
       ])
-      setVendorConfig(configs?.[0] ?? null)
+      setVendorConfig(methodRes?.configured ? { provider: methodRes.provider, configured: true } : null)
       setVendorInfo(vendor ? {
         ...vendor,
         delivery_cost: ss?.delivery_cost ?? 0,
@@ -146,10 +122,10 @@ export default function CheckoutPage() {
   }
 
   async function createOrder() {
+    // Only identifiers/quantities are sent; the server recomputes all prices.
     const orderItems = currentVendorItems.map(i => ({
-      product_id: i.product_id, product_name: i.product_name,
-      product_image: i.image, quantity: i.quantity,
-      unit_price: i.price, total_price: i.price * i.quantity,
+      product_id: i.product_id,
+      quantity: i.quantity,
       variant: i.variant ?? null,
     }))
     const res = await fetch('/api/orders', {
@@ -161,7 +137,7 @@ export default function CheckoutPage() {
         shipping_address: form.fulfilment === 'delivery'
           ? { line1: form.line1, line2: form.line2 || undefined, city: form.city, province: form.province, postal_code: form.postal_code, country: 'South Africa' }
           : { collection: true },
-        items: orderItems, subtotal, delivery_cost: deliveryCost,
+        items: orderItems, fulfilment: form.fulfilment,
         payment_provider: vendorConfig!.provider,
       }),
     })
@@ -179,73 +155,18 @@ export default function CheckoutPage() {
 
     try {
       const order = await createOrder()
-      const siteUrl = window.location.origin
-      const returnUrl = `${siteUrl}/marketplace/checkout/success?order=${order.id}&vendor=${vendorInfo?.slug}`
-      const cancelUrl = `${siteUrl}/marketplace/checkout/cancel?order=${order.id}`
-      const notifyUrl = `${siteUrl}/api/orders/notify`
-      const cfg = vendorConfig.config_data
 
-      if (vendorConfig.provider === 'payfast') {
-        if (!cfg.merchant_id) throw new Error('PayFast merchant ID not configured')
-        window.location.href = buildPayFastUrl({
-          merchantId: cfg.merchant_id, merchantKey: cfg.merchant_key ?? '',
-          passphrase: cfg.passphrase ?? '', amount: total,
-          itemName: `Order ${order.order_number} — ${vendorInfo?.business_name}`,
-          orderId: order.id, returnUrl, cancelUrl,
-          notifyUrl: `${notifyUrl}?provider=payfast`,
-          email: form.email, name: form.full_name,
-        })
-        return
+      // All gateway logic (and credential handling) runs server-side.
+      const res = await fetch('/api/checkout/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: order.id }),
+      })
+      const d = await res.json()
+      if (!res.ok || !d.redirectUrl) {
+        throw new Error(d.error ?? 'Payment could not be initiated. Please contact the vendor.')
       }
-
-      if (vendorConfig.provider === 'yoco') {
-        if (!cfg.secret_key) throw new Error('Yoco secret key not configured')
-        const r = await fetch('/api/checkout/yoco', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            secretKey: cfg.secret_key, amount: total,
-            orderId: order.id, orderNumber: order.order_number,
-            successUrl: returnUrl, cancelUrl, failureUrl: cancelUrl,
-          }),
-        })
-        const d = await r.json()
-        if (!r.ok || !d.redirectUrl) throw new Error(d.error ?? 'Yoco checkout could not be initiated')
-        window.location.href = d.redirectUrl
-        return
-      }
-
-      if (vendorConfig.provider === 'peach') {
-        if (!cfg.entity_id || !cfg.access_token) throw new Error('Peach Payments credentials not configured')
-        const r = await fetch('/api/checkout/peach', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            entityId: cfg.entity_id, accessToken: cfg.access_token,
-            amount: total, orderId: order.id, orderNumber: order.order_number,
-            shopperResultUrl: returnUrl, nonce: order.id,
-          }),
-        })
-        const d = await r.json()
-        if (!r.ok || !d.redirectUrl) throw new Error(d.error ?? 'Peach Payments checkout could not be initiated')
-        window.location.href = d.redirectUrl
-        return
-      }
-
-      if (vendorConfig.provider === 'ozow') {
-        if (!cfg.site_code || !cfg.private_key) throw new Error('Ozow credentials not configured')
-        window.location.href = buildOzowUrl({
-          siteCode: cfg.site_code, privateKey: cfg.private_key,
-          amount: total, transactionReference: order.order_number,
-          optional1: order.id,
-          successUrl: returnUrl, cancelUrl, errorUrl: cancelUrl,
-          notifyUrl: `${notifyUrl}?provider=ozow`,
-          isTest: process.env.NEXT_PUBLIC_OZOW_SANDBOX !== 'false',
-        })
-        return
-      }
-
-      throw new Error('Payment gateway not configured correctly. Please contact the vendor.')
+      window.location.href = d.redirectUrl
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setLoading(false)

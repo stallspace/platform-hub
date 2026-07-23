@@ -21,6 +21,13 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+nohup.out
+*.log
+
+# Editor/backup cruft
+*.bak
+*.old
+**/.DS_Store
 
 # Local env files - NEVER commit these
 .env

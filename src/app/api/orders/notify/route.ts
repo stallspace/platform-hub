@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/admin'
+import { readConfigData } from '@/lib/crypto/secrets'
 import { createHmac, createHash } from 'crypto'
 import { sendEmail } from '@/lib/email/resend'
 import { orderConfirmationEmail } from '@/lib/email/templates'
@@ -11,11 +12,18 @@ import { orderConfirmationEmail } from '@/lib/email/templates'
  * Yoco / Peach use redirect URLs handled on the success page.
  */
 
-async function verifyPayFast(rawBody: string): Promise<boolean> {
+// Supabase can type a to-one join as an array; normalise it.
+function bizName(vendors: unknown): string {
+  if (Array.isArray(vendors)) return vendors[0]?.business_name ?? ''
+  return (vendors as { business_name?: string } | null)?.business_name ?? ''
+}
+
+// Verify the PayFast ITN signature using THIS vendor's passphrase (each vendor
+// has their own PayFast account, so the passphrase is per-vendor, not global).
+function verifyPayFast(rawBody: string, passphrase: string): boolean {
   const params = new URLSearchParams(rawBody)
   const signature = params.get('signature') ?? ''
   params.delete('signature')
-  const passphrase = process.env.PAYFAST_PASSPHRASE ?? ''
   const paramString =
     [...params.entries()]
       .map(([k, v]) => `${k}=${encodeURIComponent(v.trim()).replace(/%20/g, '+')}`)
@@ -44,20 +52,45 @@ export async function POST(request: NextRequest) {
   const params = new URLSearchParams(rawBody)
 
   try {
-    const supabase = await createClient()
+    // Webhooks have no user session — use the service role (with signature checks below).
+    const supabase = createServiceClient()
 
     if (provider === 'payfast') {
-      const valid = await verifyPayFast(rawBody)
-      if (!valid) return NextResponse.json({ error: 'Invalid PayFast signature' }, { status: 400 })
-
       const orderId = params.get('m_payment_id')
       if (!orderId) return NextResponse.json({ error: 'Missing order id' }, { status: 400 })
+
+      // Load the order and the paying vendor's PayFast passphrase to verify the signature.
+      const { data: pending } = await supabase
+        .from('orders')
+        .select('id, vendor_id, total, status')
+        .eq('id', orderId)
+        .single()
+      if (!pending) return NextResponse.json({ error: 'Order not found' }, { status: 404 })
+
+      const { data: cfg } = await supabase
+        .from('vendor_payment_configs')
+        .select('config_data')
+        .eq('vendor_id', pending.vendor_id)
+        .eq('provider', 'payfast')
+        .single()
+      const passphrase = cfg ? (readConfigData(cfg.config_data).passphrase ?? '') : ''
+
+      if (!verifyPayFast(rawBody, passphrase)) {
+        return NextResponse.json({ error: 'Invalid PayFast signature' }, { status: 400 })
+      }
+
+      // Guard against amount tampering — the paid amount must match the order total.
+      const amountGross = Number(params.get('amount_gross') ?? '0')
+      if (Math.abs(amountGross - Number(pending.total)) > 0.01) {
+        return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 })
+      }
 
       if (params.get('payment_status') === 'COMPLETE') {
         const { data: order } = await supabase
           .from('orders')
-          .update({ status: 'paid', payment_reference: params.get('pf_payment_id') })
+          .update({ status: 'confirmed', payment_reference: params.get('pf_payment_id') })
           .eq('id', orderId)
+          .eq('status', 'pending')
           .select('*, vendors(business_name)')
           .single()
 
@@ -65,7 +98,7 @@ export async function POST(request: NextRequest) {
           const { subject, html } = orderConfirmationEmail({
             customerName: order.customer_name,
             orderNumber: order.order_number,
-            businessName: order.vendors?.business_name ?? '',
+            businessName: bizName(order.vendors),
             total: `R${Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
             items: order.items ?? [],
             ordersUrl: `${process.env.NEXT_PUBLIC_APP_URL}/account/orders`,
@@ -98,15 +131,20 @@ export async function POST(request: NextRequest) {
       }
 
       if (params.get('Status') === 'Complete') {
-        await supabase
+        const { data: updated } = await supabase
           .from('orders')
-          .update({ status: 'paid', payment_reference: params.get('TransactionId') })
+          .update({ status: 'confirmed', payment_reference: params.get('TransactionId') })
           .eq('id', order.id)
+          .eq('status', 'pending')
+          .select('id')
+          .single()
+
+        if (!updated) return NextResponse.json({ ok: true }) // already processed
 
         const { subject, html } = orderConfirmationEmail({
           customerName: order.customer_name,
           orderNumber: order.order_number,
-          businessName: order.vendors?.business_name ?? '',
+          businessName: bizName(order.vendors),
           total: `R${Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
           items: order.items ?? [],
           ordersUrl: `${process.env.NEXT_PUBLIC_APP_URL}/account/orders`,

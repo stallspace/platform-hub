@@ -103,9 +103,111 @@ export default function VendorDetailClient({
   const [toast, setToast] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>('details')
 
+  // Admin-managed subscription controls
+  const [subPlan, setSubPlan] = useState(vendor.subscription_plan ?? '')
+  const [subStatus, setSubStatus] = useState(vendor.subscription_status ?? '')
+  const [subNextBilling, setSubNextBilling] = useState(
+    vendor.subscription_next_billing ? vendor.subscription_next_billing.slice(0, 10) : ''
+  )
+  const [savingSub, setSavingSub] = useState(false)
+
   function showToast(text: string, type: 'success' | 'error') {
     setToast({ text, type })
     setTimeout(() => setToast(null), 3500)
+  }
+
+  async function saveSubscription() {
+    setSavingSub(true)
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('vendors')
+      .update({
+        subscription_plan: subPlan || null,
+        subscription_status: subStatus || null,
+        subscription_next_billing: subNextBilling ? new Date(subNextBilling).toISOString() : null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', vendor.id)
+    if (error) showToast(`Failed: ${error.message}`, 'error')
+    else { showToast('Subscription updated.', 'success'); startTransition(() => router.refresh()) }
+    setSavingSub(false)
+  }
+
+  // Record a manual subscription payment: logs a billing event, sets status
+  // active, and advances next billing by one month.
+  async function recordPayment() {
+    if (!subPlan) { showToast('Select a plan first.', 'error'); return }
+    setSavingSub(true)
+    const supabase = createClient()
+    const amount = PLAN_PRICES[subPlan] ?? 0
+    const base = subNextBilling ? new Date(subNextBilling) : new Date()
+    const next = new Date(base)
+    next.setMonth(next.getMonth() + 1)
+
+    const { error: evErr } = await supabase.from('subscription_events').insert({
+      vendor_id: vendor.id,
+      event_type: 'charge_success',
+      amount,
+      provider_reference: 'manual',
+    })
+    const { error: vErr } = await supabase
+      .from('vendors')
+      .update({
+        subscription_plan: subPlan,
+        subscription_status: 'active',
+        subscription_next_billing: next.toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', vendor.id)
+
+    if (evErr || vErr) showToast(`Failed: ${(evErr ?? vErr)?.message}`, 'error')
+    else {
+      setSubStatus('active')
+      setSubNextBilling(next.toISOString().slice(0, 10))
+      showToast(`Payment of R${amount} recorded.`, 'success')
+      startTransition(() => router.refresh())
+    }
+    setSavingSub(false)
+  }
+
+  // Give the vendor 3 free months: active now, first payment due in 3 months.
+  async function startFreeTrial() {
+    setSavingSub(true)
+    const supabase = createClient()
+    const plan = subPlan || 'starter'
+    const next = new Date()
+    next.setMonth(next.getMonth() + 3)
+    const { error } = await supabase
+      .from('vendors')
+      .update({
+        subscription_plan: plan,
+        subscription_status: 'active',
+        subscription_next_billing: next.toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', vendor.id)
+    if (error) showToast(`Failed: ${error.message}`, 'error')
+    else {
+      setSubPlan(plan)
+      setSubStatus('active')
+      setSubNextBilling(next.toISOString().slice(0, 10))
+      showToast('3-month free trial started. First payment due in 3 months.', 'success')
+      startTransition(() => router.refresh())
+    }
+    setSavingSub(false)
+  }
+
+  // Email the vendor a subscription payment reminder (no debit order — manual).
+  async function sendReminder() {
+    if (!subPlan) { showToast('Set a plan first.', 'error'); return }
+    setSavingSub(true)
+    try {
+      await fireNotification('subscription.reminder', { vendorId: vendor.id })
+      showToast('Payment reminder sent to vendor.', 'success')
+    } catch {
+      showToast('Failed to send reminder.', 'error')
+    }
+    setSavingSub(false)
   }
 
   async function updateStatus(newStatus: string, label: string) {
@@ -465,6 +567,57 @@ export default function VendorDetailClient({
                       </div>
                     ))}
                   </div>
+                  {/* Admin-managed subscription controls */}
+                  <div className="border border-gray-100 rounded-xl p-4 bg-gray-50/50">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Manage Subscription</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-xs text-gray-500 mb-1 block">Plan</label>
+                        <select value={subPlan} onChange={(e) => setSubPlan(e.target.value)}
+                          className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white">
+                          <option value="">No plan</option>
+                          <option value="starter">Starter — R250 (20 products)</option>
+                          <option value="growth">Growth — R500 (50 products)</option>
+                          <option value="premium">Premium — R1000 (unlimited)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 mb-1 block">Status</label>
+                        <select value={subStatus} onChange={(e) => setSubStatus(e.target.value)}
+                          className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white">
+                          <option value="">None</option>
+                          <option value="active">Active</option>
+                          <option value="past_due">Past Due</option>
+                          <option value="suspended">Suspended</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 mb-1 block">Next Billing</label>
+                        <input type="date" value={subNextBilling} onChange={(e) => setSubNextBilling(e.target.value)}
+                          className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3 flex-wrap">
+                      <button onClick={startFreeTrial} disabled={savingSub}
+                        className="px-4 py-2 bg-brand-mint hover:bg-brand-forest text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                        Start 3-Month Free Trial
+                      </button>
+                      <button onClick={saveSubscription} disabled={savingSub}
+                        className="px-4 py-2 bg-[#0D3B2E] hover:bg-[#0d2a5e] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                        {savingSub ? 'Saving...' : 'Save Changes'}
+                      </button>
+                      <button onClick={recordPayment} disabled={savingSub}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                        Record Payment (+1 month)
+                      </button>
+                      <button onClick={sendReminder} disabled={savingSub}
+                        className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                        Send Payment Reminder
+                      </button>
+                    </div>
+                  </div>
+
                   <div>
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Billing History</p>
                     {events.length === 0 ? (

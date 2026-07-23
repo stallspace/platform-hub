@@ -81,7 +81,7 @@ export default async function AdminProductsPage({
       </div>
 
       <ProductModerationClient
-        products={(products as AdminProduct[]) ?? []}
+        products={(products ?? []) as unknown as AdminProduct[]}
         activeFilter={filter}
         counts={counts}
         searchQuery={search}
