@@ -10,11 +10,12 @@ const STATUS_STYLES: Record<string, string> = {
   processing: 'bg-violet-50 text-violet-700 border-violet-200',
   shipped:    'bg-sky-50 text-sky-700 border-sky-200',
   delivered:  'bg-emerald-50 text-emerald-700 border-emerald-200',
+  completed:  'bg-green-100 text-green-800 border-green-200',
   cancelled:  'bg-red-50 text-red-700 border-red-200',
   refunded:   'bg-gray-100 text-gray-600 border-gray-200',
 }
 
-const STATUS_TABS = ['all', 'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
+const STATUS_TABS = ['all', 'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'completed', 'cancelled', 'refunded']
 
 type OrderItem = {
   product_id: string

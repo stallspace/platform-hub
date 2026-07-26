@@ -9,6 +9,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
   processing: { label: 'Processing', color: 'bg-blue-100 text-blue-700',    icon: <RefreshCw    className="w-3.5 h-3.5" /> },
   shipped:    { label: 'Shipped',    color: 'bg-purple-100 text-purple-700', icon: <Truck       className="w-3.5 h-3.5" /> },
   delivered:  { label: 'Delivered',  color: 'bg-green-100 text-green-700',  icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  completed:  { label: 'Completed',  color: 'bg-green-100 text-green-800',  icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
   cancelled:  { label: 'Cancelled',  color: 'bg-red-100 text-red-700',      icon: <XCircle      className="w-3.5 h-3.5" /> },
   refunded:   { label: 'Refunded',   color: 'bg-gray-100 text-gray-700',    icon: <RefreshCw    className="w-3.5 h-3.5" /> },
 }
