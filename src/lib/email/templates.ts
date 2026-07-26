@@ -318,18 +318,24 @@ export function orderStatusUpdateEmail(data: {
     pending: 'Pending',
     confirmed: 'Confirmed',
     processing: 'Processing',
+    shipped: 'Shipped',
     dispatched: 'Dispatched',
     delivered: 'Delivered',
+    completed: 'Completed',
     ready_for_collection: 'Ready for Collection',
     cancelled: 'Cancelled',
+    refunded: 'Refunded',
   }
   const statusColors: Record<string, string> = {
     confirmed: 'green',
     processing: 'blue',
+    shipped: 'blue',
     dispatched: 'blue',
     delivered: 'green',
+    completed: 'green',
     ready_for_collection: 'green',
     cancelled: 'red',
+    refunded: 'red',
     pending: 'amber',
   }
   const label = statusLabels[data.newStatus] ?? data.newStatus

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { ShoppingBag, Search, X, Check } from 'lucide-react'
 
 interface OrderItem {
@@ -40,7 +39,7 @@ interface Props {
   productNames: Record<string, string>
 }
 
-const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled']
+const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'completed', 'cancelled']
 
 const STATUS_STYLES: Record<string, string> = {
   pending:    'bg-amber-100 text-amber-700',
@@ -48,6 +47,7 @@ const STATUS_STYLES: Record<string, string> = {
   processing: 'bg-violet-100 text-violet-700',
   shipped:    'bg-sky-100 text-sky-700',
   delivered:  'bg-emerald-100 text-emerald-700',
+  completed:  'bg-green-100 text-green-800',
   cancelled:  'bg-red-100 text-red-700',
 }
 
@@ -56,7 +56,8 @@ const STATUS_NEXT: Record<string, string> = {
   confirmed:  'Mark processing',
   processing: 'Mark shipped',
   shipped:    'Mark delivered',
-  delivered:  '',
+  delivered:  'Mark completed',
+  completed:  '',
   cancelled:  '',
 }
 
@@ -65,6 +66,7 @@ const STATUS_FLOW: Record<string, string> = {
   confirmed:  'processing',
   processing: 'shipped',
   shipped:    'delivered',
+  delivered:  'completed',
 }
 
 function fmt(n: number) {
@@ -80,7 +82,6 @@ function fmtDateTime(iso: string) {
 }
 
 export default function OrdersClient({ orders: initial, vendorId, productNames }: Props) {
-  const supabase = createClient()
   const [orders, setOrders] = useState(initial)
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -101,11 +102,16 @@ export default function OrdersClient({ orders: initial, vendorId, productNames }
 
   async function updateStatus(orderId: string, status: string) {
     setUpdating(true)
-    const { error } = await supabase.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', orderId)
-    if (error) { showToast('Failed to update status', false); setUpdating(false); return }
+    // Go through the server route so the customer is emailed/notified of the change.
+    const res = await fetch('/api/orders/status', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: orderId, status }),
+    })
+    if (!res.ok) { showToast('Failed to update status', false); setUpdating(false); return }
     setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status } : o))
     setSelected((prev) => prev?.id === orderId ? { ...prev, status } : prev)
-    showToast('Status updated successfully')
+    showToast('Status updated — customer notified')
     setUpdating(false)
   }
 

@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const productIds = [...new Set(items.map((i: { product_id: string }) => i.product_id))]
     const { data: products, error: prodErr } = await supabase
       .from('products')
-      .select('id, name, price, images, vendor_id, is_available, is_archived')
+      .select('id, name, price, images, vendor_id, is_available, is_archived, track_inventory, stock_quantity')
       .in('id', productIds)
 
     if (prodErr) throw new Error(prodErr.message)
@@ -51,6 +51,15 @@ export async function POST(request: NextRequest) {
       if (!p.is_available || p.is_archived) return NextResponse.json({ error: `Product unavailable: ${p.name}` }, { status: 400 })
 
       const qty = Math.max(1, Math.floor(Number(item.quantity) || 1))
+
+      // Prevent overselling when the vendor tracks inventory.
+      if (p.track_inventory && p.stock_quantity != null && p.stock_quantity < qty) {
+        return NextResponse.json(
+          { error: p.stock_quantity <= 0 ? `${p.name} is out of stock` : `Only ${p.stock_quantity} of ${p.name} left in stock` },
+          { status: 409 }
+        )
+      }
+
       const unit = Number(p.price)
       const lineTotal = unit * qty
       subtotal += lineTotal
