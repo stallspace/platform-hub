@@ -51,6 +51,7 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
   const [activeTab, setActiveTab] = useState<ActiveTab>('banners')
   const [toast, setToast] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
   const [saving, setSaving] = useState<string | null>(null)
+  const [uploading, setUploading] = useState<string | null>(null)
 
   // Banner state — one form per section
   const [banners, setBanners] = useState<Record<string, any>>(() => {
@@ -142,6 +143,23 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
     setBanners((b) => ({ ...b, [section]: { ...b[section], [field]: value } }))
   }
 
+  async function uploadBannerImage(section: string, file: File) {
+    setUploading(section)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Upload failed')
+      updateBanner(section, 'image_url', json.url)
+      showToast('Image uploaded — click Save Banner to apply.', 'success')
+    } catch (e) {
+      showToast(e instanceof Error ? e.message : 'Upload failed', 'error')
+    } finally {
+      setUploading(null)
+    }
+  }
+
   function toggleVendor(id: string) {
     setSelectedVendorIds((prev) => prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id])
   }
@@ -214,9 +232,8 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
                     { field: 'subtitle', label: 'Subheading', placeholder: 'e.g. Discover unique products...' },
                     { field: 'cta_text', label: 'Button Text', placeholder: 'e.g. Shop Now' },
                     { field: 'cta_url', label: 'Button URL', placeholder: 'e.g. /marketplace' },
-                    { field: 'image_url', label: 'Background Image URL', placeholder: 'https://...' },
                   ].map(({ field, label, placeholder }) => (
-                    <div key={field} className={field === 'image_url' ? 'sm:col-span-2' : ''}>
+                    <div key={field}>
                       <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">{label}</label>
                       <input
                         type="text"
@@ -227,6 +244,43 @@ export default function ContentClient({ homepageContent, vendors, featuredVendor
                       />
                     </div>
                   ))}
+                </div>
+
+                {/* Background image — upload from your computer or paste a URL */}
+                <div className="px-5 pb-5">
+                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Background Image</label>
+                  {b.image_url && (
+                    <div className="relative mb-3 rounded-xl overflow-hidden border border-gray-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={b.image_url} alt="Banner preview" className="w-full h-40 object-cover" />
+                      <button
+                        onClick={() => updateBanner(section, 'image_url', '')}
+                        className="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-700 text-xs font-medium px-2.5 py-1 rounded-lg shadow"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <label className={`inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-lg cursor-pointer transition-colors ${uploading === section ? 'bg-gray-400 cursor-wait' : 'bg-[#2ECC8E] hover:bg-[#0D3B2E]'}`}>
+                      {uploading === section ? 'Uploading…' : (b.image_url ? 'Replace image' : 'Upload image')}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploading === section}
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadBannerImage(section, f); e.currentTarget.value = '' }}
+                      />
+                    </label>
+                    <span className="text-xs text-gray-400">JPG, PNG or WebP · max 5 MB · or paste a URL below</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={b.image_url}
+                    onChange={(e) => updateBanner(section, 'image_url', e.target.value)}
+                    placeholder="https://…"
+                    className="mt-2 w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#2ECC8E] transition-colors"
+                  />
                 </div>
                 <div className="px-5 pb-5 flex justify-end">
                   <button

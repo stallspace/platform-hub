@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
   ArrowRight, ChevronRight, ShieldCheck, Store, CreditCard,
   Search, Laptop, Shirt, Home, Leaf, ShoppingBag, Dumbbell,
@@ -60,7 +59,6 @@ export default async function HomePage() {
   ])
 
   const heroBanner = banners?.find((b: any) => b.section === 'hero')
-  const heroImageUrl = heroBanner?.content?.image_url || '/hero-illustration.png'
 
   return (
     <div className="bg-white">
@@ -109,8 +107,16 @@ export default async function HomePage() {
               </div>
             </div>
             {!heroBanner?.content?.image_url && (
-              <div className="hidden lg:flex items-end justify-center">
-                <Image src="/hero-illustration.png" alt="Market stalls" width={540} height={400} className="object-contain" priority />
+              <div className="hidden lg:flex items-center justify-center">
+                {/* Decorative placeholder shown only until an admin uploads a hero banner in Admin → Content */}
+                <div className="relative w-full max-w-[440px] aspect-[4/3]">
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#0D3B2E] to-[#2ECC8E] opacity-90" />
+                  <div className="absolute inset-0 rounded-3xl flex flex-col items-center justify-center text-center px-8">
+                    <span className="text-white/80 text-xs font-semibold uppercase tracking-widest mb-3">Stallspace</span>
+                    <p className="text-white text-2xl font-bold leading-snug">Vetted vendors.<br />Direct payments.</p>
+                    <p className="text-white/75 text-sm mt-3">Shop local, buy with confidence.</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
