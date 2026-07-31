@@ -55,8 +55,11 @@ export default async function SearchPage({ searchParams }: PageProps) {
     .eq('is_available', true)
     .eq('is_archived', false)
 
-  if (q) {
-    query = query.textSearch('name', q, { type: 'websearch', config: 'english' })
+  // Partial, case-insensitive matching on product name + description.
+  // Sanitise before using inside a PostgREST `.or()` filter string.
+  const safeQ = q.replace(/[,()%*]/g, ' ').trim()
+  if (safeQ) {
+    query = query.or(`name.ilike.%${safeQ}%,description.ilike.%${safeQ}%`)
   }
 
   if (category) {
@@ -80,8 +83,6 @@ export default async function SearchPage({ searchParams }: PageProps) {
   const totalPages = Math.ceil((count ?? 0) / PER_PAGE)
 
   // Also search vendors by name / description (the search bar promises vendors too).
-  // Sanitise q before using it inside a PostgREST `.or()` filter string.
-  const safeQ = q.replace(/[,()%*]/g, ' ').trim()
   let vendors: any[] = []
   if (safeQ) {
     const { data: v } = await supabase
