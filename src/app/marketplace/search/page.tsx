@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
   Search, SlidersHorizontal, Package, ChevronRight,
-  MapPin, X, ArrowUpDown, Filter
+  MapPin, X, ArrowUpDown, Filter, Store
 } from 'lucide-react'
 
 interface PageProps {
@@ -79,6 +79,23 @@ export default async function SearchPage({ searchParams }: PageProps) {
   const { data: products, count } = await query
   const totalPages = Math.ceil((count ?? 0) / PER_PAGE)
 
+  // Also search vendors by name / description (the search bar promises vendors too).
+  // Sanitise q before using it inside a PostgREST `.or()` filter string.
+  const safeQ = q.replace(/[,()%*]/g, ' ').trim()
+  let vendors: any[] = []
+  if (safeQ) {
+    const { data: v } = await supabase
+      .from('vendors')
+      .select('id, business_name, slug, logo_url, city, province')
+      .eq('status', 'approved')
+      .or(`business_name.ilike.%${safeQ}%,business_description.ilike.%${safeQ}%`)
+      .limit(12)
+    vendors = v ?? []
+  }
+
+  const hasResults = (products?.length ?? 0) > 0 || vendors.length > 0
+  const totalResults = (count ?? 0) + vendors.length
+
   const activeFilters = [
     category,
     minPrice !== null ? 'min' : '',
@@ -138,7 +155,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
             <p className="text-white font-semibold text-xl mt-4">
               &ldquo;{q}&rdquo;
               <span className="text-white/50 font-normal text-base ml-3">
-                {count ?? 0} result{(count ?? 0) !== 1 ? 's' : ''}
+                {totalResults} result{totalResults !== 1 ? 's' : ''}
               </span>
             </p>
           )}
@@ -290,7 +307,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Search the marketplace</h3>
                 <p className="text-gray-500 text-sm">Enter a product name, category, or vendor above to get started.</p>
               </div>
-            ) : !products || products.length === 0 ? (
+            ) : !hasResults ? (
               <div className="bg-white rounded-xl border border-gray-100 p-16 text-center">
                 <Package className="w-12 h-12 text-gray-200 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">No results found</h3>
@@ -301,8 +318,44 @@ export default async function SearchPage({ searchParams }: PageProps) {
               </div>
             ) : (
               <>
+                {/* Matching vendors */}
+                {vendors.length > 0 && (
+                  <div className="mb-6">
+                    <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <Store className="w-4 h-4 text-brand-mint" /> Vendors
+                      <span className="text-gray-400 font-normal">({vendors.length})</span>
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {vendors.map((v: any) => (
+                        <Link key={v.id} href={`/marketplace/store/${v.slug}`}
+                          className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-3 hover:border-brand-mint transition-colors">
+                          <div className="w-11 h-11 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                            {v.logo_url
+                              ? <img src={v.logo_url} alt={v.business_name} className="w-full h-full object-cover" />
+                              : <span className="text-sm font-bold text-gray-500">{v.business_name.charAt(0)}</span>}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{v.business_name}</p>
+                            {(v.city || v.province) && (
+                              <p className="text-xs text-gray-400 flex items-center gap-1">
+                                <MapPin className="w-3 h-3" />{[v.city, v.province].filter(Boolean).join(', ')}
+                              </p>
+                            )}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {products && products.length > 0 && (
+                  <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <Package className="w-4 h-4 text-brand-mint" /> Products
+                    <span className="text-gray-400 font-normal">({count ?? 0})</span>
+                  </h2>
+                )}
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {products.map((product: any) => {
+                  {(products ?? []).map((product: any) => {
                     const discount = (product.compare_at_price && Number(product.compare_at_price) > Number(product.price))
                       ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100)
                       : null

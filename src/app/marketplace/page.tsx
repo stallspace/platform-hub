@@ -73,7 +73,7 @@ export default async function HomePage() {
         }
       >
         {heroBanner?.content?.image_url && (
-          <div className="absolute inset-0 bg-[#0D3B2E]/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A2A20]/90 via-[#0D3B2E]/60 to-[#0D3B2E]/20" />
         )}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 min-h-[500px]">
