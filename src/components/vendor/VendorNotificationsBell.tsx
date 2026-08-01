@@ -41,9 +41,12 @@ export default function VendorNotificationsBell() {
     setLoading(true)
     try {
       const res = await fetch('/api/vendor/notifications')
+      if (!res.ok) return
       const json = await res.json()
       setNotifications(json.data ?? [])
       setUnreadCount(json.unreadCount ?? 0)
+    } catch {
+      // Transient network/hot-reload failure — notifications are non-critical, ignore.
     } finally {
       setLoading(false)
     }
@@ -64,13 +67,17 @@ export default function VendorNotificationsBell() {
   }, [])
 
   async function markAllRead() {
-    await fetch('/api/vendor/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ all: true }) })
+    try {
+      await fetch('/api/vendor/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ all: true }) })
+    } catch { /* ignore */ }
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
     setUnreadCount(0)
   }
 
   async function markRead(id: string) {
-    await fetch('/api/vendor/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [id] }) })
+    try {
+      await fetch('/api/vendor/notifications', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [id] }) })
+    } catch { /* ignore */ }
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
     setUnreadCount(prev => Math.max(0, prev - 1))
   }
