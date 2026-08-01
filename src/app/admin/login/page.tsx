@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 mb-3">
             <div className="w-8 h-8 bg-[#2ECC8E] rounded-sm flex items-center justify-center">
-              <span className="text-white font-black text-sm tracking-tighter">M</span>
+              <span className="text-white font-black text-sm tracking-tighter">S</span>
             </div>
             <span className="text-white font-black text-2xl tracking-tight">Stallspace</span>
           </div>
