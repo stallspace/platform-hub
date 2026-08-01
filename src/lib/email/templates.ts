@@ -19,7 +19,7 @@ function layout(body: string): string {
         <tr>
           <td style="background:#0D3B2E;border-radius:12px 12px 0 0;padding:28px 36px;text-align:center;">
             <span style="display:inline-block;background:#2ECC8E;border-radius:6px;padding:6px 10px;margin-bottom:12px;">
-              <span style="color:#fff;font-weight:900;font-size:16px;letter-spacing:-0.5px;">M</span>
+              <span style="color:#fff;font-weight:900;font-size:16px;letter-spacing:-0.5px;">S</span>
             </span>
             <div style="color:#fff;font-weight:900;font-size:22px;letter-spacing:-0.5px;">Stallspace</div>
             <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;">Marketplace Platform</div>
