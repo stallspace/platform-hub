@@ -30,11 +30,31 @@ interface Props {
     id: string
     business_name: string
     slug: string
+    status: string | null
     subscription_plan: string | null
     subscription_status: string | null
     logo_url: string | null
   }
   children: React.ReactNode
+}
+
+const STATUS_NOTICE: Record<string, { text: string; cls: string }> = {
+  suspended: {
+    text: 'Your account is suspended. Your storefront and products are hidden from the marketplace. Please contact support at hello@stallspace.co.za to resolve this.',
+    cls: 'bg-red-50 border-red-200 text-red-800',
+  },
+  pending: {
+    text: 'Your application is under review. Your storefront and products are not yet visible on the marketplace.',
+    cls: 'bg-amber-50 border-amber-200 text-amber-800',
+  },
+  under_review: {
+    text: 'Your application is under review. Your storefront and products are not yet visible on the marketplace.',
+    cls: 'bg-amber-50 border-amber-200 text-amber-800',
+  },
+  rejected: {
+    text: 'Your application was not approved. Please contact support at hello@stallspace.co.za if you believe this was a mistake.',
+    cls: 'bg-red-50 border-red-200 text-red-800',
+  },
 }
 
 export default function VendorLayoutClient({ vendor, children }: Props) {
@@ -50,6 +70,7 @@ export default function VendorLayoutClient({ vendor, children }: Props) {
   }
 
   const initials = vendor.business_name.slice(0, 2).toUpperCase()
+  const statusNotice = vendor.status && vendor.status !== 'approved' ? STATUS_NOTICE[vendor.status] : null
   const planLabel = vendor.subscription_plan
     ? vendor.subscription_plan.charAt(0).toUpperCase() + vendor.subscription_plan.slice(1) + ' Plan'
     : 'No Plan'
@@ -168,6 +189,11 @@ export default function VendorLayoutClient({ vendor, children }: Props) {
         </header>
 
         <main className="flex-1 p-4 sm:p-6 overflow-auto">
+          {statusNotice && (
+            <div className={`mb-5 rounded-xl border px-4 py-3 text-sm font-medium ${statusNotice.cls}`}>
+              {statusNotice.text}
+            </div>
+          )}
           {children}
         </main>
       </div>

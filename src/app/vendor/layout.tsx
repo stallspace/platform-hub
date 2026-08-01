@@ -10,7 +10,7 @@ export default async function VendorLayout({ children }: { children: React.React
 
   const { data: vendor } = await supabase
     .from('vendors')
-    .select('id, business_name, slug, subscription_plan, subscription_status, logo_url')
+    .select('id, business_name, slug, status, subscription_plan, subscription_status, logo_url')
     .eq('user_id', user.id)
     .single()
 
