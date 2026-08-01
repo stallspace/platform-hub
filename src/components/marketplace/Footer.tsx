@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react'
+import { Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -64,10 +64,6 @@ export default function Footer() {
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 flex-shrink-0 text-[#2ECC8E]" />
                 <a href="mailto:hello@stallspace.co.za" className="hover:text-white transition-colors">hello@stallspace.co.za</a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 flex-shrink-0 text-[#2ECC8E]" />
-                <span>+27 (0)xx xxx xxxx</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 flex-shrink-0 text-[#2ECC8E] mt-0.5" />
