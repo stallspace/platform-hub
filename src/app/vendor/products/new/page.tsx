@@ -14,7 +14,7 @@ export default async function NewProductPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const { data: categories } = await supabase
     .from('categories')

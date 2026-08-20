@@ -14,7 +14,7 @@ export default async function VendorProductsPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const [{ data: products }, { data: categories }] = await Promise.all([
     supabase

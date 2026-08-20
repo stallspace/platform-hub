@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
           type: 'account',
           title: 'Application not approved',
           message: 'Your Stallspace vendor application was not approved.',
-          actionUrl: '/vendor/register',
+          actionUrl: '/join',
         })
         break
       }

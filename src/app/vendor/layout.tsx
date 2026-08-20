@@ -14,7 +14,7 @@ export default async function VendorLayout({ children }: { children: React.React
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   return (
     <VendorLayoutClient vendor={vendor}>

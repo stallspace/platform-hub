@@ -14,7 +14,7 @@ export default async function EditProductPage({ params }: { params: { id: string
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const { data: product } = await supabase
     .from('products')

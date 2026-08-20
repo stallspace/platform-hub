@@ -13,7 +13,7 @@ export default async function VendorStorefrontPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   return <StorefrontSettingsClient vendor={vendor} />
 }

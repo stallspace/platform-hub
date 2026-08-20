@@ -13,7 +13,7 @@ export default async function VendorAnalyticsPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const [
     { count: storeViews },

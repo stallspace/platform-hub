@@ -29,7 +29,7 @@ export default async function VendorDashboardPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const [
     { count: productCount },

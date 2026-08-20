@@ -45,3 +45,7 @@ next-env.d.ts
 
 # Supabase
 .supabase
+
+# Local Netlify folder
+.netlify
+deno.lock

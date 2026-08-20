@@ -13,7 +13,7 @@ export default async function VendorPaymentsPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   // Credentials are loaded (masked) by the client via the secured API route.
   return <PaymentsClient vendorId={vendor.id} />

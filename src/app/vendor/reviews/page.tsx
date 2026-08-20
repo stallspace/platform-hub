@@ -13,7 +13,7 @@ export default async function VendorReviewsPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const { data: reviews } = await supabase
     .from('reviews')

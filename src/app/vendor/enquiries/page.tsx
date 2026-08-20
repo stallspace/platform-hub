@@ -14,7 +14,7 @@ export default async function VendorEnquiriesPage() {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) redirect('/vendor/register')
+  if (!vendor) redirect('/join')
 
   const { data: enquiries } = await supabase
     .from('enquiries')
