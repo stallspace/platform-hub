@@ -3,7 +3,14 @@ import { createClient } from '@/lib/supabase/server'
 import { escapeHtml } from '@/lib/utils'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Created lazily — a module-scope client crashes the build when the key is absent.
+let _resend: Resend | null = null
+function getResend(): Resend | null {
+  const key = process.env.RESEND_API_KEY
+  if (!key) return null
+  if (!_resend) _resend = new Resend(key)
+  return _resend
+}
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -42,6 +49,8 @@ export async function POST(req: NextRequest) {
   if (!enquiry) return NextResponse.json({ error: 'Enquiry not found' }, { status: 404 })
 
   try {
+    const resend = getResend()
+    if (!resend) return NextResponse.json({ error: 'Email is not configured' }, { status: 503 })
     await resend.emails.send({
       from: `${vendor.business_name} via Stallspace <noreply@Stallspace.co.za>`,
       to: toEmail,
