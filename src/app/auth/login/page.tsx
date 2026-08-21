@@ -33,11 +33,19 @@ function LoginForm() {
       return
     }
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single()
+    // Look up the role to decide where to land. Never let a slow/failed
+    // profile query leave the user stuck on "Signing in..." — fall back to
+    // the account page after a short timeout.
+    let profile: { role?: string } | null = null
+    try {
+      const result = await Promise.race([
+        supabase.from('profiles').select('role').eq('id', data.user.id).single(),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+      ])
+      profile = (result as { data?: { role?: string } } | null)?.data ?? null
+    } catch {
+      profile = null
+    }
 
     if (next) {
       router.push(next)
