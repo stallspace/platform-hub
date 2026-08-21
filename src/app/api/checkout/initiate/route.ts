@@ -57,7 +57,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'This vendor has not configured PayFast.' }, { status: 400 })
     }
 
-    const returnUrl = `${appUrl}/marketplace/checkout/success?order=${order.id}&vendor=${vendor?.slug ?? ''}&provider=${provider}`
+    // Keep these URLs as simple as possible — extra query parameters get
+    // double-encoded inside the gateway URL and are a common cause of
+    // signature mismatches.
+    const returnUrl = `${appUrl}/marketplace/checkout/success?order=${order.id}`
     const cancelUrl = `${appUrl}/marketplace/checkout/cancel?order=${order.id}`
     const notifyBase = `${appUrl}/api/orders/notify`
     const amount = Number(order.total)

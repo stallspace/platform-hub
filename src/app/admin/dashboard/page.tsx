@@ -20,7 +20,7 @@ export default async function AdminDashboardPage() {
   // Vendor counts by status
   const { data: vendorRows } = await supabase
     .from('vendors')
-    .select('id, business_name, email, status, subscription_plan, subscription_status, created_at, logo_url')
+    .select('id, business_name, email, status, subscription_plan, subscription_status, subscription_next_billing, created_at, logo_url')
     .order('created_at', { ascending: false })
 
   const vendors = vendorRows ?? []
@@ -31,6 +31,34 @@ export default async function AdminDashboardPage() {
   const activeSubVendors = vendors.filter((v) => v.subscription_status === 'active')
 
   const mrr = activeSubVendors.reduce((sum, v) => sum + (PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0), 0)
+
+  // ── Payments due: vendors billing within 7 days, or already overdue ──
+  const DUE_WINDOW_DAYS = 7
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+
+  const paymentsDue = vendors
+    .filter((v) =>
+      v.subscription_next_billing &&
+      v.subscription_status !== 'cancelled' &&
+      v.status !== 'rejected'
+    )
+    .map((v) => {
+      const due = new Date(v.subscription_next_billing as string)
+      due.setHours(0, 0, 0, 0)
+      const daysUntil = Math.round((due.getTime() - today.getTime()) / 86_400_000)
+      return {
+        id: v.id,
+        business_name: v.business_name,
+        plan: v.subscription_plan ?? 'starter',
+        amount: PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0,
+        dueDate: v.subscription_next_billing as string,
+        daysUntil,
+      }
+    })
+    .filter((v) => v.daysUntil <= DUE_WINDOW_DAYS)
+    .sort((a, b) => a.daysUntil - b.daysUntil)
+
+  const overdueCount = paymentsDue.filter((v) => v.daysUntil < 0).length
 
   // Product count
   const { count: totalProducts } = await supabase
@@ -105,6 +133,67 @@ export default async function AdminDashboardPage() {
             <div className="text-xs text-gray-400 mt-0.5">{stat.sub}</div>
           </Link>
         ))}
+      </div>
+
+      {/* ── Payments due ── */}
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden mb-6">
+        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-amber-500" />
+            <h3 className="font-semibold text-gray-900">Payments Due</h3>
+            {overdueCount > 0 && (
+              <span className="text-xs font-semibold bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded-full">
+                {overdueCount} overdue
+              </span>
+            )}
+          </div>
+          <span className="text-xs text-gray-400">Next {DUE_WINDOW_DAYS} days &amp; overdue</span>
+        </div>
+
+        {paymentsDue.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-8">
+            No subscription payments due in the next {DUE_WINDOW_DAYS} days
+          </p>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {paymentsDue.map((v) => {
+              const overdue = v.daysUntil < 0
+              const label = overdue
+                ? `${Math.abs(v.daysUntil)} day${Math.abs(v.daysUntil) !== 1 ? 's' : ''} overdue`
+                : v.daysUntil === 0
+                  ? 'Due today'
+                  : `Due in ${v.daysUntil} day${v.daysUntil !== 1 ? 's' : ''}`
+              return (
+                <div key={v.id} className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50/60 transition-colors">
+                  <div className="min-w-0">
+                    <Link href={`/admin/vendors/${v.id}`} className="text-sm font-medium text-gray-800 hover:text-[#2ECC8E] truncate block">
+                      {v.business_name}
+                    </Link>
+                    <p className="text-xs text-gray-400 capitalize">
+                      {v.plan} · {formatDate(v.dueDate)}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <span className="text-sm font-bold text-gray-800">{formatCurrency(v.amount)}</span>
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      overdue
+                        ? 'bg-red-100 text-red-700'
+                        : v.daysUntil === 0
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {label}
+                    </span>
+                    <Link href={`/admin/vendors/${v.id}`}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#0D3B2E] text-white hover:bg-[#0d2a5e] transition-colors">
+                      Manage
+                    </Link>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
