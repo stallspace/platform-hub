@@ -71,7 +71,9 @@ export async function POST(request: NextRequest) {
         merchantKey: config.merchant_key,
         passphrase: config.passphrase ?? '',
         amount,
-        itemName: `Order ${order.order_number} — ${vendor?.business_name ?? 'Stallspace'}`,
+        // Keep this ASCII-only: non-ASCII characters (e.g. em dashes) are a
+        // common source of PayFast signature mismatches.
+        itemName: `Order ${order.order_number}`.replace(/[^\x20-\x7E]/g, ''),
         orderId: order.id,
         returnUrl,
         cancelUrl,

@@ -58,6 +58,13 @@ export function buildPayFastUrl(p: PayFastParams): string {
 
   const signature = createHash('md5').update(signatureBase).digest('hex')
 
+  // Diagnostic: shows exactly what was signed, with the passphrase masked.
+  // If PayFast reports a signature mismatch, compare this against their expectation.
+  console.log('[payfast] signature base:',
+    signatureBase.replace(/passphrase=[^&]*/, 'passphrase=***'),
+    '| usedPassphrase:', Boolean(p.passphrase),
+    '| signature:', signature)
+
   const data = new URLSearchParams(fields)
   data.set('signature', signature)
 
