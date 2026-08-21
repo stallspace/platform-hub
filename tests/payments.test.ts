@@ -14,9 +14,28 @@ test('PayFast URL includes required fields and formats amount to 2dp', () => {
   assert.match(url, /merchant_id=10000100/)
   assert.match(url, /amount=250\.00/)
   assert.match(url, /m_payment_id=order-1/)
-  assert.match(url, /passphrase=pass/)
   assert.match(url, /name_first=Jane/)
   assert.match(url, /name_last=Doe/)
+  // A signature must be present...
+  assert.match(url, /signature=[0-9a-f]{32}/)
+  // ...and the passphrase must NEVER be sent to the browser.
+  assert.ok(!url.includes('passphrase'), 'passphrase must not appear in the redirect URL')
+  assert.ok(!url.includes('pass&') && !url.endsWith('pass'), 'raw passphrase leaked')
+})
+
+test('PayFast signature changes when the passphrase changes', () => {
+  const base = {
+    merchantId: '10000100', merchantKey: 'key123',
+    amount: 250, itemName: 'Order MRC-1', orderId: 'order-1',
+    returnUrl: 'https://x/return', cancelUrl: 'https://x/cancel', notifyUrl: 'https://x/notify',
+    email: 'a@b.com', name: 'Jane Doe',
+  }
+  const sig = (u: string) => new URL(u).searchParams.get('signature')
+  const a = sig(buildPayFastUrl({ ...base, passphrase: 'one' }))
+  const b = sig(buildPayFastUrl({ ...base, passphrase: 'two' }))
+  assert.notEqual(a, b)
+  // Deterministic for identical input
+  assert.equal(sig(buildPayFastUrl({ ...base, passphrase: 'one' })), a)
 })
 
 test('PayFast defaults to the sandbox host unless PAYFAST_ENV=live', () => {

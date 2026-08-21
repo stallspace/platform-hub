@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { readConfigData } from '@/lib/crypto/secrets'
+import { phpUrlencode } from '@/lib/payments/payfast'
 import { createHmac, createHash } from 'crypto'
 import { sendEmail } from '@/lib/email/resend'
 import { orderConfirmationEmail } from '@/lib/email/templates'
@@ -16,17 +17,6 @@ import { orderConfirmationEmail } from '@/lib/email/templates'
 function bizName(vendors: unknown): string {
   if (Array.isArray(vendors)) return vendors[0]?.business_name ?? ''
   return (vendors as { business_name?: string } | null)?.business_name ?? ''
-}
-
-/**
- * PHP's urlencode(), which is what PayFast uses to build the signature string.
- * encodeURIComponent leaves !'()*~ unencoded; PHP encodes them. Without this,
- * any order containing those characters fails signature verification.
- */
-function phpUrlencode(value: string): string {
-  return encodeURIComponent(value)
-    .replace(/%20/g, '+')
-    .replace(/[!'()*~]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase())
 }
 
 // Verify the PayFast ITN signature using THIS vendor's passphrase (each vendor

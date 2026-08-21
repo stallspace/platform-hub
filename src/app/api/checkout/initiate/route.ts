@@ -75,7 +75,8 @@ export async function POST(request: NextRequest) {
         orderId: order.id,
         returnUrl,
         cancelUrl,
-        notifyUrl: `${notifyBase}?provider=payfast`,
+        // No query string — some gateways mishandle it, and the route defaults to payfast.
+        notifyUrl: notifyBase,
         email: order.customer_email,
         name: order.customer_name,
       })
