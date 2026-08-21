@@ -12,6 +12,7 @@ function SuccessContent() {
   const orderId    = searchParams.get('order')
   const provider   = searchParams.get('provider')
   const isManual   = searchParams.get('manual') === 'true'
+  const isCollect  = searchParams.get('collect') === 'true'
 
   const clearVendorItems = useCartStore(s => s.clearVendorItems)
   const clearCart        = useCartStore(s => s.clearCart)
@@ -70,7 +71,7 @@ function SuccessContent() {
       </div>
 
       <h1 className="text-2xl font-bold text-gray-900 mb-2">
-        {isManual ? 'Order Created' : 'Payment Successful'}
+        {isCollect ? 'Order Placed' : isManual ? 'Order Created' : 'Payment Successful'}
       </h1>
 
       {order ? (
@@ -120,14 +121,33 @@ function SuccessContent() {
         </div>
       )}
 
+      {isCollect && (
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5 text-left flex items-start gap-3">
+          <Package className="w-4 h-4 text-brand-mint flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Pay when you collect</p>
+            <p className="text-xs text-gray-600 mt-0.5">
+              No payment has been taken. The vendor will confirm your order and let you know when it&apos;s
+              ready — you&apos;ll pay them directly when you collect.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="bg-blue-50 rounded-xl p-4 mb-6 text-left">
         <h3 className="text-sm font-semibold text-gray-900 mb-2">What happens next?</h3>
         <ol className="space-y-1.5">
-          {[
+          {(isCollect
+            ? [
+                'The vendor receives your order notification',
+                'They confirm and prepare your order for collection',
+                'You collect and pay the vendor directly',
+              ]
+            : [
             'The vendor receives your order notification',
             'They confirm and begin processing your order',
             "You'll receive updates on your order status",
-          ].map((step, i) => (
+          ]).map((step, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
               <span className="w-4 h-4 bg-brand-mint text-white rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5 font-bold">
                 {i + 1}

@@ -18,6 +18,17 @@ function bizName(vendors: unknown): string {
   return (vendors as { business_name?: string } | null)?.business_name ?? ''
 }
 
+/**
+ * PHP's urlencode(), which is what PayFast uses to build the signature string.
+ * encodeURIComponent leaves !'()*~ unencoded; PHP encodes them. Without this,
+ * any order containing those characters fails signature verification.
+ */
+function phpUrlencode(value: string): string {
+  return encodeURIComponent(value)
+    .replace(/%20/g, '+')
+    .replace(/[!'()*~]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase())
+}
+
 // Verify the PayFast ITN signature using THIS vendor's passphrase (each vendor
 // has their own PayFast account, so the passphrase is per-vendor, not global).
 function verifyPayFast(rawBody: string, passphrase: string): boolean {
@@ -26,13 +37,19 @@ function verifyPayFast(rawBody: string, passphrase: string): boolean {
   params.delete('signature')
   const paramString =
     [...params.entries()]
-      .map(([k, v]) => `${k}=${encodeURIComponent(v.trim()).replace(/%20/g, '+')}`)
+      .map(([k, v]) => `${k}=${phpUrlencode(v.trim())}`)
       .join('&') +
-    (passphrase
-      ? `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`
-      : '')
+    (passphrase ? `&passphrase=${phpUrlencode(passphrase.trim())}` : '')
   const hash = createHash('md5').update(paramString).digest('hex')
-  return hash === signature
+  if (hash !== signature) {
+    console.error('[notify:payfast] signature mismatch', {
+      expected: hash,
+      received: signature,
+      usedPassphrase: Boolean(passphrase),
+    })
+    return false
+  }
+  return true
 }
 
 function verifyOzow(params: URLSearchParams, privateKey: string): boolean {
@@ -50,6 +67,14 @@ export async function POST(request: NextRequest) {
   const provider = request.nextUrl.searchParams.get('provider') ?? 'payfast'
   const rawBody = await request.text()
   const params = new URLSearchParams(rawBody)
+
+  // Always log arrival so we can confirm the gateway is reaching us at all.
+  console.log('[notify] received', {
+    provider,
+    payment_status: params.get('payment_status'),
+    m_payment_id: params.get('m_payment_id'),
+    amount_gross: params.get('amount_gross'),
+  })
 
   try {
     // Webhooks have no user session — use the service role (with signature checks below).
@@ -82,8 +107,10 @@ export async function POST(request: NextRequest) {
       // Guard against amount tampering — the paid amount must match the order total.
       const amountGross = Number(params.get('amount_gross') ?? '0')
       if (Math.abs(amountGross - Number(pending.total)) > 0.01) {
+        console.error('[notify:payfast] amount mismatch', { amountGross, orderTotal: pending.total })
         return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 })
       }
+      console.log('[notify:payfast] verified OK, status =', params.get('payment_status'))
 
       if (params.get('payment_status') === 'COMPLETE') {
         const { data: order } = await supabase

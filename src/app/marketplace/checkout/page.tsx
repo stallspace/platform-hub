@@ -17,8 +17,9 @@ const PROVINCES = [
 ]
 
 interface VendorPaymentMethod {
-  provider: string
+  provider: string | null
   configured: boolean
+  payOnCollection: boolean
 }
 
 interface CheckoutForm {
@@ -54,6 +55,8 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [prefilling, setPrefilling] = useState(true)
+  // 'online' = pay now via the vendor's gateway; 'collection' = pay the vendor on collection
+  const [payMethod, setPayMethod] = useState<'online' | 'collection'>('online')
 
   const subtotal = currentVendorItems.reduce((s, i) => s + i.price * i.quantity, 0)
   const deliveryCost = form.fulfilment === 'delivery' ? (vendorInfo?.delivery_cost ?? 0) : 0
@@ -94,7 +97,9 @@ export default function CheckoutPage() {
         supabase.from('vendors').select('business_name, slug').eq('id', currentVendorId).single(),
         supabase.from('vendor_store_settings').select('fulfilment_type, delivery_cost').eq('vendor_id', currentVendorId).single(),
       ])
-      setVendorConfig(methodRes?.configured ? { provider: methodRes.provider, configured: true } : null)
+      setVendorConfig(methodRes
+        ? { provider: methodRes.provider ?? null, configured: !!methodRes.configured, payOnCollection: !!methodRes.payOnCollection }
+        : null)
       setVendorInfo(vendor ? {
         ...vendor,
         delivery_cost: ss?.delivery_cost ?? 0,
@@ -103,6 +108,16 @@ export default function CheckoutPage() {
     }
     loadVendor()
   }, [currentVendorId])
+
+  // Which payment routes are available for this vendor + chosen fulfilment.
+  const canPayOnline = Boolean(vendorConfig?.configured)
+  const canPayOnCollection = Boolean(vendorConfig?.payOnCollection) && form.fulfilment === 'collection'
+
+  // Keep the selected method valid as the customer changes fulfilment.
+  useEffect(() => {
+    if (payMethod === 'collection' && !canPayOnCollection) setPayMethod('online')
+    if (payMethod === 'online' && !canPayOnline && canPayOnCollection) setPayMethod('collection')
+  }, [canPayOnline, canPayOnCollection, payMethod])
 
   function setField(field: keyof CheckoutForm, value: string) {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -138,7 +153,7 @@ export default function CheckoutPage() {
           ? { line1: form.line1, line2: form.line2 || undefined, city: form.city, province: form.province, postal_code: form.postal_code, country: 'South Africa' }
           : { collection: true },
         items: orderItems, fulfilment: form.fulfilment,
-        payment_provider: vendorConfig!.provider,
+        payment_provider: payMethod === 'collection' ? 'cash_on_collection' : vendorConfig?.provider,
       }),
     })
     const { data: order, error: orderError } = await res.json()
@@ -149,12 +164,22 @@ export default function CheckoutPage() {
   async function handlePay() {
     const err = validate()
     if (err) { setError(err); return }
-    if (!vendorConfig) { setError('This vendor has not configured a payment method yet.'); return }
+    if (!canPayOnline && !canPayOnCollection) {
+      setError('This vendor has not set up a way to accept orders yet.')
+      return
+    }
     setLoading(true)
     setError('')
 
     try {
       const order = await createOrder()
+
+      // Pay on collection: nothing to charge now — the vendor takes payment
+      // when the customer collects. Straight to the confirmation page.
+      if (payMethod === 'collection') {
+        window.location.href = `/marketplace/checkout/success?order=${order.id}&vendor=${vendorInfo?.slug ?? ''}&collect=true`
+        return
+      }
 
       // All gateway logic (and credential handling) runs server-side.
       const res = await fetch('/api/checkout/initiate', {
@@ -311,22 +336,49 @@ export default function CheckoutPage() {
               <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-brand-mint" />Payment
               </h2>
-              {vendorConfig ? (
-                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                  <ShieldCheck className="w-5 h-5 text-green-500" />
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900">
-                      {vendorConfig.provider === 'payfast' ? 'PayFast' : vendorConfig.provider === 'yoco' ? 'Yoco' : vendorConfig.provider === 'peach' ? 'Peach Payments' : vendorConfig.provider === 'ozow' ? 'Ozow (EFT)' : vendorConfig.provider}
+              {(canPayOnline || canPayOnCollection) ? (
+                <div className="space-y-3">
+                  {canPayOnline && (
+                    <button type="button" onClick={() => setPayMethod('online')}
+                      className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all ${payMethod === 'online' ? 'border-brand-mint bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                      <ShieldCheck className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">Pay now online</p>
+                        <p className="text-xs text-gray-400">
+                          You&apos;ll be redirected to pay securely. Funds go directly to {vendorInfo?.business_name}.
+                        </p>
+                      </div>
+                    </button>
+                  )}
+
+                  {canPayOnCollection && (
+                    <button type="button" onClick={() => setPayMethod('collection')}
+                      className={`w-full flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all ${payMethod === 'collection' ? 'border-brand-mint bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                      <Store className="w-5 h-5 text-brand-mint flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">Pay on collection</p>
+                        <p className="text-xs text-gray-400">
+                          Place your order now and pay {vendorInfo?.business_name} when you collect.
+                        </p>
+                      </div>
+                    </button>
+                  )}
+
+                  {/* Hint when pay-on-collection exists but delivery is selected */}
+                  {!canPayOnCollection && vendorConfig?.payOnCollection && form.fulfilment === 'delivery' && (
+                    <p className="text-xs text-gray-400">
+                      Tip: choose <strong>Collection</strong> above if you&apos;d prefer to pay when you collect.
                     </p>
-                    <p className="text-xs text-gray-400">You will be redirected to complete payment securely with {vendorInfo?.business_name}</p>
-                  </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100">
                   <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-semibold text-amber-800">Payment not configured</p>
-                    <p className="text-xs text-amber-600 mt-0.5">{vendorInfo?.business_name} has not set up a payment method yet. Please contact them directly.</p>
+                    <p className="text-sm font-semibold text-amber-800">Payment not available</p>
+                    <p className="text-xs text-amber-600 mt-0.5">
+                      {vendorInfo?.business_name} has not set up a way to accept orders yet. Please contact them directly.
+                    </p>
                   </div>
                 </div>
               )}
@@ -357,14 +409,20 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-gray-600"><span>Delivery</span><span>{form.fulfilment === 'collection' ? 'Free (collection)' : deliveryCost === 0 ? 'Free' : `R${deliveryCost.toFixed(2)}`}</span></div>
                 <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-100 mt-2"><span>Total</span><span>R{total.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span></div>
               </div>
-              <button onClick={handlePay} disabled={loading}
+              <button onClick={handlePay} disabled={loading || (!canPayOnline && !canPayOnCollection)}
                 className="mt-4 w-full flex items-center justify-center gap-2 bg-brand-mint text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                {loading ? 'Processing...' : `Pay R${total.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`}
+                {loading
+                  ? 'Processing...'
+                  : payMethod === 'collection'
+                    ? 'Place Order'
+                    : `Pay R${total.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`}
               </button>
-              <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-400">
-                <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
-                Paid directly to {vendorInfo?.business_name ?? 'vendor'}
+              <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-400 text-center">
+                <ShieldCheck className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                {payMethod === 'collection'
+                  ? `Pay ${vendorInfo?.business_name ?? 'the vendor'} when you collect`
+                  : `Paid directly to ${vendorInfo?.business_name ?? 'vendor'}`}
               </div>
             </div>
           </div>

@@ -12,6 +12,8 @@ function generateOrderNumber(): string {
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
 
+const VALID_PROVIDERS = new Set(['payfast', 'peach', 'yoco', 'ozow', 'cash_on_collection'])
+
 export async function POST(request: NextRequest) {
   try {
     // Identify the logged-in customer (if any) from their own session.
@@ -29,6 +31,22 @@ export async function POST(request: NextRequest) {
     }
     if (!isEmail(String(customer_email))) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+    }
+    if (!payment_provider || !VALID_PROVIDERS.has(String(payment_provider))) {
+      return NextResponse.json({ error: 'Invalid payment method' }, { status: 400 })
+    }
+    // Pay-on-collection must be genuinely offered by the vendor, and only for
+    // collection orders — never trust the client on this.
+    if (payment_provider === 'cash_on_collection') {
+      const { data: ss } = await supabase
+        .from('vendor_store_settings')
+        .select('pay_on_collection, fulfilment_type')
+        .eq('vendor_id', vendor_id)
+        .maybeSingle()
+      const offersCollection = ss?.fulfilment_type === 'collection' || ss?.fulfilment_type === 'both'
+      if (!ss?.pay_on_collection || !offersCollection || fulfilment !== 'collection') {
+        return NextResponse.json({ error: 'Pay on collection is not available for this vendor' }, { status: 400 })
+      }
     }
 
     // Recompute prices SERVER-SIDE from the database. Never trust client prices.

@@ -17,6 +17,7 @@ interface StoreSettings {
   collection_address: string | null
   collection_hours: string | null
   collection_instructions: string | null
+  pay_on_collection?: boolean
   vat_registered: boolean
   vat_number: string | null
   vat_included: boolean
@@ -51,6 +52,7 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
   const [collectionAddress, setCollectionAddress] = useState(settings?.collection_address ?? '')
   const [collectionHours, setCollectionHours] = useState(settings?.collection_hours ?? '')
   const [collectionInstructions, setCollectionInstructions] = useState(settings?.collection_instructions ?? '')
+  const [payOnCollection, setPayOnCollection] = useState(settings?.pay_on_collection ?? false)
   const [vatRegistered, setVatRegistered] = useState(settings?.vat_registered ?? false)
   const [vatNumber, setVatNumber] = useState(settings?.vat_number ?? '')
   const [vatIncluded, setVatIncluded] = useState(settings?.vat_included ?? false)
@@ -79,6 +81,7 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
         collection_address: collectionAddress || null,
         collection_hours: collectionHours || null,
         collection_instructions: collectionInstructions || null,
+        pay_on_collection: payOnCollection,
         vat_registered: vatRegistered,
         vat_number: vatNumber || null,
         vat_included: vatIncluded,
@@ -151,6 +154,25 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">Collection Instructions</label>
                 <textarea value={collectionInstructions} onChange={e => setCollectionInstructions(e.target.value)} rows={2} placeholder="e.g. Enter via the side gate, ask for reception" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-brand-mint/30 focus:border-brand-mint" />
+              </div>
+
+              {/* Pay on collection */}
+              <div className="pt-3 border-t border-gray-100">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={payOnCollection}
+                    onChange={e => setPayOnCollection(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 accent-[#2ECC8E] flex-shrink-0"
+                  />
+                  <span>
+                    <span className="text-sm font-medium text-gray-900 block">Accept payment on collection</span>
+                    <span className="text-xs text-gray-500">
+                      Customers can place a collection order and pay you in store (cash, card or EFT — your choice).
+                      No online payment gateway needed.
+                    </span>
+                  </span>
+                </label>
               </div>
             </div>
           )}
