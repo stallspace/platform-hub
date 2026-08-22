@@ -10,7 +10,7 @@ export default function NotFound() {
           <Image
             src="/logo.png"
             alt="Stallspace"
-            width={140}
+            width={55}
             height={40}
             className="h-10 w-auto object-contain mx-auto"
           />

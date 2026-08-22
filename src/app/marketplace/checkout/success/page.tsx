@@ -109,7 +109,7 @@ function SuccessContent() {
         </div>
       )}
 
-      {isManual && provider === 'yoco' && (
+      {isManual && provider === 'legacy' && (
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-5 text-left flex items-start gap-3">
           <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>

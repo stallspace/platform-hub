@@ -70,7 +70,7 @@ function LoginForm() {
             <Image
               src="/logo.png"
               alt="Stallspace"
-              width={160}
+              width={66}
               height={48}
               className="h-12 w-auto object-contain mx-auto"
               priority

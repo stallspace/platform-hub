@@ -14,13 +14,13 @@ export default function Footer() {
               <Image
                 src="/logo-white.png"
                 alt="Stallspace"
-                width={140}
+                width={55}
                 height={40}
                 className="h-10 w-auto object-contain"
               />
             </div>
             <p className="text-sm leading-relaxed mb-5">
-              South Africa&apos;s vetted online marketplace. Connecting trusted vendors with customers since 2026.
+              The vetted online marketplace. Connecting trusted vendors with customers since 2026.
             </p>
             <div className="flex gap-3">
               <a href="#" className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#2ECC8E] transition-colors">

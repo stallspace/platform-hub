@@ -18,7 +18,7 @@ const PLANS = [
       'Up to 20 product listings',
       'Dedicated storefront page',
       'Basic analytics dashboard',
-      'All payment providers',
+      'Take payments your way',
       'Email support',
     ],
   },
@@ -33,7 +33,7 @@ const PLANS = [
       'Up to 50 product listings',
       'Dedicated storefront page',
       'Advanced analytics',
-      'All payment providers',
+      'Take payments your way',
       'Bulk product upload',
       'Priority support',
     ],
@@ -48,7 +48,7 @@ const PLANS = [
       'Unlimited product listings',
       'Dedicated storefront page',
       'Full analytics suite',
-      'All payment providers',
+      'Take payments your way',
       'Bulk product upload',
       'Featured placement priority',
       'Dedicated account support',
@@ -79,7 +79,7 @@ const HOW_IT_WORKS = [
     step: '04',
     icon: <TrendingUp className="w-6 h-6" />,
     title: 'Start Selling',
-    description: 'List your products, customise your storefront, and start reaching thousands of customers across South Africa.',
+    description: 'List your products, customise your storefront, and start reaching customers looking for what you sell.',
   },
 ]
 
@@ -87,7 +87,7 @@ const WHY_Stallspace = [
   {
     icon: <Users className="w-5 h-5" />,
     title: 'Reach Real Customers',
-    description: 'Access a growing base of South African customers actively looking for products like yours.',
+    description: 'Access a growing base of customers actively looking for products like yours.',
   },
   {
     icon: <CreditCard className="w-5 h-5" />,
@@ -112,7 +112,7 @@ const WHY_Stallspace = [
   {
     icon: <HeartHandshake className="w-5 h-5" />,
     title: 'Local Support',
-    description: 'South African team. We understand your market, your payment needs, and your customers.',
+    description: 'A responsive team that understands your market, your payment needs, and your customers.',
   },
 ]
 
@@ -124,7 +124,7 @@ export default function VendorJoinPage() {
       <header className="sticky top-0 z-50 bg-brand-forest border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/marketplace" className="flex items-center gap-2">
-            <Image src="/logo-white.png" alt="Stallspace" width={120} height={36} className="h-9 w-auto object-contain" priority /><span className="text-white font-bold text-xl tracking-tight ml-2">Stallspace</span>
+            <Image src="/logo-white.png" alt="Stallspace" width={50} height={36} className="h-9 w-auto object-contain" priority /><span className="text-white font-bold text-xl tracking-tight ml-2">Stallspace</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link
@@ -165,14 +165,14 @@ export default function VendorJoinPage() {
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Sell on South Africa&apos;s <br />
+              Sell on a <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2ECC8E] to-[#5dd9a8]">
                 Trusted Marketplace
               </span>
             </h1>
 
             <p className="text-gray-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
-              Stallspace connects verified local businesses with customers across South Africa.
+              Stallspace connects verified local businesses with customers who want to buy from them.
               No commission fees. No middlemen. Just a flat monthly subscription and your
               products in front of real buyers.
             </p>
@@ -197,10 +197,10 @@ export default function VendorJoinPage() {
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
-                { value: 'R0',      label: 'Commission fees' },
+                { value: 'R0',       label: 'Commission fees' },
                 { value: '2–3 days', label: 'Approval time' },
-                { value: '1,000+',  label: 'Active customers' },
-                { value: '100%',    label: 'SA-focused' },
+                { value: 'R250',     label: 'From, per month' },
+                { value: '100%',     label: 'Vendor vetted' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl font-bold text-white">{stat.value}</div>
@@ -221,7 +221,7 @@ export default function VendorJoinPage() {
               <span className="text-brand-mint text-sm font-semibold uppercase tracking-wider">Why Stallspace</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">
-              Built for South African Vendors
+              Built for Independent Vendors
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               Everything you need to sell online — without the complexity or the commission cuts.
@@ -360,7 +360,7 @@ export default function VendorJoinPage() {
               },
               {
                 q: 'Which payment providers are supported?',
-                a: 'Vendors can accept payments via PayFast, Peach Payments, Yoco, or Ozow. You configure your preferred gateway in your vendor dashboard after approval.',
+                a: 'You can accept card and EFT payments through your own PayFast account — funds go straight to you, never to Stallspace. You can also accept payment on collection if you prefer not to use an online gateway.',
               },
               {
                 q: 'How long does approval take?',
@@ -404,7 +404,7 @@ export default function VendorJoinPage() {
             Ready to Start Selling?
           </h2>
           <p className="text-gray-300 text-lg mb-8">
-            Join South Africa&apos;s vetted marketplace. Your application takes less than 10 minutes.
+            Join our vetted marketplace. Your application takes less than 10 minutes.
           </p>
           <Link
             href="/join/register"

@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-bold text-[#0D3B2E] mt-8 mb-3">3. Important: Payments Are Not Processed by Stallspace</h2>
           <p>
             Stallspace is not a payment intermediary. When you make a purchase, your payment is processed
-            directly by the vendor's chosen payment provider (PayFast, Peach Payments, Yoco, or Ozow). We do
+            directly by the vendor's payment provider (currently PayFast). We do
             not collect, store, or have access to your full payment card details. Please refer to the relevant
             payment provider's privacy policy for information on how they handle your payment data.
           </p>

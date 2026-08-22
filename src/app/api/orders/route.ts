@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
-import { escapeHtml } from '@/lib/utils'
+import { newOrderVendorEmail } from '@/lib/email/templates'
 
 function generateOrderNumber(): string {
   const ts = Date.now().toString(36).toUpperCase()
@@ -149,12 +149,20 @@ export async function POST(request: NextRequest) {
             .eq('id', vendor.user_id)
             .single()
           if (profile?.email) {
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://Stallspace.co.za'
-            await sendEmail({
-              to: profile.email,
-              subject: `New order ${order_number} from ${customer_name}`,
-              html: `<p>Hi ${escapeHtml(profile.full_name ?? 'there')},</p><p>You have a new order on Stallspace.</p><p><strong>Order:</strong> ${escapeHtml(order_number)}<br><strong>Customer:</strong> ${escapeHtml(customer_name)}<br><strong>Total:</strong> R${Number(total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</p><p><a href="${appUrl}/vendor/orders">View order</a></p>`,
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
+            const tpl = newOrderVendorEmail({
+              vendorName: profile.full_name ?? vendor.business_name ?? 'there',
+              orderNumber: order_number,
+              customerName: customer_name,
+              customerEmail: customer_email,
+              customerPhone: customer_phone ?? null,
+              total: `R${Number(total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
+              items: validatedItems as unknown as { product_name: string; quantity: number; total_price: number }[],
+              fulfilment: fulfilment ?? null,
+              paymentMethod: payment_provider === 'cash_on_collection' ? 'Pay on collection' : 'PayFast',
+              ordersUrl: `${appUrl}/vendor/orders`,
             })
+            await sendEmail({ to: profile.email, ...tpl })
           }
         } catch (e) {
           console.error('[orders] vendor email failed', e)

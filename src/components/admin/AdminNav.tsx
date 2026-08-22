@@ -47,7 +47,7 @@ export default function AdminNav({ adminName }: AdminNavProps) {
               <Image
                 src="/logo-white.png"
                 alt="Stallspace"
-                width={110}
+                width={47}
                 height={34}
                 className="h-8 w-auto object-contain "
                 priority

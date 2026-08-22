@@ -1,3 +1,6 @@
+// Reads live data / the user session, so it must never be statically rendered.
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
@@ -32,7 +35,7 @@ const PER_PAGE = 24
 
 export const metadata: Metadata = {
   title: 'All Products',
-  description: 'Browse thousands of products from trusted local vendors. Compare prices and shop with confidence.',
+  description: 'Browse products from trusted local vendors. Compare prices and shop with confidence.',
 }
 
 export default async function ProductsPage({ searchParams }: PageProps) {

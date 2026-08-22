@@ -18,9 +18,9 @@ function layout(body: string): string {
         <!-- Header -->
         <tr>
           <td style="background:#0D3B2E;border-radius:12px 12px 0 0;padding:28px 36px;text-align:center;">
-            <span style="display:inline-block;background:#2ECC8E;border-radius:6px;padding:6px 10px;margin-bottom:12px;">
-              <span style="color:#fff;font-weight:900;font-size:16px;letter-spacing:-0.5px;">S</span>
-            </span>
+            <img src="${APP_URL}/logo-white.png" alt="Stallspace"
+                 width="56" height="41"
+                 style="display:block;margin:0 auto 12px;width:56px;height:auto;border:0;outline:none;text-decoration:none;" />
             <div style="color:#fff;font-weight:900;font-size:22px;letter-spacing:-0.5px;">Stallspace</div>
             <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;">Marketplace Platform</div>
           </td>
@@ -301,6 +301,58 @@ export function orderConfirmationEmail(data: {
       <tbody>${itemRows}</tbody>
     </table>
     ${para('The vendor will update you when your order is dispatched or ready for collection.')}
+    ${ctaButton('View Order', data.ordersUrl)}
+  `)
+  return { subject, html }
+}
+
+export function newOrderVendorEmail(data: {
+  vendorName: string
+  orderNumber: string
+  customerName: string
+  customerEmail: string
+  customerPhone?: string | null
+  total: string
+  items: Array<{ product_name: string; quantity: number; total_price: number }>
+  fulfilment?: string | null
+  paymentMethod?: string | null
+  ordersUrl: string
+}): { subject: string; html: string } {
+  const subject = `New order ${data.orderNumber} from ${data.customerName}`
+
+  const itemRows = (data.items ?? [])
+    .map(
+      i => `<tr>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;">${esc(i.product_name)}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#6b7280;font-size:13px;text-align:center;">${i.quantity}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8ecf0;color:#111827;font-size:13px;text-align:right;">R${Number(i.total_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</td>
+      </tr>`
+    )
+    .join('')
+
+  const html = layout(`
+    ${heading('You have a new order! 🎉')}
+    ${para(`Hi ${esc(data.vendorName)}, you've received a new order on Stallspace.`)}
+    ${infoTable([
+      ['Order Number', esc(data.orderNumber)],
+      ['Customer', esc(data.customerName)],
+      ['Email', esc(data.customerEmail)],
+      ...(data.customerPhone ? [['Phone', esc(data.customerPhone)] as [string, string]] : []),
+      ...(data.fulfilment ? [['Fulfilment', esc(data.fulfilment === 'collection' ? 'Collection' : 'Delivery')] as [string, string]] : []),
+      ...(data.paymentMethod ? [['Payment', esc(data.paymentMethod)] as [string, string]] : []),
+      ['Total', data.total],
+    ])}
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:8px;overflow:hidden;border:1px solid #e8ecf0;margin:16px 0;">
+      <thead>
+        <tr style="background:#f8f9fc;">
+          <th style="padding:8px 12px;text-align:left;color:#6b7280;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Product</th>
+          <th style="padding:8px 12px;text-align:center;color:#6b7280;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Qty</th>
+          <th style="padding:8px 12px;text-align:right;color:#6b7280;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Total</th>
+        </tr>
+      </thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+    ${para('Confirm the order in your dashboard to let the customer know you’re preparing it.')}
     ${ctaButton('View Order', data.ordersUrl)}
   `)
   return { subject, html }

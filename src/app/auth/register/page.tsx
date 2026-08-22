@@ -59,7 +59,7 @@ export default function CustomerRegisterPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/marketplace" className="inline-flex items-center gap-2 mb-6">
-            <Image src="/logo.png" alt="Stallspace" width={160} height={48} className="h-12 w-auto object-contain mx-auto" priority />
+            <Image src="/logo.png" alt="Stallspace" width={66} height={48} className="h-12 w-auto object-contain mx-auto" priority />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
           <p className="text-gray-500 text-sm mt-1">Shop from South Africa&apos;s verified vendors</p>

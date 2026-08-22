@@ -32,6 +32,10 @@
 
   html {
     scroll-behavior: smooth;
+    /* Stop iOS inflating text when the device rotates */
+    -webkit-text-size-adjust: 100%;
+    /* Respect notches / home indicators when installed as an app */
+    background: var(--color-white);
   }
 
   body {
@@ -40,7 +44,59 @@
     background: var(--color-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Kill the grey flash on tap — the main thing that makes a web app
+       feel "webby" rather than native */
+    -webkit-tap-highlight-color: transparent;
+    /* Prevent accidental horizontal scroll from wide elements */
+    overflow-x: hidden;
   }
+
+  /* iOS zooms the whole page when focusing an input under 16px.
+     Enforcing 16px on form controls keeps it feeling native. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Comfortable minimum touch targets on small screens */
+  @media (max-width: 640px) {
+    button,
+    a[role='button'],
+    [type='button'],
+    [type='submit'] {
+      min-height: 44px;
+    }
+  }
+
+  /* Momentum scrolling inside scrollable panes */
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Safe-area helpers for installed (standalone) mode */
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pb-safe-4 { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 @layer components {

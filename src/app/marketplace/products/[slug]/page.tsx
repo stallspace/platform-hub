@@ -1,3 +1,6 @@
+// Reads live data / the user session, so it must never be statically rendered.
+export const dynamic = 'force-dynamic'
+
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
@@ -452,7 +455,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div className="bg-gray-50 rounded-xl p-3 space-y-2">
                 {[
                   { icon: <ShieldCheck className="w-3.5 h-3.5 text-green-500" />, text: 'Verified vendor' },
-                  { icon: <CheckCircle2 className="w-3.5 h-3.5 text-brand-mint" />, text: 'Secure payment via PayFast, Yoco, or Peach' },
+                  { icon: <CheckCircle2 className="w-3.5 h-3.5 text-brand-mint" />, text: 'Secure payment direct to the vendor' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs text-gray-500">
                     {icon}

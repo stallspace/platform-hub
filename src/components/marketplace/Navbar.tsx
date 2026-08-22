@@ -62,7 +62,7 @@ export default function Navbar() {
 
       {/* Announcement bar — forest green */}
       <div className="bg-[#0D3B2E] py-1.5 px-4 text-center text-xs text-white/70 tracking-wide">
-        South Africa&apos;s vetted online marketplace — trusted vendors, direct payments
+        Your Marketplace | Trusted Vendors
       </div>
 
       {/* Main nav — white */}
@@ -75,7 +75,7 @@ export default function Navbar() {
               <Image
                 src="/logo.png"
                 alt="Stallspace"
-                width={120}
+                width={55}
                 height={40}
                 className="h-10 w-auto object-contain"
                 priority

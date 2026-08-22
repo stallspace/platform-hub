@@ -1,3 +1,6 @@
+// Reads live data / the user session, so it must never be statically rendered.
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { XCircle, ArrowLeft, ShoppingCart } from 'lucide-react'

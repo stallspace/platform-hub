@@ -1,3 +1,6 @@
+// Reads live data / the user session, so it must never be statically rendered.
+export const dynamic = 'force-dynamic'
+
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SubscriptionClient from '@/components/vendor/SubscriptionClient'

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>You're offline · Stallspace</title>
+  <style>
+    *{ box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(160deg, #08251C 0%, #0D3B2E 55%, #0F5A43 100%);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card { max-width: 340px; }
+    img { width: 84px; height: auto; margin-bottom: 24px; opacity: .95; }
+    h1 { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+    p { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.72); margin: 0 0 28px; }
+    button {
+      background: #2ECC8E; color: #06231A; border: 0;
+      font-size: 15px; font-weight: 700; padding: 14px 28px;
+      border-radius: 12px; cursor: pointer; width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active { transform: scale(.98); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="/logo-white.png" alt="Stallspace" />
+    <h1>You're offline</h1>
+    <p>Check your connection and try again — your cart is saved on this device.</p>
+    <button onclick="location.reload()">Try again</button>
+  </div>
+  <script>
+    // Auto-recover the moment the connection returns.
+    window.addEventListener('online', () => location.reload())
+  </script>
+</body>
+</html>

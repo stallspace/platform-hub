@@ -1,3 +1,6 @@
+// Reads live data / the user session, so it must never be statically rendered.
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
@@ -37,7 +40,7 @@ function StarRating({ rating, count }: { rating: number; count?: number }) {
 }
 
 export const metadata: Metadata = {
-  title: { absolute: 'Stallspace - Your Local Marketplace' },
+  title: { absolute: 'Stallspace | Your Marketplace' },
   description: 'Discover trusted local vendors, compare prices, and shop directly from independent businesses. No middlemen — just local sellers you can trust.',
 }
 
@@ -65,27 +68,30 @@ export default async function HomePage() {
 
       {/* HERO */}
       <section
-        className="relative overflow-hidden"
+        // Background position is left-anchored on mobile so a wide banner
+        // doesn't crop to its middle and crowd the headline.
+        className={`relative overflow-hidden bg-cover bg-left sm:bg-center ${heroBanner?.content?.image_url ? '' : 'bg-[#F8FAF3]'}`}
         style={
           heroBanner?.content?.image_url
-            ? { backgroundImage: `url(${heroBanner.content.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-            : { backgroundColor: '#F8FAF3' }
+            ? { backgroundImage: `url(${heroBanner.content.image_url})` }
+            : undefined
         }
       >
         {heroBanner?.content?.image_url && (
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0A2A20]/90 via-[#0D3B2E]/60 to-[#0D3B2E]/20" />
+          // Solid, even darkening on mobile for legibility; directional fade on desktop.
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A2A20]/90 to-[#0D3B2E]/80 sm:bg-gradient-to-r sm:from-[#0A2A20]/90 sm:via-[#0D3B2E]/60 sm:to-[#0D3B2E]/20" />
         )}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 min-h-[500px]">
-            <div className="py-16 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 min-h-[420px] sm:min-h-[500px]">
+            <div className="py-10 sm:py-16 lg:py-24">
               <span className={`inline-flex items-center gap-2 border text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-6 ${heroBanner?.content?.image_url ? 'bg-white/10 border-white/25 text-white' : 'bg-white border-[#2ECC8E]/25 text-[#0D3B2E]'}`}>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#2ECC8E]" />
                 All vendors vetted &amp; verified
               </span>
-              <h1 className={`text-[42px] sm:text-5xl lg:text-[54px] font-bold leading-[1.08] tracking-tight mb-5 ${heroBanner?.content?.image_url ? 'text-white' : 'text-[#0D3B2E]'}`}>
+              <h1 className={`text-[32px] sm:text-5xl lg:text-[54px] font-bold leading-[1.1] tracking-tight mb-4 sm:mb-5 ${heroBanner?.content?.image_url ? 'text-white' : 'text-[#0D3B2E]'}`}>
                 {heroBanner?.content?.title || (<>Your marketplace<br />for <span className="text-[#2ECC8E]">local stalls.</span></>)}
               </h1>
-              <p className={`text-lg leading-relaxed mb-8 max-w-[420px] ${heroBanner?.content?.image_url ? 'text-white/80' : 'text-[#4B5563]'}`}>
+              <p className={`text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-[420px] ${heroBanner?.content?.image_url ? 'text-white/80' : 'text-[#4B5563]'}`}>
                 {heroBanner?.content?.subtitle || 'Discover trusted vendors. Compare prices. Support local.'}
               </p>
               <form action="/marketplace/search" method="GET">
@@ -123,24 +129,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* STATS BAR */}
-      <section className="bg-[#0D3B2E]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
-            {[
-              { value: '20+',    label: 'Vetted Vendors' },
-              { value: '5,000+', label: 'Products Listed' },
-              { value: '1,000+', label: 'Happy Customers' },
-              { value: '100%',   label: 'Secure Payments' },
-            ].map(stat => (
-              <div key={stat.label} className="py-6 px-4 text-center">
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-xs text-white/60 mt-0.5">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* PROMOTIONAL BANNERS */}
       {banners && banners.filter((b: any) => b.section !== 'hero').length > 0 && (
@@ -361,9 +349,9 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <Search className="w-5 h-5" />,     title: 'Browse & Discover',        desc: 'Search thousands of products from vetted South African vendors.' },
+              { icon: <Search className="w-5 h-5" />,     title: 'Browse & Discover',        desc: 'Find products from vetted South African vendors.' },
               { icon: <Store className="w-5 h-5" />,      title: 'Visit Vendor Storefronts', desc: 'Explore dedicated stores, read reviews, and compare products.' },
-              { icon: <CreditCard className="w-5 h-5" />, title: 'Pay Directly & Securely',  desc: 'Purchase directly from the vendor via PayFast, Peach, Yoco, or Ozow.' },
+              { icon: <CreditCard className="w-5 h-5" />, title: 'Pay Directly & Securely',  desc: 'Pay the vendor directly via PayFast, or pay on collection.' },
             ].map((step, i) => (
               <div key={step.title} className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/8 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-[#2ECC8E]/15 text-[#2ECC8E] flex items-center justify-center mb-5">{step.icon}</div>
@@ -406,7 +394,7 @@ export default async function HomePage() {
               <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
                 Sell on Stallspace.<br /><span className="text-[#2ECC8E]">Reach more customers.</span>
               </h3>
-              <p className="text-white/55 text-sm max-w-md">Join South Africa&apos;s fastest-growing vetted marketplace. Plans from R250/month.</p>
+              <p className="text-white/55 text-sm max-w-md">Join South Africa&apos;s vetted marketplace. Plans from R250/month.</p>
             </div>
             <Link href="/join" className="relative z-10 flex-shrink-0 inline-flex items-center gap-2 bg-[#2ECC8E] hover:bg-[#22a370] text-[#0D3B2E] font-bold text-sm px-8 py-4 rounded-xl transition-colors whitespace-nowrap">
               Apply as a Vendor <ArrowRight className="w-4 h-4" />

@@ -33,7 +33,8 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-bold text-[#0D3B2E] mt-8 mb-3">2. Stallspace Is Not a Payment Intermediary</h2>
           <p>
             All customer payments are made directly to the vendor via the vendor's own configured payment
-            gateway (PayFast, Peach Payments, Yoco, or Ozow). Stallspace does not collect, hold, process, or
+            gateway (currently PayFast), or in person where the vendor offers payment on collection.
+            Stallspace does not collect, hold, process, or
             distribute customer funds at any point. Stallspace records transactions for reporting and platform
             functionality purposes only.
           </p>

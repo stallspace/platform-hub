@@ -83,7 +83,7 @@ export default function VendorLayoutClient({ vendor, children }: Props) {
           <Image
             src="/logo-white.png"
             alt="Stallspace"
-            width={120}
+            width={50}
             height={36}
             className="h-9 w-auto object-contain"
             priority
