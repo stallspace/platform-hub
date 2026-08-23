@@ -223,7 +223,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
                 <p className="text-[#9CA3AF] text-sm">No products listed yet.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                 {products.map((product: any) => {
                   const outOfStock = product.track_inventory && (product.stock_quantity ?? 0) <= 0
                   const discount = product.compare_at_price

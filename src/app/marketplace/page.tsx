@@ -265,7 +265,7 @@ export default async function HomePage() {
             <Link href="/marketplace/vendors" className="hidden sm:flex items-center gap-1 text-sm font-semibold text-[#2ECC8E] hover:underline">All vendors <ChevronRight className="w-4 h-4" /></Link>
           </div>
           {!featuredVendors || featuredVendors.length === 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="rounded-2xl border border-[#E5E7EB] overflow-hidden animate-pulse">
                   <div className="h-20 bg-[#F8FAF3]" />
@@ -278,7 +278,7 @@ export default async function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
               {featuredVendors.map((vendor: any) => (
                 <Link key={vendor.slug} href={`/marketplace/store/${vendor.slug}`}
                   className="group bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
@@ -321,7 +321,7 @@ export default async function HomePage() {
               <TrendingUp className="w-5 h-5 text-[#2ECC8E]" />
               <h2 className="text-2xl font-bold text-[#111111] tracking-tight">Trending Now</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
               {trendingProducts.map((product: any) => (
                 <Link key={product.id} href={`/marketplace/products/${product.slug}`}
                   className="flex items-center gap-4 bg-white rounded-2xl p-3 border border-[#E5E7EB] hover:border-[#2ECC8E] hover:shadow-sm transition-all">
