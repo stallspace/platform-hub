@@ -17,11 +17,32 @@ function formatDate(iso: string) {
 export default async function AdminDashboardPage() {
   const supabase = await createClient()
 
-  // Vendor counts by status
-  const { data: vendorRows } = await supabase
-    .from('vendors')
-    .select('id, business_name, email, status, subscription_plan, subscription_status, subscription_next_billing, created_at, logo_url')
-    .order('created_at', { ascending: false })
+  // All four queries are independent — run them concurrently rather than
+  // paying four sequential round trips to the database.
+  const [
+    { data: vendorRows },
+    { count: totalProducts },
+    { count: unreadEnquiries },
+    { data: auditRows },
+  ] = await Promise.all([
+    supabase
+      .from('vendors')
+      .select('id, business_name, email, status, subscription_plan, subscription_status, subscription_next_billing, created_at, logo_url')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('products')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_archived', false),
+    supabase
+      .from('enquiries')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_read', false),
+    supabase
+      .from('audit_logs')
+      .select('id, action, resource_type, created_at, profiles(full_name, email)')
+      .order('created_at', { ascending: false })
+      .limit(8),
+  ])
 
   const vendors = vendorRows ?? []
   const totalVendors     = vendors.length
@@ -59,25 +80,6 @@ export default async function AdminDashboardPage() {
     .sort((a, b) => a.daysUntil - b.daysUntil)
 
   const overdueCount = paymentsDue.filter((v) => v.daysUntil < 0).length
-
-  // Product count
-  const { count: totalProducts } = await supabase
-    .from('products')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_archived', false)
-
-  // Enquiry count (unread)
-  const { count: unreadEnquiries } = await supabase
-    .from('enquiries')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_read', false)
-
-  // Recent audit log
-  const { data: auditRows } = await supabase
-    .from('audit_logs')
-    .select('id, action, resource_type, created_at, profiles(full_name, email)')
-    .order('created_at', { ascending: false })
-    .limit(8)
 
   const STATS = [
     {

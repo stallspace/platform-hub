@@ -3,21 +3,14 @@ export const dynamic = 'force-dynamic'
 
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentVendor } from '@/lib/supabase/session'
 import ProductFormClient from '@/components/vendor/ProductFormClient'
 
 export default async function EditProductPage({ params }: { params: { id: string } }) {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id')
-    .eq('user_id', user.id)
-    .single()
-
+  const vendor = await getCurrentVendor()
   if (!vendor) redirect('/join')
+
+  const supabase = await createClient()
 
   const { data: product } = await supabase
     .from('products')

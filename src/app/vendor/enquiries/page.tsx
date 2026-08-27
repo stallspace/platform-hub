@@ -3,21 +3,14 @@ export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentVendor } from '@/lib/supabase/session'
 import EnquiriesClient from '@/components/vendor/EnquiriesClient'
 
 export default async function VendorEnquiriesPage() {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id, email')
-    .eq('user_id', user.id)
-    .single()
-
+  const vendor = await getCurrentVendor()
   if (!vendor) redirect('/join')
+
+  const supabase = await createClient()
 
   const { data: enquiries } = await supabase
     .from('enquiries')

@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentVendor } from '@/lib/supabase/session'
 import { DollarSign, ShoppingBag, Eye, MessageSquare, TrendingUp, Crown, ArrowUpRight, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 
@@ -18,18 +19,10 @@ const STATUS_STYLES: Record<string, string> = {
 const LOW_STOCK_THRESHOLD = 5
 
 export default async function VendorDashboardPage() {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id, business_name, subscription_plan, subscription_status, subscription_next_billing')
-    .eq('user_id', user.id)
-    .single()
-
+  const vendor = await getCurrentVendor()
   if (!vendor) redirect('/join')
+
+  const supabase = await createClient()
 
   const [
     { count: productCount },

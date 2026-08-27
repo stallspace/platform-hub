@@ -1,19 +1,13 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { getCurrentUser, getCurrentVendor } from '@/lib/supabase/session'
 import VendorLayoutClient from '@/components/vendor/VendorLayoutClient'
 
 export default async function VendorLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
+  // Both lookups are request-cached, so the child page reuses them for free.
+  const user = await getCurrentUser()
   if (!user) redirect('/auth/login')
 
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id, business_name, slug, status, subscription_plan, subscription_status, logo_url')
-    .eq('user_id', user.id)
-    .single()
-
+  const vendor = await getCurrentVendor()
   if (!vendor) redirect('/join')
 
   return (

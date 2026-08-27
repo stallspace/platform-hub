@@ -55,7 +55,17 @@ export default async function AdminOrdersPage({
   if (toFilter)   query = query.lte('created_at', toFilter + 'T23:59:59')
   if (searchQuery) query = query.or(`customer_name.ilike.%${searchQuery}%,customer_email.ilike.%${searchQuery}%,order_number.ilike.%${searchQuery}%,payment_reference.ilike.%${searchQuery}%`)
 
-  const { data: rows, error } = await query
+  // The filtered orders, the platform totals and the vendor list don't depend
+  // on each other, so fetch them concurrently.
+  const [
+    { data: rows, error },
+    { data: allOrders },
+    { data: vendorRows },
+  ] = await Promise.all([
+    query,
+    supabase.from('orders').select('status, total'),
+    supabase.from('vendors').select('id, business_name').eq('status', 'approved').order('business_name'),
+  ])
 
   const orders: AdminOrder[] = (rows ?? []).map((r: any) => ({
     ...r,
@@ -79,7 +89,6 @@ export default async function AdminOrdersPage({
     }
   }
 
-  const { data: allOrders } = await supabase.from('orders').select('status, total')
   const statusCounts: Record<string, number> = {}
   let platformTotal = 0
   if (allOrders) {
@@ -88,12 +97,6 @@ export default async function AdminOrdersPage({
       platformTotal += Number(o.total ?? 0)
     }
   }
-
-  const { data: vendorRows } = await supabase
-    .from('vendors')
-    .select('id, business_name')
-    .eq('status', 'approved')
-    .order('business_name')
 
   return (
     <div>

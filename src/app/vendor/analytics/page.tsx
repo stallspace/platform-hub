@@ -3,20 +3,14 @@ export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentVendor } from '@/lib/supabase/session'
 import AnalyticsClient from '@/components/vendor/AnalyticsClient'
 
 export default async function VendorAnalyticsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id, business_name')
-    .eq('user_id', user.id)
-    .single()
-
+  const vendor = await getCurrentVendor()
   if (!vendor) redirect('/join')
+
+  const supabase = await createClient()
 
   const [
     { count: storeViews },
