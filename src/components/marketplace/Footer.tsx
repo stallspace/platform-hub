@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react'
+import { Mail, MapPin, Instagram } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -25,14 +25,14 @@ export default function Footer() {
               The vetted online marketplace. Connecting trusted vendors with customers since 2026.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#2ECC8E] transition-colors">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#2ECC8E] transition-colors">
+              <a
+                href="https://www.instagram.com/stallspace_"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Stallspace on Instagram"
+                className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#2ECC8E] transition-colors"
+              >
                 <Instagram className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#2ECC8E] transition-colors">
-                <Twitter className="w-4 h-4" />
               </a>
             </div>
           </div>

@@ -232,14 +232,15 @@ export default function VendorJoinPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Two-up on phones so six benefits read as a glanceable grid, not a long column. */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {WHY_Stallspace.map((item) => (
-              <div key={item.title} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-xl bg-brand-mint/10 text-brand-mint flex items-center justify-center mb-4">
+              <div key={item.title} className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-brand-mint/10 text-brand-mint flex items-center justify-center mb-3 sm:mb-4">
                   {item.icon}
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+                <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-1 sm:mb-2 leading-snug">{item.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
@@ -256,21 +257,24 @@ export default function VendorJoinPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Compact icon-left rows on mobile; the original 4-across layout on desktop. */}
+          <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6">
             {HOW_IT_WORKS.map((step, i) => (
               <div key={step.step} className="relative">
                 {i < HOW_IT_WORKS.length - 1 && (
                   <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gray-100 -z-0 -translate-x-6" />
                 )}
-                <div className="relative z-10">
-                  <div className="w-20 h-20 rounded-2xl bg-brand-forest text-white flex items-center justify-center mb-5 shadow-lg relative">
+                <div className="relative z-10 flex md:block items-start gap-4">
+                  <div className="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-2xl bg-brand-forest text-white flex items-center justify-center md:mb-5 shadow-md md:shadow-lg relative flex-shrink-0">
                     {step.icon}
-                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-brand-mint text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-brand-mint text-white text-[10px] md:text-xs font-bold rounded-full flex items-center justify-center">
                       {i + 1}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-base md:text-lg font-bold text-gray-900 mb-1 md:mb-2">{step.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -313,17 +317,17 @@ export default function VendorJoinPage() {
                   </div>
                 )}
 
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
+                <div className="mb-4 sm:mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">{plan.name}</h3>
                   <p className="text-sm text-gray-500 mt-1">{plan.description}</p>
-                  <div className="mt-4 flex items-end gap-1">
-                    <span className="text-4xl font-bold text-brand-forest">R{plan.price}</span>
+                  <div className="mt-3 sm:mt-4 flex items-end gap-1">
+                    <span className="text-3xl sm:text-4xl font-bold text-brand-forest">R{plan.price}</span>
                     <span className="text-gray-400 mb-1">/month</span>
                   </div>
                   <p className="text-sm text-brand-mint font-medium mt-1">{plan.limit}</p>
                 </div>
 
-                <ul className="space-y-3 flex-1 mb-5 sm:mb-8">
+                <ul className="space-y-2 sm:space-y-3 flex-1 mb-4 sm:mb-8">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2.5 text-sm text-gray-600">
                       <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
@@ -345,7 +349,7 @@ export default function VendorJoinPage() {
             ))}
           </div>
 
-          <p className="text-center text-sm text-gray-400 mt-8">
+          <p className="text-center text-sm text-gray-400 mt-6 sm:mt-8">
             All plans include a dedicated storefront, customer enquiry inbox, and all supported payment providers.
             You can upgrade or downgrade at any time.
           </p>
@@ -355,8 +359,8 @@ export default function VendorJoinPage() {
       {/* ── FAQ ─────────────────────────────────────── */}
       <section className="py-8 sm:py-14 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-brand-forest text-center mb-6 sm:mb-10">Common Questions</h2>
-          <div className="space-y-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-brand-forest text-center mb-6 sm:mb-10">Common Questions</h2>
+          <div className="space-y-2.5 sm:space-y-3">
             {[
               {
                 q: 'Does Stallspace take a commission on my sales?',
@@ -383,13 +387,19 @@ export default function VendorJoinPage() {
                 a: 'You\'ll receive reminder emails before any action is taken. After a grace period, your storefront will be temporarily suspended until payment is made, then automatically reactivated.',
               },
             ].map(({ q, a }) => (
-              <div key={q} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                <h4 className="font-semibold text-gray-900 mb-2 flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 text-brand-mint flex-shrink-0 mt-0.5" />
-                  {q}
-                </h4>
-                <p className="text-sm text-gray-500 leading-relaxed pl-6">{a}</p>
-              </div>
+              /* Native <details> — collapses by default, works without JavaScript. */
+              <details
+                key={q}
+                className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden"
+              >
+                <summary className="flex items-start gap-2.5 p-4 sm:p-5 cursor-pointer select-none list-none font-semibold text-gray-900 text-sm sm:text-base [&::-webkit-details-marker]:hidden hover:bg-gray-100/70 transition-colors">
+                  <ChevronRight className="w-4 h-4 text-brand-mint flex-shrink-0 mt-0.5 transition-transform duration-200 group-open:rotate-90" />
+                  <span className="flex-1">{q}</span>
+                </summary>
+                <p className="text-sm text-gray-500 leading-relaxed px-4 sm:px-5 pb-4 sm:pb-5 pl-[2.375rem] sm:pl-[2.875rem]">
+                  {a}
+                </p>
+              </details>
             ))}
           </div>
         </div>
