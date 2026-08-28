@@ -62,7 +62,7 @@ export default function Navbar() {
 
       {/* Announcement bar — forest green */}
       <div className="bg-[#0D3B2E] py-1.5 px-4 text-center text-xs text-white/70 tracking-wide">
-        Your Marketplace | Trusted Vendors
+        Your Marketplace | Proudly South African
       </div>
 
       {/* Main nav — white */}

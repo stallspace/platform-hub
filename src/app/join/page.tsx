@@ -161,7 +161,7 @@ export default function VendorJoinPage() {
         />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-mint opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 md:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 md:py-24">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
               <BadgeCheck className="w-4 h-4 text-green-400" />
@@ -199,7 +199,7 @@ export default function VendorJoinPage() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
               {[
                 { value: 'R0',       label: 'Commission fees' },
                 { value: '2–3 days', label: 'Approval time' },
@@ -217,9 +217,9 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── WHY Stallspace ─────────────────────────────── */}
-      <section className="py-10 sm:py-16 bg-gray-50">
+      <section className="py-8 sm:py-14 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-7 sm:mb-12">
             <div className="inline-flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-brand-mint" />
               <span className="text-brand-mint text-sm font-semibold uppercase tracking-wider">Why Stallspace</span>
@@ -232,7 +232,7 @@ export default function VendorJoinPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {WHY_Stallspace.map((item) => (
               <div key={item.title} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-xl bg-brand-mint/10 text-brand-mint flex items-center justify-center mb-4">
@@ -247,16 +247,16 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── HOW IT WORKS ────────────────────────────── */}
-      <section className="py-10 sm:py-16 bg-white">
+      <section className="py-8 sm:py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-7 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-forest">How It Works</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               From application to your first sale in four simple steps.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {HOW_IT_WORKS.map((step, i) => (
               <div key={step.step} className="relative">
                 {i < HOW_IT_WORKS.length - 1 && (
@@ -289,20 +289,20 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── PRICING ─────────────────────────────────── */}
-      <section id="pricing" className="py-10 sm:py-16 bg-gray-50">
+      <section id="pricing" className="py-8 sm:py-14 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-7 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-forest">Simple, Flat Pricing</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               One monthly fee. No commission. No hidden costs. Cancel anytime.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
             {PLANS.map((plan) => (
               <div
                 key={plan.id}
-                className={`relative bg-white rounded-2xl border-2 p-8 flex flex-col
+                className={`relative bg-white rounded-2xl border-2 p-5 sm:p-8 flex flex-col
                   ${plan.popular ? 'border-brand-mint shadow-xl shadow-brand-mint/10' : 'border-gray-100 shadow-sm'}`}
               >
                 {plan.popular && (
@@ -323,7 +323,7 @@ export default function VendorJoinPage() {
                   <p className="text-sm text-brand-mint font-medium mt-1">{plan.limit}</p>
                 </div>
 
-                <ul className="space-y-3 flex-1 mb-8">
+                <ul className="space-y-3 flex-1 mb-5 sm:mb-8">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2.5 text-sm text-gray-600">
                       <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
@@ -353,9 +353,9 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────── */}
-      <section className="py-10 sm:py-16 bg-white">
+      <section className="py-8 sm:py-14 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-brand-forest text-center mb-10">Common Questions</h2>
+          <h2 className="text-3xl font-bold text-brand-forest text-center mb-6 sm:mb-10">Common Questions</h2>
           <div className="space-y-4">
             {[
               {
@@ -396,7 +396,7 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── FINAL CTA ───────────────────────────────── */}
-      <section className="py-10 sm:py-16 bg-brand-forest relative overflow-hidden">
+      <section className="py-8 sm:py-14 bg-brand-forest relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}
@@ -407,7 +407,7 @@ export default function VendorJoinPage() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Start Selling?
           </h2>
-          <p className="text-gray-300 text-lg mb-8">
+          <p className="text-gray-300 text-lg mb-5 sm:mb-8">
             Join our vetted marketplace. Your application takes less than 10 minutes.
           </p>
           <Link
