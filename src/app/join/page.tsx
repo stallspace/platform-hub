@@ -122,26 +122,30 @@ export default function VendorJoinPage() {
 
       {/* ── NAVBAR ──────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-brand-forest border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/marketplace" className="flex items-center gap-2">
-            <Image src="/logo-white.png" alt="Stallspace" width={50} height={36} className="h-9 w-auto object-contain" priority /><span className="text-white font-bold text-xl tracking-tight ml-2">Stallspace</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+          <Link href="/marketplace" className="flex items-center gap-2 min-w-0 flex-shrink">
+            <Image src="/logo-white.png" alt="Stallspace" width={44} height={32} className="h-7 sm:h-9 w-auto object-contain flex-shrink-0" priority />
+            <span className="text-white font-bold text-lg sm:text-xl tracking-tight truncate">Stallspace</span>
           </Link>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+            {/* Secondary links are hidden on small screens — the primary
+                action (Apply Now) is what matters on a phone. */}
             <Link
               href="/marketplace"
-              className="text-gray-300 hover:text-white text-sm transition-colors"
+              className="hidden md:inline text-gray-300 hover:text-white text-sm transition-colors whitespace-nowrap"
             >
               Browse Marketplace
             </Link>
             <Link
               href="/auth/login"
-              className="text-gray-300 hover:text-white text-sm transition-colors"
+              className="hidden sm:inline text-gray-300 hover:text-white text-sm transition-colors whitespace-nowrap"
             >
               Sign In
             </Link>
             <Link
               href="/join/register"
-              className="bg-brand-mint hover:bg-[#22a370] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+              className="bg-brand-mint hover:bg-[#22a370] text-white text-xs sm:text-sm font-semibold px-3.5 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               Apply Now
             </Link>
@@ -157,38 +161,38 @@ export default function VendorJoinPage() {
         />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-mint opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 md:py-28">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
               <BadgeCheck className="w-4 h-4 text-green-400" />
               <span className="text-white/90 text-sm font-medium">Applications open — limited vendor spots available</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-[34px] sm:text-5xl md:text-6xl font-bold text-white leading-[1.12] mb-5 sm:mb-6">
               Sell on a <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2ECC8E] to-[#5dd9a8]">
                 Trusted Marketplace
               </span>
             </h1>
 
-            <p className="text-gray-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
+            <p className="text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed mb-7 sm:mb-8 max-w-2xl">
               Stallspace connects verified local businesses with customers who want to buy from them.
               No commission fees. No middlemen. Just a flat monthly subscription and your
               products in front of real buyers.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-9 sm:mb-12">
               <Link
                 href="/join/register"
                 className="inline-flex items-center justify-center gap-2 bg-brand-mint hover:bg-[#22a370]
-                           text-white font-semibold px-8 py-4 rounded-xl transition-colors shadow-lg text-base"
+                           text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl transition-colors shadow-lg text-sm sm:text-base"
               >
                 Apply to Become a Vendor <ArrowRight className="w-5 h-5" />
               </Link>
               <a
                 href="#pricing"
                 className="inline-flex items-center justify-center gap-2 border-2 border-white/30
-                           text-white font-semibold px-8 py-4 rounded-xl hover:border-white transition-colors text-base"
+                           text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl hover:border-white transition-colors text-sm sm:text-base"
               >
                 View Pricing Plans
               </a>
@@ -213,14 +217,14 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── WHY Stallspace ─────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-10 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-brand-mint" />
               <span className="text-brand-mint text-sm font-semibold uppercase tracking-wider">Why Stallspace</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-forest">
               Built for Independent Vendors
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
@@ -243,10 +247,10 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── HOW IT WORKS ────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">How It Works</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-forest">How It Works</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               From application to your first sale in four simple steps.
             </p>
@@ -285,10 +289,10 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── PRICING ─────────────────────────────────── */}
-      <section id="pricing" className="py-16 bg-gray-50">
+      <section id="pricing" className="py-10 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-forest">Simple, Flat Pricing</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-forest">Simple, Flat Pricing</h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               One monthly fee. No commission. No hidden costs. Cancel anytime.
             </p>
@@ -349,7 +353,7 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="py-10 sm:py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-brand-forest text-center mb-10">Common Questions</h2>
           <div className="space-y-4">
@@ -392,7 +396,7 @@ export default function VendorJoinPage() {
       </section>
 
       {/* ── FINAL CTA ───────────────────────────────── */}
-      <section className="py-16 bg-brand-forest relative overflow-hidden">
+      <section className="py-10 sm:py-16 bg-brand-forest relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }}
@@ -400,7 +404,7 @@ export default function VendorJoinPage() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-mint opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ShieldCheck className="w-12 h-12 text-green-400 mx-auto mb-4" />
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Start Selling?
           </h2>
           <p className="text-gray-300 text-lg mb-8">

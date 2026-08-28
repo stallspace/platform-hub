@@ -346,14 +346,14 @@ export default function VendorRegisterPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-brand-forest py-10 px-4">
+      <div className="bg-brand-forest py-7 sm:py-10 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <Link href="/marketplace" className="inline-flex items-center gap-2 mb-6">
+          <Link href="/marketplace" className="inline-flex items-center gap-2 mb-4 sm:mb-6">
             <Image src="/logo-white.png" alt="Stallspace" width={50} height={36} className="h-9 w-auto object-contain" priority />
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Register as a Vendor</h1>
-          <p className="text-gray-300 text-sm">Join South Africa&apos;s vetted marketplace</p>
-          <div className="mt-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Register as a Vendor</h1>
+          <p className="text-gray-300 text-sm">Join our vetted marketplace</p>
+          <div className="mt-6 sm:mt-8">
             <StepIndicator current={step} />
           </div>
         </div>
