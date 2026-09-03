@@ -13,6 +13,7 @@ import {
 import AddToCartButton from '@/components/marketplace/AddToCartButton'
 import TrackView from '@/components/marketplace/TrackView'
 import ReviewForm from '@/components/storefront/ReviewForm'
+import ProductGallery from '@/components/marketplace/ProductGallery'
 
 interface PageProps {
   params: { slug: string }
@@ -177,33 +178,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           {/* ── LEFT — IMAGES ──────────────────────── */}
           <div className="lg:col-span-5">
             <div className="sticky top-24">
-              {/* Main image */}
-              <div className="aspect-square rounded-2xl bg-white border border-gray-100 overflow-hidden mb-3 shadow-sm">
-                {product.images?.[0] ? (
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-20 h-20 text-gray-200" />
-                  </div>
-                )}
-              </div>
-              {/* Thumbnails */}
-              {product.images && product.images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {product.images.map((img: string, i: number) => (
-                    <div
-                      key={i}
-                      className={`flex-shrink-0 w-16 h-16 rounded-xl border-2 overflow-hidden cursor-pointer transition-colors ${i === 0 ? 'border-brand-mint' : 'border-gray-200 hover:border-gray-400'}`}
-                    >
-                      <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <ProductGallery images={product.images} productName={product.name} />
             </div>
           </div>
 

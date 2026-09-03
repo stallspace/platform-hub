@@ -3,21 +3,18 @@ import { createServiceClient } from '@/lib/supabase/admin'
 import { readConfigData } from '@/lib/crypto/secrets'
 import { phpUrlencode } from '@/lib/payments/payfast'
 import { createHmac, createHash } from 'crypto'
-import { sendEmail } from '@/lib/email/resend'
-import { orderConfirmationEmail } from '@/lib/email/templates'
+import { settlePaidOrder, recordFailedPayment } from '@/lib/orders/settle'
 
 /**
  * POST /api/orders/notify
  *
  * Unified ITN webhook for PayFast (?provider=payfast) and Ozow (?provider=ozow).
  * Yoco / Peach use redirect URLs handled on the success page.
+ *
+ * PayFast sends an ITN for every outcome, not just success: COMPLETE, FAILED,
+ * PENDING and CANCELLED. Acting only on COMPLETE left declined payments stuck
+ * at 'pending' forever with nobody told.
  */
-
-// Supabase can type a to-one join as an array; normalise it.
-function bizName(vendors: unknown): string {
-  if (Array.isArray(vendors)) return vendors[0]?.business_name ?? ''
-  return (vendors as { business_name?: string } | null)?.business_name ?? ''
-}
 
 // Verify the PayFast ITN signature using THIS vendor's passphrase (each vendor
 // has their own PayFast account, so the passphrase is per-vendor, not global).
@@ -102,26 +99,17 @@ export async function POST(request: NextRequest) {
       }
       console.log('[notify:payfast] verified OK, status =', params.get('payment_status'))
 
-      if (params.get('payment_status') === 'COMPLETE') {
-        const { data: order } = await supabase
-          .from('orders')
-          .update({ status: 'confirmed', payment_reference: params.get('pf_payment_id') })
-          .eq('id', orderId)
-          .eq('status', 'pending')
-          .select('*, vendors(business_name)')
-          .single()
+      const status = params.get('payment_status')
 
-        if (order) {
-          const { subject, html } = orderConfirmationEmail({
-            customerName: order.customer_name,
-            orderNumber: order.order_number,
-            businessName: bizName(order.vendors),
-            total: `R${Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
-            items: order.items ?? [],
-            ordersUrl: `${process.env.NEXT_PUBLIC_APP_URL}/account/orders`,
-          })
-          await sendEmail({ to: order.customer_email, subject, html })
-        }
+      if (status === 'COMPLETE') {
+        await settlePaidOrder({
+          supabase,
+          orderId,
+          paymentReference: params.get('pf_payment_id'),
+        })
+      } else if (status === 'FAILED' || status === 'CANCELLED') {
+        // Leave 'PENDING' alone — PayFast will send a further ITN for it.
+        await recordFailedPayment(supabase, orderId, `payfast:${status.toLowerCase()}`)
       }
     }
 
@@ -147,26 +135,16 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid Ozow hash' }, { status: 400 })
       }
 
-      if (params.get('Status') === 'Complete') {
-        const { data: updated } = await supabase
-          .from('orders')
-          .update({ status: 'confirmed', payment_reference: params.get('TransactionId') })
-          .eq('id', order.id)
-          .eq('status', 'pending')
-          .select('id')
-          .single()
+      const ozowStatus = params.get('Status')
 
-        if (!updated) return NextResponse.json({ ok: true }) // already processed
-
-        const { subject, html } = orderConfirmationEmail({
-          customerName: order.customer_name,
-          orderNumber: order.order_number,
-          businessName: bizName(order.vendors),
-          total: `R${Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
-          items: order.items ?? [],
-          ordersUrl: `${process.env.NEXT_PUBLIC_APP_URL}/account/orders`,
+      if (ozowStatus === 'Complete') {
+        await settlePaidOrder({
+          supabase,
+          orderId: order.id,
+          paymentReference: params.get('TransactionId'),
         })
-        await sendEmail({ to: order.customer_email, subject, html })
+      } else if (ozowStatus === 'Cancelled' || ozowStatus === 'Error' || ozowStatus === 'Abandoned') {
+        await recordFailedPayment(supabase, order.id, `ozow:${String(ozowStatus).toLowerCase()}`)
       }
     }
 

@@ -9,8 +9,15 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const discount = product.compare_at_price
-    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+  // A "was" price is only a discount if it is actually higher than the price.
+  // Vendors routinely enter the same number in both fields, which rendered as
+  // "R325,00 R325,00" with the second struck through.
+  const hasDiscount =
+    product.compare_at_price != null &&
+    Number(product.compare_at_price) > Number(product.price)
+
+  const discount = hasDiscount
+    ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100)
     : null
 
   return (
@@ -84,9 +91,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span className="text-lg font-bold text-brand-forest">
               {formatCurrency(product.price)}
             </span>
-            {product.compare_at_price && (
+            {hasDiscount && (
               <span className="text-xs text-gray-400 line-through ml-1.5">
-                {formatCurrency(product.compare_at_price)}
+                {formatCurrency(product.compare_at_price as number)}
               </span>
             )}
           </div>

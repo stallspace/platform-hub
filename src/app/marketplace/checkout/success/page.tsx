@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle2, Package, ShoppingBag, Loader2, AlertCircle } from 'lucide-react'
 import { useCartStore } from '@/lib/cart/store'
-import { createClient } from '@/lib/supabase/client'
 
 function SuccessContent() {
   const searchParams = useSearchParams()
@@ -19,36 +18,40 @@ function SuccessContent() {
 
   const [order, setOrder]     = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError]     = useState('')
 
   useEffect(() => {
     async function confirm() {
       if (!orderId) { setLoading(false); return }
+      let token: string | null = null
       try {
-        // Verify the payment SERVER-SIDE. The browser never sets the paid status.
-        await fetch('/api/checkout/verify', {
+        token = sessionStorage.getItem(`ss_checkout_${orderId}`)
+      } catch {
+        token = null
+      }
+
+      try {
+        // Verify the payment SERVER-SIDE. The browser never sets the paid
+        // status. This also returns the order summary: guest orders have
+        // customer_id = null, so RLS correctly hides them from the anon
+        // client and the page cannot read them directly.
+        const res = await fetch('/api/checkout/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId }),
-        }).catch(() => {})
+          body: JSON.stringify({ orderId, token }),
+        })
+        const d = await res.json().catch(() => ({}))
 
-        const supabase = createClient()
-        const { data, error: fetchError } = await supabase
-          .from('orders')
-          .select('id, order_number, total, status, vendor_id, vendor:vendors(business_name, slug)')
-          .eq('id', orderId)
-          .single()
-
-        if (fetchError) throw new Error(fetchError.message)
-        setOrder(data)
-
-        if (data?.vendor_id) {
-          clearVendorItems(data.vendor_id)
+        if (d?.order) {
+          setOrder({ ...d.order, status: d.status })
+          if (d.order.vendor_id) clearVendorItems(d.order.vendor_id)
+          else clearCart()
         } else {
+          // No summary (storage blocked, or a different device). The payment
+          // is unaffected — the webhook settles it — so don't alarm anyone.
           clearCart()
         }
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Could not confirm order')
+      } catch {
+        clearCart()
       } finally {
         setLoading(false)
       }
@@ -80,7 +83,7 @@ function SuccessContent() {
             Order <strong className="text-gray-800">#{order.order_number}</strong>
           </p>
           <p className="text-gray-500 text-sm mb-5">
-            from <strong className="text-gray-800">{(order.vendor as any)?.business_name}</strong>
+            from <strong className="text-gray-800">{order.vendor_name}</strong>
           </p>
           <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
             <div className="flex justify-between text-sm">
@@ -96,17 +99,9 @@ function SuccessContent() {
           </div>
         </>
       ) : (
-        <p className="text-gray-500 text-sm mb-6">Your order has been received.</p>
-      )}
-
-      {error && (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 mb-5 flex items-start gap-2 text-left">
-          <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-700">
-            Payment was received but we could not update your order status automatically.
-            Your order reference is <strong>{orderId}</strong>. Contact support if needed.
-          </p>
-        </div>
+        <p className="text-gray-500 text-sm mb-6">
+          Your order has been received. We&apos;ve emailed your confirmation and order number.
+        </p>
       )}
 
       {isManual && provider === 'legacy' && (

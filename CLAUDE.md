@@ -82,6 +82,31 @@ the Germany latency.
 
 **Admin and vendor portals are separate.** An admin account has no vendor portal access.
 
+**RLS policies need `WITH CHECK`, not just `USING`.** On UPDATE, Postgres reuses `USING`
+as the check, so `USING (auth.uid() = id)` stays true after the row's `role` changes —
+that let any user make themselves an admin, and any vendor approve themselves. Migration
+008 guards `profiles.role` and `vendors.status`/`subscription_*` with `BEFORE UPDATE`
+triggers instead. Use that pattern for any privileged column.
+
+**Never log a PayFast signature base.** It begins `merchant_id=...&merchant_key=...`, so
+logging it leaks the vendor's live credentials into Netlify's function logs. Log the field
+names and the resulting signature only.
+
+**Order status is a state machine, not a free-text column.** `confirmed` means paid, and
+for gateway orders only the signed ITN may set it — a vendor button must never be able to
+(it fires the stock trigger and emails the customer). The table lives in
+`src/app/api/orders/status/route.ts`, mirrored in `OrdersClient.tsx` and
+`tests/order-transitions.test.ts`. Change all three together.
+
+**Payment settlement has one entry point:** `settlePaidOrder()` in `src/lib/orders/settle.ts`.
+It is idempotent (compare-and-set on `status = 'pending'`) and sends both the customer
+confirmation and the vendor notification. Don't email either side from a webhook directly.
+
+**Checkout tokens.** `/api/checkout/initiate` and `/verify` require an HMAC of the order id
+(`src/lib/payments/checkout-token.ts`), issued in the response to `POST /api/orders` and
+held in `sessionStorage`. Guests have no session, and the order id travels in URLs, so it
+proves nothing on its own. Never put the token in a URL.
+
 ## Mobile / PWA conventions
 
 The app is used mostly on phones and should feel native, not like a shrunk website.
@@ -99,11 +124,24 @@ scroll endlessly."*
 - Next.js 15/16 upgrade deferred; remaining advisories are DoS-class and need a major bump.
 - `src/app/auth/login/page.tsx.bak` and `src/app/marketplace/store/[slug]/page.tsx.bak`
   are dead files, safe to delete.
+- `database/migrations/` and `supabase/migrations/` are byte-identical duplicates, both
+  tracked. Write to both, or delete one.
+- Rate limiting is an in-process Map, so it resets on every Netlify cold start. Applied
+  only to `/api/reviews`.
 
 ## Still open
 
-- Switch PayFast from sandbox to live: delete sandbox config, set `PAYFAST_ENV=live`,
-  have vendors enter their own credentials, then run one small real transaction.
+- `PAYFAST_ENV=live` is set in Netlify for **all deploy contexts** — deploy previews hit
+  live PayFast with real vendor credentials. Split it per-context before testing on a
+  preview URL.
+- One real transaction against a real vendor's credentials is still untested: a different
+  merchant's passphrase through the signature path, and a production ITN actually landing.
+- Reconciliation job — nothing catches an order whose ITN never arrived (endpoint down
+  mid-deploy, customer closed the tab). Sweep `pending` orders with a `payment_reference`
+  older than a few minutes and re-verify.
+- Subscription billing: no scheduled reminders, and `subscriptionReminderEmail` has no
+  banking details. `subscription_status` gates nothing — unpaid vendors keep selling.
+- No `robots.txt`, no `sitemap.xml`, no returns/refunds policy.
 - Delete test data and seed real categories.
 - Refresh `docs/` — written before the payment model and several flows changed.
 - Product grid tuning once real vendor products exist.

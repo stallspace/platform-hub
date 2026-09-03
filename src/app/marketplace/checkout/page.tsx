@@ -156,9 +156,20 @@ export default function CheckoutPage() {
         payment_provider: payMethod === 'collection' ? 'cash_on_collection' : vendorConfig?.provider,
       }),
     })
-    const { data: order, error: orderError } = await res.json()
+    const { data: order, error: orderError, checkoutToken } = await res.json()
     if (orderError) throw new Error(orderError)
-    return order
+
+    // Proof we created this order. /api/checkout/initiate and /verify need it,
+    // and it must never travel in a URL. sessionStorage survives the round trip
+    // to the gateway and back in the same tab.
+    if (checkoutToken && order?.id) {
+      try {
+        sessionStorage.setItem(`ss_checkout_${order.id}`, checkoutToken)
+      } catch {
+        // Private mode or blocked storage — the webhook still settles the order.
+      }
+    }
+    return { order, checkoutToken }
   }
 
   async function handlePay() {
@@ -172,7 +183,7 @@ export default function CheckoutPage() {
     setError('')
 
     try {
-      const order = await createOrder()
+      const { order, checkoutToken } = await createOrder()
 
       // Pay on collection: nothing to charge now — the vendor takes payment
       // when the customer collects. Straight to the confirmation page.
@@ -185,7 +196,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/checkout/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: order.id }),
+        body: JSON.stringify({ orderId: order.id, token: checkoutToken }),
       })
       const d = await res.json()
       if (!res.ok || !d.redirectUrl) {

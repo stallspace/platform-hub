@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Truck, Clock, Package, Loader2, Check, AlertCircle } from 'lucide-react'
+import { Truck, Clock, Package, Loader2, Check, AlertCircle, Eye } from 'lucide-react'
 
 const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
@@ -18,6 +18,9 @@ interface StoreSettings {
   collection_hours: string | null
   collection_instructions: string | null
   pay_on_collection?: boolean
+  show_email?: boolean
+  show_phone?: boolean
+  show_address?: boolean
   vat_registered: boolean
   vat_number: string | null
   vat_included: boolean
@@ -53,6 +56,9 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
   const [collectionHours, setCollectionHours] = useState(settings?.collection_hours ?? '')
   const [collectionInstructions, setCollectionInstructions] = useState(settings?.collection_instructions ?? '')
   const [payOnCollection, setPayOnCollection] = useState(settings?.pay_on_collection ?? false)
+  const [showEmail, setShowEmail] = useState(settings?.show_email ?? true)
+  const [showPhone, setShowPhone] = useState(settings?.show_phone ?? true)
+  const [showAddress, setShowAddress] = useState(settings?.show_address ?? true)
   const [vatRegistered, setVatRegistered] = useState(settings?.vat_registered ?? false)
   const [vatNumber, setVatNumber] = useState(settings?.vat_number ?? '')
   const [vatIncluded, setVatIncluded] = useState(settings?.vat_included ?? false)
@@ -82,6 +88,9 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
         collection_hours: collectionHours || null,
         collection_instructions: collectionInstructions || null,
         pay_on_collection: payOnCollection,
+        show_email: showEmail,
+        show_phone: showPhone,
+        show_address: showAddress,
         vat_registered: vatRegistered,
         vat_number: vatNumber || null,
         vat_included: vatIncluded,
@@ -108,6 +117,39 @@ export default function StoreSettingsClient({ vendorId, settings }: Props) {
       <div className="mb-6"><h1 className="text-2xl font-bold text-gray-900">Store Settings</h1><p className="text-gray-500 text-sm mt-0.5">Configure fulfilment, hours and VAT</p></div>
       {error && <div className="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg flex items-center gap-2"><AlertCircle className="w-4 h-4" />{error}</div>}
       <div className="space-y-5">
+        {/* Contact visibility */}
+        <div className="bg-white rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center gap-2 mb-1">
+            <Eye className="w-4 h-4 text-[#2ECC8E]" />
+            <h2 className="font-semibold text-gray-900">Contact details on your storefront</h2>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">
+            Choose what shoppers can see on your store page. Customers can always reach you through the
+            enquiry form, and anything you hide here is still sent to you with every order.
+          </p>
+
+          <div className="space-y-3">
+            {([
+              ['Email address', showEmail, setShowEmail, 'Shown as a mailto link on your store page.'],
+              ['Phone number', showPhone, setShowPhone, 'Shown as a tap-to-call link.'],
+              ['Business address', showAddress, setShowAddress, 'Hide this if you trade from home.'],
+            ] as [string, boolean, (v: boolean) => void, string][]).map(([label, value, setter, hint]) => (
+              <label key={label} className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={value}
+                  onChange={e => setter(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 accent-[#2ECC8E] flex-shrink-0"
+                />
+                <span>
+                  <span className="text-sm font-medium text-gray-900 block">Show my {label.toLowerCase()}</span>
+                  <span className="text-xs text-gray-500">{hint}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <div className="flex items-center gap-2 mb-4"><Truck className="w-4 h-4 text-brand-mint" /><h2 className="font-semibold text-gray-900">Fulfilment Options</h2></div>
           <div className="grid grid-cols-3 gap-3 mb-4">

@@ -5,6 +5,7 @@ import { buildPayFastUrl } from '@/lib/payments/payfast'
 import { buildOzowUrl } from '@/lib/payments/ozow'
 import { createYocoCheckout } from '@/lib/payments/yoco'
 import { createPeachCheckout } from '@/lib/payments/peach'
+import { verifyCheckoutToken } from '@/lib/payments/checkout-token'
 
 /**
  * POST /api/checkout/initiate
@@ -16,8 +17,16 @@ import { createPeachCheckout } from '@/lib/payments/peach'
  */
 export async function POST(request: NextRequest) {
   try {
-    const { orderId } = await request.json()
+    const { orderId, token } = await request.json()
     if (!orderId) return NextResponse.json({ error: 'Missing orderId' }, { status: 400 })
+
+    // This route decrypts vendor payment credentials and returns a URL that
+    // contains them. The order id is not a secret (it travels in return_url
+    // and browser history), so require the token issued when the order was
+    // created. Deliberately vague error — do not confirm the id exists.
+    if (!verifyCheckoutToken(orderId, token)) {
+      return NextResponse.json({ error: 'This checkout link is not valid.' }, { status: 403 })
+    }
 
     const supabase = createServiceClient()
 

@@ -31,6 +31,9 @@ interface Order {
   created_at: string
   items: OrderItem[] | null
   shipping_address: ShippingAddress | null
+  payment_provider: string | null
+  fulfilment: string | null
+  paid_at: string | null
 }
 
 interface Props {
@@ -52,7 +55,7 @@ const STATUS_STYLES: Record<string, string> = {
 }
 
 const STATUS_NEXT: Record<string, string> = {
-  pending:    'Confirm order',
+  pending:    'Mark as paid',
   confirmed:  'Mark processing',
   processing: 'Mark shipped',
   shipped:    'Mark delivered',
@@ -67,6 +70,27 @@ const STATUS_FLOW: Record<string, string> = {
   processing: 'shipped',
   shipped:    'delivered',
   delivered:  'completed',
+}
+
+/**
+ * Which statuses this vendor may set, given where the order is now.
+ * Mirrors the server-side table in /api/orders/status — the server is the
+ * authority; this just avoids offering buttons that will be refused.
+ *
+ * A pending gateway order is waiting on the customer's payment. Only the
+ * signed webhook may confirm it. A pending collection order has no gateway,
+ * so the vendor confirming it IS the record that cash changed hands.
+ */
+function allowedNext(status: string, paymentProvider: string | null): string[] {
+  switch (status) {
+    case 'pending':
+      return paymentProvider === 'cash_on_collection' ? ['confirmed', 'cancelled'] : ['cancelled']
+    case 'confirmed':  return ['processing', 'shipped', 'delivered', 'completed', 'cancelled']
+    case 'processing': return ['shipped', 'delivered', 'completed', 'cancelled']
+    case 'shipped':    return ['delivered', 'completed']
+    case 'delivered':  return ['completed']
+    default:           return []
+  }
 }
 
 function fmt(n: number) {
@@ -251,8 +275,24 @@ export default function OrdersClient({ orders: initial, vendorId, productNames }
                 </div>
               </div>
 
+              {/* Payment state — a pending gateway order is not a sale yet */}
+              <div className="rounded-lg bg-gray-50 px-3 py-2.5">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Payment</p>
+                {selected.paid_at ? (
+                  <p className="text-xs text-emerald-700 font-medium">
+                    Paid · {selected.payment_provider === 'cash_on_collection' ? 'on collection' : 'PayFast'}
+                  </p>
+                ) : selected.payment_provider === 'cash_on_collection' ? (
+                  <p className="text-xs text-gray-600">Pay on collection — take payment when the customer arrives.</p>
+                ) : (
+                  <p className="text-xs text-amber-700">
+                    Not paid yet. This order confirms itself once payment comes through.
+                  </p>
+                )}
+              </div>
+
               {/* Quick advance button */}
-              {STATUS_FLOW[selected.status] && (
+              {allowedNext(selected.status, selected.payment_provider).includes(STATUS_FLOW[selected.status]) && (
                 <button
                   onClick={() => updateStatus(selected.id, STATUS_FLOW[selected.status])}
                   disabled={updating}
@@ -261,19 +301,20 @@ export default function OrdersClient({ orders: initial, vendorId, productNames }
                 </button>
               )}
 
-              {/* All status options */}
-              <div>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Set Status</p>
-                <div className="space-y-1">
-                  {STATUSES.map((s) => (
-                    <button key={s} onClick={() => updateStatus(selected.id, s)} disabled={updating || selected.status === s}
-                      className={`w-full text-left text-xs px-3 py-2 rounded-lg flex items-center justify-between transition-colors capitalize ${selected.status === s ? 'bg-[#0D3B2E] text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 disabled:opacity-40'}`}>
-                      {s}
-                      {selected.status === s && <Check className="w-3 h-3" />}
-                    </button>
-                  ))}
+              {/* All status options this order can actually move to */}
+              {allowedNext(selected.status, selected.payment_provider).length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Set Status</p>
+                  <div className="space-y-1">
+                    {allowedNext(selected.status, selected.payment_provider).map((s) => (
+                      <button key={s} onClick={() => updateStatus(selected.id, s)} disabled={updating}
+                        className="w-full text-left text-xs px-3 py-2 rounded-lg flex items-center justify-between transition-colors capitalize bg-gray-50 text-gray-700 hover:bg-gray-100 disabled:opacity-40">
+                        {s}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         )}

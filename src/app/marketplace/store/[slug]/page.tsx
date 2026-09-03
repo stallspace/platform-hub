@@ -62,7 +62,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
 
   if (!vendor) notFound()
 
-  const [{ data: products }, { data: reviews }] = await Promise.all([
+  const [{ data: products }, { data: reviews }, { data: storeSettings }] = await Promise.all([
     supabase
       .from('products')
       .select('id, name, slug, price, compare_at_price, images, is_available, stock_quantity, track_inventory, category:categories(name)')
@@ -77,7 +77,18 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
       .eq('is_approved', true)
       .order('created_at', { ascending: false })
       .limit(6),
+    supabase
+      .from('vendor_store_settings')
+      .select('show_email, show_phone, show_address')
+      .eq('vendor_id', vendor.id)
+      .maybeSingle(),
   ])
+
+  // Vendors choose which contact details are public. Default to showing them
+  // when no settings row exists yet, so existing storefronts are unchanged.
+  const showEmail   = storeSettings?.show_email   !== false && Boolean(vendor.email)
+  const showPhone   = storeSettings?.show_phone   !== false && Boolean(vendor.phone)
+  const showAddress = storeSettings?.show_address !== false && Boolean(vendor.business_address)
 
   const avgRating = reviews && reviews.length > 0
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
@@ -161,18 +172,24 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
 
             <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 space-y-3">
               <h2 className="font-semibold text-[#111111] mb-3">Contact</h2>
-              <div className="flex items-start gap-2 text-sm text-[#6B7280]">
-                <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
-                <a href={`mailto:${vendor.email}`} className="hover:text-[#2ECC8E] break-all">{vendor.email}</a>
-              </div>
-              <div className="flex items-start gap-2 text-sm text-[#6B7280]">
-                <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
-                <a href={`tel:${vendor.phone}`} className="hover:text-[#2ECC8E]">{vendor.phone}</a>
-              </div>
-              <div className="flex items-start gap-2 text-sm text-[#6B7280]">
-                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
-                <span>{vendor.business_address}</span>
-              </div>
+              {showEmail && (
+                <div className="flex items-start gap-2 text-sm text-[#6B7280]">
+                  <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
+                  <a href={`mailto:${vendor.email}`} className="hover:text-[#2ECC8E] break-all">{vendor.email}</a>
+                </div>
+              )}
+              {showPhone && (
+                <div className="flex items-start gap-2 text-sm text-[#6B7280]">
+                  <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
+                  <a href={`tel:${vendor.phone}`} className="hover:text-[#2ECC8E]">{vendor.phone}</a>
+                </div>
+              )}
+              {showAddress && (
+                <div className="flex items-start gap-2 text-sm text-[#6B7280]">
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
+                  <span>{vendor.business_address}</span>
+                </div>
+              )}
               {social?.website && (
                 <div className="flex items-start gap-2 text-sm text-[#6B7280]">
                   <Globe className="w-4 h-4 mt-0.5 flex-shrink-0 text-[#9CA3AF]" />
@@ -226,8 +243,9 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
               <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                 {products.map((product: any) => {
                   const outOfStock = product.track_inventory && (product.stock_quantity ?? 0) <= 0
-                  const discount = product.compare_at_price
-                    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+                  const hasDiscount = (product.compare_at_price != null && Number(product.compare_at_price) > Number(product.price))
+                  const discount = hasDiscount
+                    ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100)
                     : null
                   return (
                     <div key={product.id} className="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden hover:shadow-md transition-shadow group">
@@ -260,7 +278,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
                             <span className="font-bold text-[#111111]">
                               R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                             </span>
-                            {product.compare_at_price && (
+                            {hasDiscount && (
                               <span className="text-xs text-[#9CA3AF] line-through">
                                 R{Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                               </span>

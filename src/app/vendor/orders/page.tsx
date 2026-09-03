@@ -15,7 +15,7 @@ export default async function VendorOrdersPage() {
 
   const { data: orders } = await supabase
     .from('orders')
-    .select('id, order_number, customer_name, customer_email, customer_phone, total, status, created_at, items, shipping_address')
+    .select('id, order_number, customer_name, customer_email, customer_phone, total, status, created_at, items, shipping_address, payment_provider, fulfilment, paid_at')
     .eq('vendor_id', vendor.id)
     .order('created_at', { ascending: false })
 

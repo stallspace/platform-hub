@@ -114,7 +114,7 @@ export default function ComparePage() {
                           <span className="text-lg font-bold text-brand-forest">
                             R{product.price.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                           </span>
-                          {product.compare_at_price && (
+                          {(product.compare_at_price != null && Number(product.compare_at_price) > Number(product.price)) && (
                             <span className="text-xs text-gray-400 line-through ml-1.5">
                               R{product.compare_at_price.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                             </span>

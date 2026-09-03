@@ -3,12 +3,12 @@ import { createServiceClient } from '@/lib/supabase/admin'
 import { readConfigData } from '@/lib/crypto/secrets'
 import { verifyYocoCheckout } from '@/lib/payments/yoco'
 import { verifyPeachPayment } from '@/lib/payments/peach'
-import { sendEmail } from '@/lib/email/resend'
-import { orderConfirmationEmail } from '@/lib/email/templates'
+import { verifyCheckoutToken } from '@/lib/payments/checkout-token'
+import { settlePaidOrder } from '@/lib/orders/settle'
 
 /**
  * POST /api/checkout/verify
- * Body: { orderId }
+ * Body: { orderId, token }
  *
  * Server-side confirmation of a payment after the customer is redirected back.
  * For Yoco/Peach we call the gateway to confirm the money actually moved before
@@ -18,22 +18,40 @@ import { orderConfirmationEmail } from '@/lib/email/templates'
  */
 export async function POST(request: NextRequest) {
   try {
-    const { orderId } = await request.json()
+    const { orderId, token } = await request.json()
     if (!orderId) return NextResponse.json({ error: 'Missing orderId' }, { status: 400 })
+
+    // Runs on the service client and can trigger a confirmation email, so it
+    // needs the same proof-of-ownership as /initiate. The order id alone is
+    // not a secret.
+    if (!verifyCheckoutToken(orderId, token)) {
+      return NextResponse.json({ error: 'This checkout link is not valid.' }, { status: 403 })
+    }
 
     const supabase = createServiceClient()
 
     const { data: order } = await supabase
       .from('orders')
-      .select('id, order_number, vendor_id, customer_email, customer_name, total, status, payment_provider, payment_reference, items')
+      .select('id, order_number, vendor_id, customer_email, customer_name, total, status, payment_provider, payment_reference, items, vendors(business_name, slug)')
       .eq('id', orderId)
       .single()
 
     if (!order) return NextResponse.json({ error: 'Order not found' }, { status: 404 })
 
+    // Display fields for the confirmation page. Guests have no session, so the
+    // page cannot read the order through RLS — it reads it from here instead.
+    const vendorRow = Array.isArray(order.vendors) ? order.vendors[0] : order.vendors
+    const summary = {
+      order_number: order.order_number,
+      total: order.total,
+      vendor_id: order.vendor_id,
+      vendor_name: vendorRow?.business_name ?? '',
+      vendor_slug: vendorRow?.slug ?? '',
+    }
+
     // Already settled — nothing to do.
     if (order.status !== 'pending') {
-      return NextResponse.json({ status: order.status, verified: true })
+      return NextResponse.json({ status: order.status, verified: true, order: summary })
     }
 
     const provider = order.payment_provider as string
@@ -48,7 +66,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (!cfg || !order.payment_reference) {
-        return NextResponse.json({ status: 'pending', verified: false, error: 'Missing gateway reference' })
+        return NextResponse.json({ status: 'pending', verified: false, order: summary })
       }
 
       const config = readConfigData(cfg.config_data)
@@ -61,14 +79,14 @@ export async function POST(request: NextRequest) {
         paid = r.paid
       }
 
-      if (!paid) return NextResponse.json({ status: 'pending', verified: false })
+      if (!paid) return NextResponse.json({ status: 'pending', verified: false, order: summary })
 
-      await markConfirmed(supabase, order)
-      return NextResponse.json({ status: 'confirmed', verified: true })
+      await settlePaidOrder({ supabase, orderId: order.id })
+      return NextResponse.json({ status: 'confirmed', verified: true, order: summary })
     }
 
     // PayFast / Ozow: rely on the signed webhook. Just report current status.
-    return NextResponse.json({ status: order.status, verified: false })
+    return NextResponse.json({ status: order.status, verified: false, order: summary })
   } catch (err: unknown) {
     console.error('[checkout/verify]', err)
     return NextResponse.json(
@@ -76,34 +94,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function markConfirmed(supabase: any, order: any) {
-  // Only transition from pending -> confirmed once (guards against double emails).
-  const { data: updated } = await supabase
-    .from('orders')
-    .update({ status: 'confirmed', updated_at: new Date().toISOString() })
-    .eq('id', order.id)
-    .eq('status', 'pending')
-    .select('id')
-    .single()
-
-  if (!updated) return // someone else already confirmed it
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('business_name')
-    .eq('id', order.vendor_id)
-    .single()
-
-  const { subject, html } = orderConfirmationEmail({
-    customerName: order.customer_name,
-    orderNumber: order.order_number,
-    businessName: vendor?.business_name ?? '',
-    total: `R${Number(order.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
-    items: order.items ?? [],
-    ordersUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/account/orders`,
-  })
-  await sendEmail({ to: order.customer_email, subject, html }).catch(() => {})
 }

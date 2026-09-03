@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
-import { newOrderVendorEmail } from '@/lib/email/templates'
+import { orderConfirmationEmail } from '@/lib/email/templates'
+import { notifyVendorOfOrder } from '@/lib/orders/settle'
+import { createCheckoutToken } from '@/lib/payments/checkout-token'
 
 function generateOrderNumber(): string {
   const ts = Date.now().toString(36).toUpperCase()
@@ -116,61 +118,68 @@ export async function POST(request: NextRequest) {
         shipping_address, items: validatedItems,
         subtotal, total,
         status: 'pending', payment_provider,
+        // Persisted so a pending row can be told apart from a collection one.
+        fulfilment: fulfilment ?? null,
       })
       .select()
       .single()
 
     if (error) throw new Error(error.message)
 
-    // In-app notification to vendor
+    const isCollection = payment_provider === 'cash_on_collection'
+
     const { data: vendor } = await supabase
       .from('vendors')
-      .select('user_id, business_name')
+      .select('id, user_id, business_name')
       .eq('id', vendor_id)
       .single()
 
-    if (vendor?.user_id) {
-      await supabase.from('notifications').insert({
-        user_id: vendor.user_id,
-        type: 'order',
-        title: `New order from ${customer_name}`,
-        message: `Order ${order_number} · R${Number(total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
-        action_url: '/vendor/orders',
-      })
-    }
-
-    // Email vendor notification (non-blocking)
-    if (vendor?.user_id) {
+    // Gateway orders are announced to the vendor when the money actually
+    // arrives (see lib/orders/settle.ts). Announcing them here meant vendors
+    // were emailed for every abandoned checkout and never told about a sale.
+    //
+    // Pay-on-collection has no gateway, so this IS the moment the vendor has
+    // to act — and it is the only chance to send the customer their order
+    // details, since no webhook will ever fire.
+    if (isCollection) {
       void (async () => {
         try {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('email, full_name')
-            .eq('id', vendor.user_id)
-            .single()
-          if (profile?.email) {
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
-            const tpl = newOrderVendorEmail({
-              vendorName: profile.full_name ?? vendor.business_name ?? 'there',
-              orderNumber: order_number,
-              customerName: customer_name,
-              customerEmail: customer_email,
-              customerPhone: customer_phone ?? null,
-              total: `R${Number(total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
-              items: validatedItems as unknown as { product_name: string; quantity: number; total_price: number }[],
-              fulfilment: fulfilment ?? null,
-              paymentMethod: payment_provider === 'cash_on_collection' ? 'Pay on collection' : 'PayFast',
-              ordersUrl: `${appUrl}/vendor/orders`,
-            })
-            await sendEmail({ to: profile.email, ...tpl })
-          }
+          await notifyVendorOfOrder(supabase, order, vendor, vendor?.business_name ?? '', false)
         } catch (e) {
-          console.error('[orders] vendor email failed', e)
+          console.error('[orders] vendor notification failed', e)
+        }
+      })()
+
+      void (async () => {
+        try {
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
+          const { subject, html } = orderConfirmationEmail({
+            customerName: customer_name,
+            orderNumber: order_number,
+            businessName: vendor?.business_name ?? '',
+            total: `R${Number(total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
+            items: validatedItems as unknown as {
+              product_name: string
+              quantity: number
+              unit_price: number
+              total_price: number
+            }[],
+            ordersUrl: `${appUrl}/account/orders`,
+          })
+          await sendEmail({ to: customer_email, subject, html })
+        } catch (e) {
+          console.error('[orders] customer email failed', e)
         }
       })()
     }
 
-    return NextResponse.json({ data: order })
+    // Proof the caller created this order — required by /api/checkout/initiate
+    // and /verify. Returned once, in this response body; never put in a URL.
+    return NextResponse.json({
+      data: order,
+      checkoutToken: createCheckoutToken(order.id),
+    })
+
   } catch (err: unknown) {
     return NextResponse.json({ error: err instanceof Error ? err.message : 'Failed to create order' }, { status: 500 })
   }

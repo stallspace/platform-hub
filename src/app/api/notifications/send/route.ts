@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
 import { createNotification } from '@/lib/notifications/create'
 import {
@@ -158,6 +159,20 @@ export async function POST(req: NextRequest) {
           .eq('id', enquiryId)
           .single()
         if (!enquiry || !enquiry.vendors) break
+
+        // Fire once per enquiry. Without this, anyone holding an enquiry id
+        // (the browser is given one on submit) could loop this endpoint and
+        // email-bomb the vendor, burning the Resend quota and the sending
+        // domain's reputation. Claim the enquiry before doing any work.
+        const admin = createServiceClient()
+        const { data: claimed } = await admin
+          .from('enquiries')
+          .update({ notified_at: new Date().toISOString() })
+          .eq('id', enquiryId)
+          .is('notified_at', null)
+          .select('id')
+          .maybeSingle()
+        if (!claimed) break
 
         const vendor = enquiry.vendors as any
         const product = enquiry.products as any

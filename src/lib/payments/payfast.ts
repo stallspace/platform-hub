@@ -58,10 +58,13 @@ export function buildPayFastUrl(p: PayFastParams): string {
 
   const signature = createHash('md5').update(signatureBase).digest('hex')
 
-  // Diagnostic: shows exactly what was signed, with the passphrase masked.
-  // If PayFast reports a signature mismatch, compare this against their expectation.
-  console.log('[payfast] signature base:',
-    signatureBase.replace(/passphrase=[^&]*/, 'passphrase=***'),
+  // Diagnostic: field ORDER and presence only — never values. signatureBase
+  // begins "merchant_id=...&merchant_key=..." so logging it leaked the vendor's
+  // live PayFast credentials into the function logs on every checkout.
+  // If PayFast reports a signature mismatch, compare this field order and the
+  // resulting signature against their expectation.
+  console.log('[payfast] signed fields:',
+    fields.map(([k]) => k).join(','),
     '| usedPassphrase:', Boolean(p.passphrase),
     '| signature:', signature)
 

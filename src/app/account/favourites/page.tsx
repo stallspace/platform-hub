@@ -54,8 +54,9 @@ export default async function FavouritesPage() {
           {favourites.map((fav: any) => {
             const product = fav.product
             if (!product) return null
-            const discount = product.compare_at_price
-              ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+            const hasDiscount = (product.compare_at_price != null && Number(product.compare_at_price) > Number(product.price))
+            const discount = hasDiscount
+              ? Math.round(((Number(product.compare_at_price) - Number(product.price)) / Number(product.compare_at_price)) * 100)
               : null
             const outOfStock = product.track_inventory && (product.stock_quantity ?? 0) <= 0
 
@@ -100,7 +101,7 @@ export default async function FavouritesPage() {
                       <span className="font-bold text-brand-forest">
                         R{Number(product.price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                       </span>
-                      {product.compare_at_price && (
+                      {hasDiscount && (
                         <span className="text-xs text-gray-400 line-through ml-1.5">
                           R{Number(product.compare_at_price).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}
                         </span>

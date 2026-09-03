@@ -2,7 +2,6 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
 import { XCircle, ArrowLeft, ShoppingCart } from 'lucide-react'
 
 interface PageProps {
@@ -10,16 +9,11 @@ interface PageProps {
 }
 
 export default async function CheckoutCancelPage({ searchParams }: PageProps) {
-  const supabase = await createClient()
 
-  // Mark order as cancelled if it exists
-  if (searchParams.order) {
-    await supabase
-      .from('orders')
-      .update({ status: 'cancelled' })
-      .eq('id', searchParams.order)
-      .eq('status', 'pending')
-  }
+  // Deliberately does NOT change the order. This is a GET: link prefetchers,
+  // chat-app URL previews and email scanners all follow it, and any of them
+  // would have cancelled a live order. The gateway's signed webhook is what
+  // marks a cancellation (see /api/orders/notify).
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center p-4">
