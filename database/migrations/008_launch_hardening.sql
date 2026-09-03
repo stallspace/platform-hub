@@ -29,17 +29,27 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_catalog;
 
 
 -- ------------------------------------------------------------
--- 1b. A user may edit their own profile, but not their role.
+-- 1b. A user may edit their own profile, but must never be able
+--     to make themselves an admin.
+--
 --     The RLS policy alone cannot express this: on UPDATE,
 --     Postgres reuses USING as the check, and (auth.uid() = id)
 --     stays true after the row's role changes. Guard the column
 --     with a trigger instead.
+--
+--     'admin' is the ONLY privileged role. customer <-> vendor is
+--     a normal part of signing up to sell — /join/register does
+--     exactly that self-promotion right after signUp — and the
+--     vendor portal gates on the vendors row and its approval
+--     status, not on this column. So block only admin.
 -- ------------------------------------------------------------
 CREATE OR REPLACE FUNCTION guard_profile_role()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.role IS DISTINCT FROM OLD.role AND NOT is_admin() THEN
-    RAISE EXCEPTION 'role may only be changed by an administrator';
+  IF (NEW.role = 'admin' OR OLD.role = 'admin')
+     AND NEW.role IS DISTINCT FROM OLD.role
+     AND NOT is_admin() THEN
+    RAISE EXCEPTION 'the admin role may only be granted or removed by an administrator';
   END IF;
   RETURN NEW;
 END;
