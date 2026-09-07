@@ -80,14 +80,17 @@ export default function SubscriptionClient({ vendor }: Props) {
         {vendor.subscription_status === 'suspended' && (
           <div className="mt-4 bg-red-400/20 border border-red-400/30 rounded-xl p-3 flex items-start gap-2">
             <XCircle className="w-4 h-4 text-red-300 flex-shrink-0 mt-0.5" />
-            <p className="text-red-200 text-sm">Your account is suspended due to non-payment. Reactivate below to restore access.</p>
+            <p className="text-red-200 text-sm">
+              Your stall fee is overdue. Your storefront is still live and taking orders — please settle
+              the outstanding invoice so it stays that way.
+            </p>
           </div>
         )}
       </div>
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900">Available Plans</h2>
-        <p className="text-gray-500 text-sm mt-0.5">To change your plan, contact us at billing@Stallspace.co.za</p>
+        <p className="text-gray-500 text-sm mt-0.5">To change your plan, contact us at billing@stallspace.co.za</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
@@ -97,7 +100,7 @@ export default function SubscriptionClient({ vendor }: Props) {
           const planIdx = PLANS.findIndex(p => p.id === plan.id)
           const label = currentIdx < planIdx ? 'Upgrade' : 'Switch'
           const mailBody = 'Hi, I would like to change my plan to ' + plan.name + '. My business: ' + vendor.business_name
-          const mailHref = 'mailto:billing@Stallspace.co.za?subject=Plan Change&body=' + encodeURIComponent(mailBody)
+          const mailHref = 'mailto:billing@stallspace.co.za?subject=Plan Change&body=' + encodeURIComponent(mailBody)
           return (
             <div key={plan.id} className={"relative rounded-2xl border-2 p-5 " + (isCurrent ? 'border-brand-mint bg-blue-50' : 'border-gray-100 bg-white')}>
               {plan.popular && !isCurrent && (
@@ -138,9 +141,9 @@ export default function SubscriptionClient({ vendor }: Props) {
       <div className="bg-white rounded-xl border border-gray-100 p-5">
         <h2 className="font-semibold text-gray-900 mb-3">Billing Support</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-          <a href="mailto:billing@Stallspace.co.za" className="flex items-center gap-2 text-brand-mint hover:underline"><ArrowUpRight className="w-4 h-4" />Contact billing support</a>
-          <a href="mailto:billing@Stallspace.co.za?subject=Cancel Subscription" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Request cancellation</a>
-          <a href="mailto:billing@Stallspace.co.za?subject=Reactivate Account" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Reactivate account</a>
+          <a href="mailto:billing@stallspace.co.za" className="flex items-center gap-2 text-brand-mint hover:underline"><ArrowUpRight className="w-4 h-4" />Contact billing support</a>
+          <a href="mailto:billing@stallspace.co.za?subject=Cancel Subscription" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Request cancellation</a>
+          <a href="mailto:billing@stallspace.co.za?subject=Reactivate Account" className="flex items-center gap-2 text-gray-500 hover:text-gray-900"><ArrowUpRight className="w-4 h-4" />Reactivate account</a>
         </div>
       </div>
     </div>

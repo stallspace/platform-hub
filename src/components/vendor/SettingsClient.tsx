@@ -206,7 +206,7 @@ export default function SettingsClient({ vendor, userEmail }: Props) {
               <p className="text-sm font-medium text-gray-900">Close Account</p>
               <p className="text-xs text-gray-500 mt-0.5">Permanently close your vendor account and remove your storefront</p>
             </div>
-            <a href="mailto:support@Stallspace.co.za?subject=Close Account Request" className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap">
+            <a href="mailto:support@stallspace.co.za?subject=Close Account Request" className="px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap">
               Request Closure
             </a>
           </div>

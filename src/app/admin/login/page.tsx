@@ -83,7 +83,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-white/[0.06] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-white/20 text-sm focus:outline-none focus:border-[#2ECC8E] transition-all"
-                placeholder="admin@Stallspace.co.za"
+                placeholder="admin@stallspace.co.za"
               />
             </div>
 

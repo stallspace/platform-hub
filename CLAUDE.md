@@ -102,6 +102,15 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 It is idempotent (compare-and-set on `status = 'pending'`) and sends both the customer
 confirmation and the vendor notification. Don't email either side from a webhook directly.
 
+**Rate limiting must be durable.** The in-process `Map` in `rate-limit.ts` resets on every
+Netlify cold start. Use `limitRequest` from `@/lib/utils/rate-limit-db`, which counts in
+Postgres via `consume_rate_limit` (migration 010) and is atomic across instances. It fails
+open on purpose — an unreachable database must not take checkout down.
+
+**Never take an email recipient from a request body.** `reply-enquiry` did, which made any
+approved vendor a relay able to send attacker-chosen text from our domain. Recipients come
+from the row being acted on.
+
 **Trials are not revenue.** `vendors.trial_ends_at` in the future means fully active but
 paying nothing. MRR must exclude them — the dashboard and reports both do, and
 `tests/subscription-mrr.test.ts` covers it. Recording a `charge_success` event ends the
@@ -131,11 +140,14 @@ scroll endlessly."*
   are dead files, safe to delete.
 - `database/migrations/` and `supabase/migrations/` are byte-identical duplicates, both
   tracked. Write to both, or delete one.
-- Rate limiting is an in-process Map, so it resets on every Netlify cold start. Applied
-  only to `/api/reviews`.
+- `netlify.toml` deliberately sets no build command or publish dir — the Next Runtime
+  manages those, and pinning them breaks the deploy. It only declares the functions dir.
 
 ## Still open
 
+- `RECONCILE_SECRET` must be set in Netlify before the scheduled reconciliation function
+  can settle anything — without it the function exits early and dropped webhooks go
+  unnoticed. Generate with `openssl rand -hex 32`.
 - `PAYFAST_ENV=live` is set in Netlify for **all deploy contexts** — deploy previews hit
   live PayFast with real vendor credentials. Split it per-context before testing on a
   preview URL.
@@ -144,9 +156,10 @@ scroll endlessly."*
 - Reconciliation job — nothing catches an order whose ITN never arrived (endpoint down
   mid-deploy, customer closed the tab). Sweep `pending` orders with a `payment_reference`
   older than a few minutes and re-verify.
-- Subscription billing: no scheduled reminders, and `subscriptionReminderEmail` has no
-  banking details. `subscription_status` gates nothing — unpaid vendors keep selling.
-- No `robots.txt`, no `sitemap.xml`, no returns/refunds policy.
+- Subscription billing is **deliberately unbuilt**. Vendors are invoiced by hand after the
+  trial and chased with reminder emails; `subscription_status` intentionally gates nothing,
+  and the copy no longer claims otherwise. Don't add enforcement without asking — this is a
+  decision, not an oversight.
 - Delete test data and seed real categories.
 - Refresh `docs/` — written before the payment model and several flows changed.
 - Product grid tuning once real vendor products exist.

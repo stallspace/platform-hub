@@ -14,7 +14,9 @@ export default function PrivacyPolicyPage() {
         </Link>
 
         <h1 className="text-3xl font-bold text-[#0D3B2E] mb-2">Privacy Policy</h1>
-        <p className="text-sm text-[#9CA3AF] mb-10">Last updated: {new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        {/* Pinned, not generated. A policy that always reads "updated today"
+            has no audit trail — bump this by hand when the text changes. */}
+        <p className="text-sm text-[#9CA3AF] mb-10">Last updated: 7 September 2026</p>
 
         <div className="prose prose-sm max-w-none text-[#374151] space-y-6">
           <p>

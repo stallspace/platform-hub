@@ -38,7 +38,7 @@ function layout(body: string): string {
               © ${new Date().getFullYear()} Stallspace · South African Marketplace
             </p>
             <p style="margin:6px 0 0;color:#9ca3af;font-size:11px;">
-              <a href="${APP_URL}" style="color:#2ECC8E;text-decoration:none;">Stallspace.co.za</a>
+              <a href="${APP_URL}" style="color:#2ECC8E;text-decoration:none;">stallspace.co.za</a>
             </p>
           </td>
         </tr>
@@ -256,7 +256,7 @@ export function subscriptionCancelledEmail(data: {
       ['Access Until', esc(data.endDate)],
       ['Status', 'Cancelled'],
     ])}
-    ${para('Your storefront will remain active until the end of your current billing period. After that, your store and products will be hidden from the marketplace.')}
+    ${para(`Your storefront stays live until ${esc(data.endDate)}. After that we'll remove it from the marketplace — your products and store details are kept, so resubscribing puts everything back exactly as it was.`)}
     ${para("We'd love to have you back. Resubscribe anytime from your dashboard.")}
     ${ctaButton('Resubscribe', `${APP_URL}/vendor/subscription`)}
   `)
@@ -404,6 +404,9 @@ export function orderStatusUpdateEmail(data: {
     ${data.statusMessage ? `<div style="background:#f8f9fc;border:1px solid #e8ecf0;border-radius:8px;padding:16px;margin:16px 0;">
       <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;">${esc(data.statusMessage)}</p>
     </div>` : ''}
+    ${data.newStatus === 'refunded'
+      ? para(`Your payment went directly to ${esc(data.businessName)}, not to Stallspace, so the refund comes from them — usually back to the card or account you paid from, within a few working days. If it hasn't arrived, contact the vendor first, then us at support@stallspace.co.za.`)
+      : ''}
     ${ctaButton('View Order', data.ordersUrl)}
   `)
   return { subject, html }

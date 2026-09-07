@@ -1,0 +1,10 @@
+# Deliberately does NOT set [build] command/publish. This project has always
+# deployed on Netlify's auto-detected Next.js settings, and the Next Runtime
+# plugin manages the publish directory itself — pinning it here is a common way
+# to break an otherwise working deploy.
+#
+# The only thing declared is where the scheduled function lives. Its cadence is
+# set inline in the function file's `export const config`.
+
+[functions]
+  directory = "netlify/functions"

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { readConfigData } from '@/lib/crypto/secrets'
 import { buildPayFastUrl } from '@/lib/payments/payfast'
+import { limitRequest, tooManyRequests } from '@/lib/utils/rate-limit-db'
 import { buildOzowUrl } from '@/lib/payments/ozow'
 import { createYocoCheckout } from '@/lib/payments/yoco'
 import { createPeachCheckout } from '@/lib/payments/peach'
@@ -26,6 +27,10 @@ export async function POST(request: NextRequest) {
     // created. Deliberately vague error — do not confirm the id exists.
     if (!verifyCheckoutToken(orderId, token)) {
       return NextResponse.json({ error: 'This checkout link is not valid.' }, { status: 403 })
+    }
+
+    if (!(await limitRequest(request.headers, { bucket: 'checkout-initiate', limit: 40, windowSeconds: 3600 }))) {
+      return tooManyRequests()
     }
 
     const supabase = createServiceClient()

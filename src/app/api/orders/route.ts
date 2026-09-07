@@ -5,6 +5,7 @@ import { sendEmail } from '@/lib/email/resend'
 import { orderConfirmationEmail } from '@/lib/email/templates'
 import { notifyVendorOfOrder } from '@/lib/orders/settle'
 import { createCheckoutToken } from '@/lib/payments/checkout-token'
+import { limitRequest, tooManyRequests } from '@/lib/utils/rate-limit-db'
 
 function generateOrderNumber(): string {
   const ts = Date.now().toString(36).toUpperCase()
@@ -27,6 +28,11 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { vendor_id, customer_email, customer_name, customer_phone, shipping_address, items, fulfilment, payment_provider } = body
+
+    // Order creation is public (guest checkout), writes rows and sends email.
+    if (!(await limitRequest(request.headers, { bucket: 'orders', limit: 20, windowSeconds: 3600 }))) {
+      return tooManyRequests('Too many orders from this connection. Please wait a few minutes.')
+    }
 
     if (!vendor_id || !customer_email || !customer_name || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })

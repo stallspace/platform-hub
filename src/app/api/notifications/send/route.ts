@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/admin'
+import { limitRequest, tooManyRequests } from '@/lib/utils/rate-limit-db'
 import { sendEmail } from '@/lib/email/resend'
 import { createNotification } from '@/lib/notifications/create'
 import {
@@ -16,7 +17,7 @@ import {
 
 const PLAN_PRICES: Record<string, number> = { starter: 250, growth: 500, premium: 1000 }
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://Stallspace.co.za'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,6 +43,13 @@ export async function POST(req: NextRequest) {
       if (profile?.role !== 'admin') {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
       }
+    }
+
+    // enquiry.new is reachable without a session by design (the public enquiry
+    // form triggers it). The notified_at guard below stops replays for a given
+    // enquiry; this stops a flood of fresh ones.
+    if (!(await limitRequest(req.headers, { bucket: 'notify', limit: 60, windowSeconds: 3600 }))) {
+      return tooManyRequests()
     }
 
     switch (event) {

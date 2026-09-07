@@ -16,9 +16,9 @@ function getResend(): Resend | null {
   return _resend
 }
 
-export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@Stallspace.co.za'
+export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'noreply@stallspace.co.za'
 export const FROM_NAME  = process.env.RESEND_FROM_NAME  ?? 'Stallspace'
-export const APP_URL    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://Stallspace.co.za'
+export const APP_URL    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
 
 export interface SendEmailOptions {
   to: string

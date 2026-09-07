@@ -388,7 +388,7 @@ export default function VendorRegisterPage() {
                   />
                   {stepOne.business_name && (
                     <p className="text-xs text-gray-400 mt-1">
-                      Storefront: Stallspace.co.za/store/{slugify(stepOne.business_name)}
+                      Storefront: stallspace.co.za/store/{slugify(stepOne.business_name)}
                     </p>
                   )}
                 </div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { escapeHtml } from '@/lib/utils'
+import { limitRequest, tooManyRequests } from '@/lib/utils/rate-limit-db'
 import { Resend } from 'resend'
 
 // Created lazily — a module-scope client crashes the build when the key is absent.
@@ -17,16 +18,23 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { enquiryId, toEmail, toName, replyText } = await req.json()
+  // The recipient is NOT taken from the request. It used to be, which made any
+  // approved vendor an authenticated relay: they owned one enquiry but could
+  // address the mail to anyone, with attacker-chosen body text, sent from our
+  // domain. The address comes from the enquiry row below.
+  const { enquiryId, replyText } = await req.json()
 
-  if (!enquiryId || !toEmail || !replyText?.trim()) {
+  if (!enquiryId || !replyText?.trim()) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
   if (String(replyText).length > 5000) {
     return NextResponse.json({ error: 'Reply is too long' }, { status: 400 })
   }
 
-  const vName = escapeHtml(toName)
+  if (!(await limitRequest(req.headers, { bucket: 'enquiry-reply', limit: 30, windowSeconds: 3600, subject: user.id }))) {
+    return tooManyRequests()
+  }
+
   const vReply = escapeHtml(replyText)
 
   const { data: vendor } = await supabase
@@ -41,18 +49,23 @@ export async function POST(req: NextRequest) {
 
   const { data: enquiry } = await supabase
     .from('enquiries')
-    .select('id, vendor_id')
+    .select('id, vendor_id, customer_email, customer_name')
     .eq('id', enquiryId)
     .eq('vendor_id', vendor.id)
     .single()
 
   if (!enquiry) return NextResponse.json({ error: 'Enquiry not found' }, { status: 404 })
 
+  const toEmail = enquiry.customer_email
+  const vName = escapeHtml(enquiry.customer_name ?? 'there')
+
   try {
     const resend = getResend()
     if (!resend) return NextResponse.json({ error: 'Email is not configured' }, { status: 503 })
     await resend.emails.send({
-      from: `${vendor.business_name} via Stallspace <noreply@Stallspace.co.za>`,
+      // Strip anything that could break out of the From header. A business
+      // name is vendor-controlled, and CR/LF there is header injection.
+      from: `${vendor.business_name.replace(/[\r\n<>"]/g, '').trim().slice(0, 60) || 'A vendor'} via Stallspace <noreply@stallspace.co.za>`,
       to: toEmail,
       reply_to: vendor.email,
       subject: `Re: Your enquiry to ${vendor.business_name}`,

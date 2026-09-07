@@ -1,9 +1,13 @@
 /**
- * Best-effort in-memory rate limiter keyed by an identifier (e.g. IP).
+ * In-memory rate limiter keyed by an identifier (e.g. IP).
  *
- * NOTE: This lives in the server process memory, so it resets on redeploy and
- * is NOT shared across serverless instances. It stops casual abuse but for
- * production-grade limits back it with a durable store (e.g. Upstash Redis).
+ * This lives in one server process's memory, so on Netlify each cold start
+ * gets a fresh bucket and concurrent instances don't share counts. Treat it
+ * as a cheap first line only.
+ *
+ * For anything that must actually hold, use `limitRequest` from
+ * `@/lib/utils/rate-limit-db`, which counts in Postgres and therefore
+ * survives cold starts and is shared across instances.
  */
 const buckets = new Map<string, { count: number; resetAt: number }>()
 

@@ -80,7 +80,9 @@ export default function Footer() {
           <div className="flex gap-5">
             <Link href="/legal/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/legal/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/legal/returns-and-refunds" className="hover:text-white transition-colors">Returns &amp; Refunds</Link>
             <Link href="/legal/popia" className="hover:text-white transition-colors">POPIA Compliance</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
           </div>
         </div>
       </div>

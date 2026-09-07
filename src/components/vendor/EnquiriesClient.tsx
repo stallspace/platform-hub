@@ -63,8 +63,6 @@ export default function EnquiriesClient({ enquiries: initial, vendorId, vendorEm
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           enquiryId: selected.id,
-          toEmail: selected.customer_email,
-          toName: selected.customer_name,
           replyText: replyText.trim(),
           vendorEmail,
         }),

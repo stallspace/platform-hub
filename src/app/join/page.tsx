@@ -102,7 +102,7 @@ const WHY_Stallspace = [
   {
     icon: <Globe className="w-5 h-5" />,
     title: 'Your Own Storefront',
-    description: 'A dedicated page at Stallspace.co.za/store/yourbusiness — your mini website on the marketplace.',
+    description: 'A dedicated page at stallspace.co.za/store/yourbusiness — your mini website on the marketplace.',
   },
   {
     icon: <BarChart3 className="w-5 h-5" />,

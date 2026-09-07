@@ -1,5 +1,5 @@
 -- ============================================================
--- MARCRTE — Seed Data
+-- Stallspace — Seed Data
 -- ============================================================
 
 -- Categories
@@ -24,8 +24,8 @@ INSERT INTO homepage_content (section, content, is_active) VALUES
     "subheadline": "Discover trusted local vendors. Shop directly. Pay securely.",
     "cta_text": "Shop Now",
     "cta_url": "/marketplace/products",
-    "secondary_cta_text": "Sell on MARCRTE",
-    "secondary_cta_url": "/vendor/register",
+    "secondary_cta_text": "Sell on Stallspace",
+    "secondary_cta_url": "/join",
     "background_type": "gradient"
   }', TRUE),
   ('featured_section', '{

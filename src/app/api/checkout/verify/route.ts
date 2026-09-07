@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { timingSafeEqual } from 'crypto'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { readConfigData } from '@/lib/crypto/secrets'
 import { verifyYocoCheckout } from '@/lib/payments/yoco'
 import { verifyPeachPayment } from '@/lib/payments/peach'
 import { verifyCheckoutToken } from '@/lib/payments/checkout-token'
 import { settlePaidOrder } from '@/lib/orders/settle'
+import { limitRequest, tooManyRequests } from '@/lib/utils/rate-limit-db'
 
 /**
  * POST /api/checkout/verify
@@ -24,8 +26,25 @@ export async function POST(request: NextRequest) {
     // Runs on the service client and can trigger a confirmation email, so it
     // needs the same proof-of-ownership as /initiate. The order id alone is
     // not a secret.
-    if (!verifyCheckoutToken(orderId, token)) {
+    //
+    // The reconciliation sweep (netlify/functions/reconcile-payments.mts) is
+    // the one caller with no token to present — it is chasing orders whose
+    // customer never came back — so it authenticates with a shared secret
+    // instead. Compared in constant time; only honoured when actually set.
+    const reconcileSecret = process.env.RECONCILE_SECRET
+    const presented = request.headers.get('x-reconcile-secret')
+    const isReconcile =
+      Boolean(reconcileSecret) &&
+      Boolean(presented) &&
+      presented!.length === reconcileSecret!.length &&
+      timingSafeEqual(Buffer.from(presented!), Buffer.from(reconcileSecret!))
+
+    if (!isReconcile && !verifyCheckoutToken(orderId, token)) {
       return NextResponse.json({ error: 'This checkout link is not valid.' }, { status: 403 })
+    }
+
+    if (!(await limitRequest(request.headers, { bucket: 'checkout-verify', limit: 60, windowSeconds: 3600 }))) {
+      return tooManyRequests()
     }
 
     const supabase = createServiceClient()

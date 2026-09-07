@@ -435,6 +435,15 @@ export default function CheckoutPage() {
                   ? `Pay ${vendorInfo?.business_name ?? 'the vendor'} when you collect`
                   : `Paid directly to ${vendorInfo?.business_name ?? 'vendor'}`}
               </div>
+              {/* Required at the point of sale: buyers must be able to find the
+                  return terms before they commit, not only afterwards. */}
+              <p className="mt-2 text-[11px] leading-relaxed text-gray-400 text-center">
+                By placing this order you agree to our{' '}
+                <a href="/legal/terms-of-service" className="underline hover:text-gray-600">Terms</a>
+                {' '}and{' '}
+                <a href="/legal/returns-and-refunds" className="underline hover:text-gray-600">Returns &amp; Refunds</a>
+                {' '}policy.
+              </p>
             </div>
           </div>
         </div>

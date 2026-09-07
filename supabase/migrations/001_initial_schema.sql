@@ -1,5 +1,5 @@
 -- ============================================================
--- MARCRTE — Full Database Schema
+-- Stallspace — Full Database Schema
 -- Migration: 001_initial_schema
 -- ============================================================
 
