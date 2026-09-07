@@ -27,7 +27,7 @@ export default async function AdminDashboardPage() {
   ] = await Promise.all([
     supabase
       .from('vendors')
-      .select('id, business_name, email, status, subscription_plan, subscription_status, subscription_next_billing, created_at, logo_url')
+      .select('id, business_name, email, status, subscription_plan, subscription_status, subscription_next_billing, trial_ends_at, created_at, logo_url')
       .order('created_at', { ascending: false }),
     supabase
       .from('products')
@@ -49,9 +49,21 @@ export default async function AdminDashboardPage() {
   const pendingVendors   = vendors.filter((v) => v.status === 'pending')
   const approvedVendors  = vendors.filter((v) => v.status === 'approved')
   const suspendedCount   = vendors.filter((v) => v.status === 'suspended').length
-  const activeSubVendors = vendors.filter((v) => v.subscription_status === 'active')
+  // A vendor on a free trial is fully active but pays nothing. Counting them
+  // as revenue made a launch cohort's MRR entirely phantom.
+  const now = Date.now()
+  const onTrial = (v: { trial_ends_at?: string | null }) =>
+    Boolean(v.trial_ends_at) && new Date(v.trial_ends_at as string).getTime() > now
 
-  const mrr = activeSubVendors.reduce((sum, v) => sum + (PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0), 0)
+  const activeSubVendors = vendors.filter((v) => v.subscription_status === 'active')
+  const trialVendors     = activeSubVendors.filter(onTrial)
+  const payingVendors    = activeSubVendors.filter((v) => !onTrial(v))
+
+  const mrr = payingVendors.reduce((sum, v) => sum + (PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0), 0)
+
+  // What the trials are worth once they convert — useful to see, never mixed
+  // into MRR.
+  const trialPipeline = trialVendors.reduce((sum, v) => sum + (PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0), 0)
 
   // ── Payments due: vendors billing within 7 days, or already overdue ──
   const DUE_WINDOW_DAYS = 7
@@ -101,7 +113,9 @@ export default async function AdminDashboardPage() {
     {
       label: 'Monthly Revenue',
       value: formatCurrency(mrr),
-      sub: `${activeSubVendors.length} active subscriptions`,
+      sub: trialVendors.length > 0
+        ? `${payingVendors.length} paying · ${trialVendors.length} on trial`
+        : `${payingVendors.length} paying subscriptions`,
       icon: CreditCard,
       color: 'text-emerald-600 bg-emerald-50',
       href: '/admin/reports',
@@ -249,7 +263,7 @@ export default async function AdminDashboardPage() {
           </div>
           <div className="p-5 space-y-4">
             {(['starter', 'growth', 'premium'] as const).map((plan) => {
-              const count = activeSubVendors.filter((v) => v.subscription_plan === plan).length
+              const count = payingVendors.filter((v) => v.subscription_plan === plan).length
               const revenue = count * PLAN_PRICES[plan]
               const pct = mrr > 0 ? (revenue / mrr) * 100 : 0
               const colors: Record<string, string> = { starter: 'bg-sky-500', growth: 'bg-violet-500', premium: 'bg-amber-500' }
@@ -272,6 +286,17 @@ export default async function AdminDashboardPage() {
               <span className="font-semibold text-gray-800">Total MRR</span>
               <span className="text-xl font-black text-emerald-600">{formatCurrency(mrr)}</span>
             </div>
+            {trialVendors.length > 0 && (
+              <div className="flex justify-between items-baseline">
+                <span className="text-sm text-gray-500">
+                  On free trial
+                  <span className="text-xs text-gray-400 ml-1.5">({trialVendors.length} vendors)</span>
+                </span>
+                <span className="text-sm font-semibold text-gray-500">
+                  {formatCurrency(trialPipeline)}<span className="text-xs font-normal text-gray-400 ml-1">when they convert</span>
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -284,7 +309,8 @@ export default async function AdminDashboardPage() {
             { label: 'Approved Vendors',  value: approvedVendors.length,      color: 'text-emerald-600' },
             { label: 'Suspended Vendors', value: suspendedCount,               color: 'text-red-500' },
             { label: 'Unread Enquiries',  value: unreadEnquiries ?? 0,         color: 'text-amber-600' },
-            { label: 'Active Billing',    value: activeSubVendors.length,      color: 'text-brand-mint' },
+            { label: 'Paying Vendors',    value: payingVendors.length,         color: 'text-brand-mint' },
+            { label: 'On Free Trial',     value: trialVendors.length,          color: 'text-gray-500' },
           ].map((row) => (
             <div key={row.label} className="flex items-center justify-between">
               <span className="text-sm text-gray-600">{row.label}</span>

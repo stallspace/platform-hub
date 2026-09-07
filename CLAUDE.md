@@ -102,6 +102,11 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 It is idempotent (compare-and-set on `status = 'pending'`) and sends both the customer
 confirmation and the vendor notification. Don't email either side from a webhook directly.
 
+**Trials are not revenue.** `vendors.trial_ends_at` in the future means fully active but
+paying nothing. MRR must exclude them — the dashboard and reports both do, and
+`tests/subscription-mrr.test.ts` covers it. Recording a `charge_success` event ends the
+trial via a DB trigger; approving a vendor starts a 3-month one automatically.
+
 **Checkout tokens.** `/api/checkout/initiate` and `/verify` require an HMAC of the order id
 (`src/lib/payments/checkout-token.ts`), issued in the response to `POST /api/orders` and
 held in `sessionStorage`. Guests have no session, and the order id travels in URLs, so it

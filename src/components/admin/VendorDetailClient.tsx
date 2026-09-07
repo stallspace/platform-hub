@@ -44,6 +44,7 @@ interface Vendor {
   subscription_plan: string | null
   subscription_status: string | null
   subscription_next_billing: string | null
+  trial_ends_at: string | null
   admin_notes: string | null
   created_at: string
   updated_at: string | null
@@ -110,6 +111,7 @@ export default function VendorDetailClient({
     vendor.subscription_next_billing ? vendor.subscription_next_billing.slice(0, 10) : ''
   )
   const [savingSub, setSavingSub] = useState(false)
+  const [trialEndsAt, setTrialEndsAt] = useState<string | null>(vendor.trial_ends_at)
 
   function showToast(text: string, type: 'success' | 'error') {
     setToast({ text, type })
@@ -164,13 +166,16 @@ export default function VendorDetailClient({
     else {
       setSubStatus('active')
       setSubNextBilling(next.toISOString().slice(0, 10))
+      setTrialEndsAt(null)
       showToast(`Payment of R${amount} recorded.`, 'success')
       startTransition(() => router.refresh())
     }
     setSavingSub(false)
   }
 
-  // Give the vendor 3 free months: active now, first payment due in 3 months.
+  // Give the vendor 3 free months: fully active now, first payment due in 3
+  // months. trial_ends_at is what keeps them OUT of MRR until they convert —
+  // without it the dashboard counted every trial vendor as paying revenue.
   async function startFreeTrial() {
     setSavingSub(true)
     const supabase = createClient()
@@ -183,6 +188,7 @@ export default function VendorDetailClient({
         subscription_plan: plan,
         subscription_status: 'active',
         subscription_next_billing: next.toISOString(),
+        trial_ends_at: next.toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', vendor.id)
@@ -191,6 +197,7 @@ export default function VendorDetailClient({
       setSubPlan(plan)
       setSubStatus('active')
       setSubNextBilling(next.toISOString().slice(0, 10))
+      setTrialEndsAt(next.toISOString())
       showToast('3-month free trial started. First payment due in 3 months.', 'success')
       startTransition(() => router.refresh())
     }
@@ -223,6 +230,30 @@ export default function VendorDetailClient({
     } else {
       showToast(`Vendor ${label} successfully.`, 'success')
       const isReactivation = newStatus === 'approved' && vendor.status === 'suspended'
+
+      // Launch vendors get 3 free months. Applying it on approval rather than
+      // relying on a separate click means a missed click can't silently start
+      // billing someone on day one.
+      if (newStatus === 'approved' && !isReactivation && !vendor.trial_ends_at && !vendor.subscription_next_billing) {
+        const next = new Date()
+        next.setMonth(next.getMonth() + 3)
+        const { error: trialErr } = await supabase
+          .from('vendors')
+          .update({
+            subscription_plan: vendor.subscription_plan ?? 'starter',
+            subscription_status: 'active',
+            subscription_next_billing: next.toISOString(),
+            trial_ends_at: next.toISOString(),
+          })
+          .eq('id', vendor.id)
+        if (trialErr) showToast('Approved, but the free trial could not be started.', 'error')
+        else {
+          setTrialEndsAt(next.toISOString())
+          setSubNextBilling(next.toISOString().slice(0, 10))
+          setSubStatus('active')
+        }
+      }
+
       const eventMap: Record<string, string> = {
         approved:  'vendor.approved',
         rejected:  'vendor.rejected',
@@ -598,6 +629,21 @@ export default function VendorDetailClient({
                           className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white" />
                       </div>
                     </div>
+                    {trialEndsAt && new Date(trialEndsAt).getTime() > Date.now() && (
+                      <div className="mt-3 rounded-lg bg-sky-50 border border-sky-100 px-3 py-2.5">
+                        <p className="text-sm font-medium text-sky-900">
+                          On a free trial until{' '}
+                          {new Date(trialEndsAt).toLocaleDateString('en-ZA', {
+                            day: 'numeric', month: 'long', year: 'numeric',
+                          })}
+                        </p>
+                        <p className="text-xs text-sky-700 mt-0.5">
+                          Fully active, paying nothing. Excluded from monthly revenue until the first
+                          payment is recorded.
+                        </p>
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-2 mt-3 flex-wrap">
                       <button onClick={startFreeTrial} disabled={savingSub}
                         className="px-4 py-2 bg-brand-mint hover:bg-brand-forest text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">

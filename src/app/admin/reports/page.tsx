@@ -23,7 +23,7 @@ export default async function ReportsPage() {
   // Active vendors with subscription data
   const { data: vendors } = await supabase
     .from('vendors')
-    .select('id, business_name, status, subscription_plan, subscription_status, subscription_next_billing, created_at')
+    .select('id, business_name, status, subscription_plan, subscription_status, subscription_next_billing, trial_ends_at, created_at')
     .order('created_at', { ascending: false })
 
   // Subscription events for billing log
@@ -33,8 +33,15 @@ export default async function ReportsPage() {
     .order('created_at', { ascending: false })
     .limit(50)
 
-  // Compute revenue metrics
-  const activeVendors = (vendors ?? []).filter((v) => v.status === 'approved' && v.subscription_status === 'active')
+  // Compute revenue metrics. A vendor on a free trial is fully active and pays
+  // nothing, so they are counted separately and never added to MRR.
+  const nowMs = Date.now()
+  const isOnTrial = (v: { trial_ends_at?: string | null }) =>
+    Boolean(v.trial_ends_at) && new Date(v.trial_ends_at as string).getTime() > nowMs
+
+  const activeSubscribers = (vendors ?? []).filter((v) => v.status === 'approved' && v.subscription_status === 'active')
+  const trialVendors  = activeSubscribers.filter(isOnTrial)
+  const activeVendors = activeSubscribers.filter((v) => !isOnTrial(v))
   const pastDueVendors = (vendors ?? []).filter((v) => v.subscription_status === 'past_due')
   const suspendedVendors = (vendors ?? []).filter((v) => v.status === 'suspended')
 
@@ -174,7 +181,7 @@ export default async function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {activeVendors.map((v) => (
+                  {activeSubscribers.map((v) => (
                     <tr key={v.id} className="hover:bg-gray-50/60">
                       <td className="px-4 py-3">
                         <a href={`/admin/vendors/${v.id}`} className="font-medium text-[#0D3B2E] hover:text-[#2ECC8E] transition-colors">
@@ -187,7 +194,14 @@ export default async function ReportsPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-semibold text-gray-800">
-                        {formatCurrency(PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0)}
+                        {isOnTrial(v) ? (
+                          <span className="text-gray-400 font-medium">
+                            R0
+                            <span className="block text-[10px] font-normal">on trial</span>
+                          </span>
+                        ) : (
+                          formatCurrency(PLAN_PRICES[v.subscription_plan ?? 'starter'] ?? 0)
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right text-gray-400 text-xs hidden sm:table-cell">
                         {v.subscription_next_billing ? formatDate(v.subscription_next_billing) : '—'}
