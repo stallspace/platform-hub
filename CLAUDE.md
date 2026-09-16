@@ -98,6 +98,13 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 `src/app/api/orders/status/route.ts`, mirrored in `OrdersClient.tsx` and
 `tests/order-transitions.test.ts`. Change all three together.
 
+**Visit tracking is anonymous on purpose.** `page_views`, `store_views` and
+`product_views` hold a random sessionStorage id and nothing else — no cookie, no IP, no
+account link — which is what keeps them outside POPIA's definition of personal
+information. `/api/track` strips the query string off a path before storing it, because a
+search URL carries what a shopper typed. Admin figures therefore say "visitors" meaning
+sessions. Don't add an identifier to these tables without re-reading the POPIA page.
+
 **Generated columns need a strictly IMMUTABLE expression.** `array_to_string()` is only
 STABLE — it calls the element type's output function — so anything including `tags` in a
 tsvector must be maintained by a trigger, not `GENERATED ALWAYS AS`. Migration 013 does it

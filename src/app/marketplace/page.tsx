@@ -95,9 +95,21 @@ export default async function HomePage() {
                 {heroBanner?.content?.subtitle || 'Discover trusted vendors. Compare prices. Support local.'}
               </p>
               <form action="/marketplace/search" method="GET">
-                <div className="flex items-center bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden max-w-[500px] mb-5">
+                {/* The focus ring goes on the WRAPPER, not the input. The global
+                    :focus-visible rule in globals.css draws a mint outline around
+                    the focused element; on the input that outline was clipped top
+                    and bottom by this container's overflow-hidden, leaving two
+                    stray green vertical lines down either side. focus-within puts
+                    the ring around the whole control, where it belongs. */}
+                <div className="flex items-center bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden max-w-[500px] mb-5 transition-shadow focus-within:border-[#2ECC8E] focus-within:ring-2 focus-within:ring-[#2ECC8E]/30">
                   <Search size={18} className="ml-4 text-[#9CA3AF] flex-shrink-0" />
-                  <input type="text" name="q" placeholder="Search products, categories, or vendors..." className="flex-1 px-3 py-4 text-sm text-[#111111] placeholder:text-[#9CA3AF] outline-none bg-transparent" />
+                  <input
+                    type="text"
+                    name="q"
+                    placeholder="Search products, categories, or vendors..."
+                    aria-label="Search products, categories or vendors"
+                    className="flex-1 px-3 py-4 text-sm text-[#111111] placeholder:text-[#9CA3AF] bg-transparent outline-none focus:outline-none focus-visible:outline-none"
+                  />
                   <button type="submit" className="m-1.5 bg-[#2ECC8E] hover:bg-[#22a370] transition-colors text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex-shrink-0">Search</button>
                 </div>
               </form>

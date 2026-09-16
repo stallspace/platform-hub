@@ -18,15 +18,19 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { type, vendor_id, product_id, session_id } = body
+    const { type, vendor_id, product_id, session_id, path } = body
 
-    if (!type || !vendor_id || !session_id) {
+    if (!type || !session_id) {
       return NextResponse.json({ ok: false }, { status: 400 })
     }
-    if (type !== 'store_view' && type !== 'product_view') {
+    // Only a page view is vendor-less; the other two must name a vendor.
+    if (type !== 'page_view' && !vendor_id) {
       return NextResponse.json({ ok: false }, { status: 400 })
     }
-    if (!UUID.test(String(vendor_id))) {
+    if (type !== 'store_view' && type !== 'product_view' && type !== 'page_view') {
+      return NextResponse.json({ ok: false }, { status: 400 })
+    }
+    if (type !== 'page_view' && !UUID.test(String(vendor_id))) {
       return NextResponse.json({ ok: false }, { status: 400 })
     }
     if (type === 'product_view' && !UUID.test(String(product_id ?? ''))) {
@@ -40,6 +44,23 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServiceClient()
     const sessionId = String(session_id).slice(0, 64)
+
+    if (type === 'page_view') {
+      // Record the PATH only — never the query string, which can carry a
+      // shopper's search terms and turn an anonymous counter into a log of
+      // what individuals were looking for.
+      const cleanPath = String(path ?? '/')
+        .split('?')[0]
+        .split('#')[0]
+        .slice(0, 200)
+
+      if (!cleanPath.startsWith('/')) {
+        return NextResponse.json({ ok: false }, { status: 400 })
+      }
+
+      await supabase.from('page_views').insert({ path: cleanPath, session_id: sessionId })
+      return NextResponse.json({ ok: true })
+    }
 
     if (type === 'store_view') {
       // Confirm the vendor exists and is public before recording a view.
