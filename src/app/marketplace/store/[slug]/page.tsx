@@ -128,8 +128,12 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Vendor header */}
-        <div className="relative -mt-8 mb-6 flex items-end gap-4 pt-2">
-          <div className="w-24 h-24 rounded-2xl border-4 border-white bg-white shadow-md overflow-hidden flex-shrink-0">
+        {/* The negative margin belongs on the LOGO, not the row. On the row it
+            pulled the text block up too, and because the items are bottom-
+            aligned a taller text block (name + location + rating) pushed the
+            store name up into the banner's bottom edge and clipped it. */}
+        <div className="relative mb-6 flex items-end gap-4">
+          <div className="-mt-12 w-24 h-24 rounded-2xl border-4 border-white bg-white shadow-md overflow-hidden flex-shrink-0">
             {vendor.logo_url ? (
               <img src={vendor.logo_url} alt="" className="w-full h-full object-cover" />
             ) : (
@@ -140,10 +144,14 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
               </div>
             )}
           </div>
-          <div className="pb-1">
+          <div className="pb-1 min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-[#111111]">{vendor.business_name}</h1>
-              <ShieldCheck className="w-5 h-5 text-[#2ECC8E]" />
+              {/* min-w-0 + break-words so a long business name wraps instead of
+                  overflowing the row on a phone. */}
+              <h1 className="text-2xl font-bold text-[#111111] leading-tight break-words min-w-0">
+                {vendor.business_name}
+              </h1>
+              <ShieldCheck className="w-5 h-5 text-[#2ECC8E] flex-shrink-0" />
             </div>
             {(vendor.city || vendor.province) && (
               <div className="flex items-center gap-1 text-sm text-[#6B7280] mt-0.5">

@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase/server'
+import { sanitiseSearchQuery, substringFilter, PRODUCT_SEARCH_COLUMNS, VENDOR_SEARCH_COLUMNS } from '@/lib/search/query'
 import Link from 'next/link'
 import {
   Search, SlidersHorizontal, Package, ChevronRight,
@@ -47,54 +48,87 @@ export default async function SearchPage({ searchParams }: PageProps) {
     .select('id, name, slug, product_count')
     .order('sort_order')
 
-  let query = supabase
-    .from('products')
-    .select(`
-      id, name, slug, price, compare_at_price, images,
-      track_inventory, stock_quantity, is_available, view_count, created_at,
-      vendor:vendors(id, business_name, slug, city, status),
-      category:categories(id, name, slug)
-    `, { count: 'exact' })
-    .eq('is_available', true)
-    .eq('is_archived', false)
+  const safeQ = sanitiseSearchQuery(q)
 
-  // Partial, case-insensitive matching on product name + description.
-  // Sanitise before using inside a PostgREST `.or()` filter string.
-  const safeQ = q.replace(/[,()%*]/g, ' ').trim()
-  if (safeQ) {
-    query = query.or(`name.ilike.%${safeQ}%,description.ilike.%${safeQ}%`)
-  }
-
+  // Resolve the category slug once — it is the same for both search attempts.
+  let categoryId: string | null = null
   if (category) {
     const { data: cat } = await supabase
       .from('categories').select('id').eq('slug', category).single()
-    if (cat) query = query.eq('category_id', cat.id)
+    categoryId = cat?.id ?? null
   }
 
-  if (minPrice !== null) query = query.gte('price', minPrice)
-  if (maxPrice !== null) query = query.lte('price', maxPrice)
-  if (inStock) query = query.or('track_inventory.eq.false,stock_quantity.gt.0')
+  // Built as a function so the whole thing can be run twice: once with
+  // full-text search, and again with a substring match if that found nothing.
+  // See lib/search/query.ts for why both are needed.
+  function buildProductQuery(mode: 'fts' | 'substring') {
+    let query = supabase
+      .from('products')
+      .select(`
+        id, name, slug, price, compare_at_price, images,
+        track_inventory, stock_quantity, is_available, view_count, created_at,
+        vendor:vendors(id, business_name, slug, city, status),
+        category:categories(id, name, slug)
+      `, { count: 'exact' })
+      .eq('is_available', true)
+      .eq('is_archived', false)
 
-  if (sort === 'price_asc')  query = query.order('price', { ascending: true })
-  else if (sort === 'price_desc') query = query.order('price', { ascending: false })
-  else if (sort === 'popular')    query = query.order('view_count', { ascending: false })
-  else                            query = query.order('created_at', { ascending: false })
+    if (safeQ) {
+      if (mode === 'fts') {
+        // websearch syntax: bare words, "quoted phrases", -exclusions. Unlike
+        // to_tsquery it never throws on whatever a shopper types.
+        query = query.textSearch('search_vector', safeQ, { type: 'websearch', config: 'english' })
+      } else {
+        query = query.or(substringFilter(PRODUCT_SEARCH_COLUMNS, safeQ))
+      }
+    }
 
-  query = query.range(from, to)
+    if (categoryId) query = query.eq('category_id', categoryId)
+    if (minPrice !== null) query = query.gte('price', minPrice)
+    if (maxPrice !== null) query = query.lte('price', maxPrice)
+    if (inStock) query = query.or('track_inventory.eq.false,stock_quantity.gt.0')
 
-  const { data: products, count } = await query
+    if (sort === 'price_asc')  query = query.order('price', { ascending: true })
+    else if (sort === 'price_desc') query = query.order('price', { ascending: false })
+    else if (sort === 'popular')    query = query.order('view_count', { ascending: false })
+    else                            query = query.order('created_at', { ascending: false })
+
+    return query.range(from, to)
+  }
+
+  let { data: products, count } = await buildProductQuery('fts')
+
+  // Nothing matched whole words — the shopper probably typed part of one.
+  if (safeQ && (count ?? 0) === 0) {
+    const fallback = await buildProductQuery('substring')
+    products = fallback.data
+    count = fallback.count
+  }
+
   const totalPages = Math.ceil((count ?? 0) / PER_PAGE)
 
-  // Also search vendors by name / description (the search bar promises vendors too).
+  // Also search vendors (the search bar promises vendors too), same two-step.
   let vendors: any[] = []
   if (safeQ) {
-    const { data: v } = await supabase
+    const vendorSelect = 'id, business_name, slug, logo_url, city, province'
+    const { data: byText } = await supabase
       .from('vendors')
-      .select('id, business_name, slug, logo_url, city, province')
+      .select(vendorSelect)
       .eq('status', 'approved')
-      .or(`business_name.ilike.%${safeQ}%,business_description.ilike.%${safeQ}%`)
+      .textSearch('search_vector', safeQ, { type: 'websearch', config: 'english' })
       .limit(12)
-    vendors = v ?? []
+
+    if (byText && byText.length > 0) {
+      vendors = byText
+    } else {
+      const { data: bySubstring } = await supabase
+        .from('vendors')
+        .select(vendorSelect)
+        .eq('status', 'approved')
+        .or(substringFilter(VENDOR_SEARCH_COLUMNS, safeQ))
+        .limit(12)
+      vendors = bySubstring ?? []
+    }
   }
 
   const hasResults = (products?.length ?? 0) > 0 || vendors.length > 0

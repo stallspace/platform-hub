@@ -34,6 +34,8 @@ interface Order {
   payment_provider: string | null
   fulfilment: string | null
   paid_at: string | null
+  refund_status: string | null
+  refund_amount: number | null
 }
 
 interface Props {
@@ -123,6 +125,48 @@ export default function OrdersClient({ orders: initial, vendorId, productNames }
     const matchStatus = filterStatus === 'all' || o.status === filterStatus
     return matchSearch && matchStatus
   })
+
+  async function issueRefund(orderId: string, total: number) {
+    const input = window.prompt(
+      `Refund how much? Enter an amount in rands, or leave as-is for the full order.\n\n` +
+      `PayFast charges you R2.00 (excl VAT) for the refund, whatever the amount.`,
+      total.toFixed(2)
+    )
+    if (input === null) return
+
+    const amount = Number(input)
+    if (!Number.isFinite(amount) || amount <= 0) {
+      showToast('Enter a refund amount greater than zero.', false)
+      return
+    }
+
+    setUpdating(true)
+    try {
+      const res = await fetch('/api/orders/refund', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: orderId, amount }),
+      })
+      const d = await res.json()
+      if (!res.ok) throw new Error(d.error ?? 'The refund could not be processed.')
+
+      const fullyRefunded = !d.partial
+      const patch = {
+        refund_status: 'refunded' as const,
+        refund_amount: amount,
+        ...(fullyRefunded ? { status: 'refunded' } : {}),
+      }
+      setOrders(prev => prev.map(o => (o.id === orderId ? { ...o, ...patch } : o)))
+      setSelected(prev => (prev?.id === orderId ? { ...prev, ...patch } : prev))
+      showToast(d.partial ? 'Partial refund sent — customer notified' : 'Refund sent — customer notified')
+    } catch (e) {
+      // Surface PayFast's own words rather than a generic failure — on a
+      // rejection this is the only thing that explains why.
+      showToast(e instanceof Error ? e.message : 'The refund could not be processed.', false)
+    } finally {
+      setUpdating(false)
+    }
+  }
 
   async function updateStatus(orderId: string, status: string) {
     setUpdating(true)
@@ -290,6 +334,35 @@ export default function OrdersClient({ orders: initial, vendorId, productNames }
                   </p>
                 )}
               </div>
+
+              {selected.refund_status && selected.refund_status !== 'refunded' && (
+                <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2.5">
+                  <p className="text-xs font-semibold text-amber-900 mb-0.5">
+                    {selected.refund_status === 'failed' ? 'Refund failed' : 'Refund owed to this customer'}
+                  </p>
+                  <p className="text-xs text-amber-800">
+                    They paid for this order and it was cancelled. The money is in your PayFast account,
+                    not ours, so the refund has to come from you.
+                  </p>
+                </div>
+              )}
+
+              {selected.refund_status === 'refunded' && (
+                <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2.5">
+                  <p className="text-xs text-emerald-900">
+                    Refunded {selected.refund_amount ? fmt(selected.refund_amount) : ''} to the customer.
+                  </p>
+                </div>
+              )}
+
+              {selected.paid_at && selected.refund_status !== 'refunded' && (
+                <button
+                  onClick={() => issueRefund(selected.id, Number(selected.total))}
+                  disabled={updating}
+                  className="w-full py-2.5 rounded-lg border border-amber-300 bg-white text-amber-800 text-sm font-semibold hover:bg-amber-50 transition-colors disabled:opacity-50">
+                  {updating ? 'Working…' : selected.refund_status === 'failed' ? 'Try the refund again' : 'Refund this customer'}
+                </button>
+              )}
 
               {/* Quick advance button */}
               {allowedNext(selected.status, selected.payment_provider).includes(STATUS_FLOW[selected.status]) && (

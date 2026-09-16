@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
-import { orderStatusUpdateEmail } from '@/lib/email/templates'
+import { orderStatusUpdateEmail, refundOwedEmail } from '@/lib/email/templates'
 import { createNotification } from '@/lib/notifications/create'
 
 const ALLOWED_STATUSES = new Set([
@@ -59,6 +59,12 @@ export async function PATCH(request: NextRequest) {
     const { order_id, status, message } = await request.json()
     if (!order_id || !status) return NextResponse.json({ error: 'Missing order_id or status' }, { status: 400 })
     if (!ALLOWED_STATUSES.has(status)) return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+    if (status === 'refunded') {
+      return NextResponse.json(
+        { error: 'Use the refund action so the money actually moves and the customer is told.' },
+        { status: 400 }
+      )
+    }
 
     // Verify this vendor owns the order.
     const { data: vendor } = await userClient
@@ -73,7 +79,7 @@ export async function PATCH(request: NextRequest) {
     // Read the current state before writing — the transition has to be legal.
     const { data: current } = await admin
       .from('orders')
-      .select('id, status, payment_provider')
+      .select('id, status, payment_provider, paid_at, total, order_number, customer_email, customer_name, refund_status')
       .eq('id', order_id)
       .eq('vendor_id', vendor.id)
       .single()
@@ -105,6 +111,16 @@ export async function PATCH(request: NextRequest) {
       patch.paid_at = new Date().toISOString()
     }
 
+    // Cancelling an order the customer has already PAID for leaves them out of
+    // pocket. Stallspace never held the money so it cannot return it — but it
+    // must not let that fact go unrecorded. Flag the debt, tell the customer
+    // plainly, and surface it to the vendor until it is settled.
+    const cancellingPaidOrder =
+      status === 'cancelled' && Boolean(current.paid_at) && !current.refund_status
+    if (cancellingPaidOrder) {
+      patch.refund_status = 'owed'
+    }
+
     const { data: order, error } = await admin
       .from('orders')
       .update(patch)
@@ -118,8 +134,28 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Order was changed by someone else. Refresh and try again.' }, { status: 409 })
     }
 
-    // Notify the customer by email.
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
+
+    // A paid order that has just been cancelled gets the refund-owed letter
+    // instead of a generic status update — the customer needs to know money is
+    // coming back to them and who owes it.
+    if (cancellingPaidOrder) {
+      try {
+        const tpl = refundOwedEmail({
+          customerName: order.customer_name,
+          orderNumber: order.order_number,
+          businessName: vendor.business_name,
+          amount: `R${Number(current.total).toLocaleString('en-ZA', { minimumFractionDigits: 2 })}`,
+          ordersUrl: `${appUrl}/account/orders`,
+        })
+        await sendEmail({ to: order.customer_email, ...tpl })
+      } catch (e) {
+        console.error('[orders/status] refund-owed email failed', e)
+      }
+      return NextResponse.json({ data: order, refundOwed: true })
+    }
+
+    // Notify the customer by email.
     const { subject, html } = orderStatusUpdateEmail({
       customerName: order.customer_name,
       orderNumber: order.order_number,

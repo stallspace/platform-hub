@@ -358,6 +358,53 @@ export function newOrderVendorEmail(data: {
   return { subject, html }
 }
 
+export function refundIssuedEmail(data: {
+  customerName: string
+  orderNumber: string
+  businessName: string
+  amount: string
+  partial: boolean
+  ordersUrl: string
+}) {
+  const subject = `Refund on its way — order ${data.orderNumber}`
+  const html = layout(`
+    ${heading(data.partial ? 'A partial refund is on its way' : 'Your refund is on its way')}
+    ${para(`Hi ${esc(data.customerName)}, ${esc(data.businessName)} has refunded ${data.partial ? 'part of' : ''} your order.`)}
+    ${infoTable([
+      ['Order Number', esc(data.orderNumber)],
+      ['Refund Amount', esc(data.amount)],
+      ['Vendor', esc(data.businessName)],
+    ])}
+    ${para('The money goes back to the card or account you paid from. Banks usually take a few working days to show it, and some take up to ten.')}
+    ${para(`Your payment went directly to ${esc(data.businessName)} rather than to Stallspace, so the refund comes from them. If it has not arrived after ten working days, contact the vendor first — and if you get nowhere, email us at support@stallspace.co.za and we will take it up.`)}
+    ${ctaButton('View Order', data.ordersUrl)}
+  `)
+  return { subject, html }
+}
+
+export function refundOwedEmail(data: {
+  customerName: string
+  orderNumber: string
+  businessName: string
+  amount: string
+  ordersUrl: string
+}) {
+  const subject = `Order ${data.orderNumber} cancelled — refund due to you`
+  const html = layout(`
+    ${heading('Your order was cancelled')}
+    ${para(`Hi ${esc(data.customerName)}, ${esc(data.businessName)} has cancelled your order. You paid for it, so you are owed a refund of ${esc(data.amount)}.`)}
+    ${infoTable([
+      ['Order Number', esc(data.orderNumber)],
+      ['Amount Due Back', esc(data.amount)],
+      ['Vendor', esc(data.businessName)],
+    ])}
+    ${para(`Your payment went directly to ${esc(data.businessName)}, not to Stallspace, so they are the ones who send it back. We have told them it is owed and we are tracking it.`)}
+    ${para('If you have not had it within ten working days, reply to this email or write to support@stallspace.co.za and we will chase it.')}
+    ${ctaButton('View Order', data.ordersUrl)}
+  `)
+  return { subject, html }
+}
+
 export function orderStatusUpdateEmail(data: {
   customerName: string
   orderNumber: string

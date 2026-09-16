@@ -105,10 +105,20 @@ export async function POST(request: NextRequest) {
     if (fulfilment === 'delivery') {
       const { data: ss } = await supabase
         .from('vendor_store_settings')
-        .select('delivery_cost')
+        .select('delivery_cost, free_delivery_threshold')
         .eq('vendor_id', vendor_id)
         .single()
+
       deliveryCost = Number(ss?.delivery_cost ?? 0)
+
+      // Vendors can set "free delivery over R500" in Store Settings. The
+      // threshold was collected and then never read, so the promise was made
+      // to the customer and quietly not kept. A threshold of 0 means "no
+      // threshold", not "everything is free".
+      const threshold = Number(ss?.free_delivery_threshold ?? 0)
+      if (threshold > 0 && subtotal >= threshold) {
+        deliveryCost = 0
+      }
     }
 
     const total = subtotal + deliveryCost

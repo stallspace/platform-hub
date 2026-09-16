@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
+import { sanitiseSearchQuery, substringFilter, PRODUCT_SEARCH_COLUMNS } from '@/lib/search/query'
 import Link from 'next/link'
 import {
   Search, SlidersHorizontal, Package, Star, ChevronRight,
@@ -58,64 +59,70 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     .select('id, name, slug, product_count')
     .order('sort_order')
 
-  // Build products query
-  let query = supabase
-    .from('products')
-    .select(`
-      id, name, slug, price, compare_at_price, images,
-      is_featured, track_inventory, stock_quantity, is_available,
-      view_count, created_at,
-      vendor:vendors(id, business_name, slug, city, status),
-      category:categories(id, name, slug)
-    `, { count: 'exact' })
-    .eq('is_available', true)
-    .eq('is_archived', false)
-    .eq('vendors.status', 'approved')
+  const safeQ = sanitiseSearchQuery(q)
 
-  // Text search using FTS
-  if (q) {
-    query = query.textSearch('name', q, { type: 'websearch', config: 'english' })
-  }
-
-  // Category filter
+  // Resolve slugs once — they are the same across both search attempts.
+  let categoryId: string | null = null
   if (category) {
     const { data: cat } = await supabase
-      .from('categories')
-      .select('id')
-      .eq('slug', category)
-      .single()
-    if (cat) query = query.eq('category_id', cat.id)
+      .from('categories').select('id').eq('slug', category).single()
+    categoryId = cat?.id ?? null
   }
 
-  // Vendor filter
+  let vendorId: string | null = null
   if (vendorSlug) {
     const { data: v } = await supabase
-      .from('vendors')
-      .select('id')
-      .eq('slug', vendorSlug)
-      .single()
-    if (v) query = query.eq('vendor_id', v.id)
+      .from('vendors').select('id').eq('slug', vendorSlug).single()
+    vendorId = v?.id ?? null
   }
 
-  // Price filters
-  if (minPrice !== null) query = query.gte('price', minPrice)
-  if (maxPrice !== null) query = query.lte('price', maxPrice)
+  // Same two-step as /marketplace/search: full-text first, substring if that
+  // finds nothing. This page previously searched `name` only, so a shopper's
+  // words never matched a description or a tag.
+  function buildProductQuery(mode: 'fts' | 'substring') {
+    let query = supabase
+      .from('products')
+      .select(`
+        id, name, slug, price, compare_at_price, images,
+        is_featured, track_inventory, stock_quantity, is_available,
+        view_count, created_at,
+        vendor:vendors!inner(id, business_name, slug, city, status),
+        category:categories(id, name, slug)
+      `, { count: 'exact' })
+      .eq('is_available', true)
+      .eq('is_archived', false)
+      .eq('vendors.status', 'approved')
 
-  // Stock filter
-  if (inStock) {
-    query = query.or('track_inventory.eq.false,stock_quantity.gt.0')
+    if (safeQ) {
+      if (mode === 'fts') {
+        query = query.textSearch('search_vector', safeQ, { type: 'websearch', config: 'english' })
+      } else {
+        query = query.or(substringFilter(PRODUCT_SEARCH_COLUMNS, safeQ))
+      }
+    }
+
+    if (categoryId) query = query.eq('category_id', categoryId)
+    if (vendorId) query = query.eq('vendor_id', vendorId)
+    if (minPrice !== null) query = query.gte('price', minPrice)
+    if (maxPrice !== null) query = query.lte('price', maxPrice)
+    if (inStock) query = query.or('track_inventory.eq.false,stock_quantity.gt.0')
+
+    if (sort === 'price_asc')  query = query.order('price', { ascending: true })
+    else if (sort === 'price_desc') query = query.order('price', { ascending: false })
+    else if (sort === 'popular')    query = query.order('view_count', { ascending: false })
+    else                            query = query.order('created_at', { ascending: false })
+
+    return query.range(from, to)
   }
 
-  // Sorting
-  if (sort === 'price_asc')  query = query.order('price', { ascending: true })
-  else if (sort === 'price_desc') query = query.order('price', { ascending: false })
-  else if (sort === 'popular')    query = query.order('view_count', { ascending: false })
-  else                            query = query.order('created_at', { ascending: false })
+  let { data: products, count } = await buildProductQuery('fts')
 
-  // Pagination
-  query = query.range(from, to)
+  if (safeQ && (count ?? 0) === 0) {
+    const fallback = await buildProductQuery('substring')
+    products = fallback.data
+    count = fallback.count
+  }
 
-  const { data: products, count } = await query
   const totalPages = Math.ceil((count ?? 0) / PER_PAGE)
 
   // Active filter count for badge

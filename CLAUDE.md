@@ -98,6 +98,35 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 `src/app/api/orders/status/route.ts`, mirrored in `OrdersClient.tsx` and
 `tests/order-transitions.test.ts`. Change all three together.
 
+**Search is full-text first, substring second.** Both surfaces
+(`/marketplace/search` and `/marketplace/products`) go through
+`src/lib/search/query.ts` and behave identically. FTS runs against the generated
+`search_vector` column (migration 013, name weighted above tags above description); if it
+returns nothing the page re-runs with ILIKE, because full-text matches whole words and a
+shopper typing "perf" will never match "Perfume". Don't remove the fallback, and don't let
+the two pages drift apart again — they used to search different columns with different
+strategies, neither of which could use an index.
+
+**There are TWO PayFast signatures and they are not the same.**
+Redirect + ITN (`payfast.ts`): fields in a FIXED ORDER, passphrase appended LAST.
+REST API (`payfast-api.ts`, used for refunds): fields sorted ALPHABETICALLY, the passphrase
+is just another field in that sort, and the auth headers are signed too. Conflating them
+gives a mismatch that looks exactly like a wrong passphrase. `tests/payfast-api-signature.test.ts`
+asserts they differ, and that the duplicated `phpUrlencode` in the two files agrees.
+
+**Refunds move the vendor's money, not ours.** `/api/orders/refund` calls PayFast with that
+vendor's own credentials, so the refund comes off their balance — same position as taking
+the payment. `refunded` is unreachable from `/api/orders/status` on purpose; it can only be
+set by a refund that actually happened. Cancelling a PAID order sets `refund_status='owed'`
+and emails the customer who owes them what. PayFast bills the vendor R2 ex VAT per refund.
+
+**The reconciliation sweep cannot confirm PayFast payments.** `/api/checkout/verify` only
+queries the gateway for Yoco and Peach; for PayFast and Ozow it just reports what our own
+database already says. So a dropped PayFast ITN is *detected* (the sweep alerts once per
+stuck order via `orders.stale_alert_at`) but not *settled*. Settling it needs PayFast's
+transaction-history API — different signature construction from the ITN, queries by date
+range, match on `m_payment_id`. Until that exists, a stuck PayFast order is a human job.
+
 **Payment settlement has one entry point:** `settlePaidOrder()` in `src/lib/orders/settle.ts`.
 It is idempotent (compare-and-set on `status = 'pending'`) and sends both the customer
 confirmation and the vendor notification. Don't email either side from a webhook directly.
