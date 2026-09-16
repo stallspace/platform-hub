@@ -98,6 +98,11 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 `src/app/api/orders/status/route.ts`, mirrored in `OrdersClient.tsx` and
 `tests/order-transitions.test.ts`. Change all three together.
 
+**Generated columns need a strictly IMMUTABLE expression.** `array_to_string()` is only
+STABLE — it calls the element type's output function — so anything including `tags` in a
+tsvector must be maintained by a trigger, not `GENERATED ALWAYS AS`. Migration 013 does it
+that way; a generated column fails with `42P17: generation expression is not immutable`.
+
 **Search is full-text first, substring second.** Both surfaces
 (`/marketplace/search` and `/marketplace/products`) go through
 `src/lib/search/query.ts` and behave identically. FTS runs against the generated
