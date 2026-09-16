@@ -1,5 +1,3 @@
-import type { Config } from '@netlify/functions'
-
 /**
  * Catches orders whose payment webhook never arrived.
  *
@@ -85,6 +83,12 @@ export default async (req: Request) => {
   return new Response(summary)
 }
 
-export const config: Config = {
+/**
+ * Netlify reads `schedule` off this export at build time. Deliberately an
+ * untyped literal rather than `import type { Config } from '@netlify/functions'`
+ * — that package is not a dependency of this project, and adding an import for
+ * a type alone is a build-time failure waiting to happen for no benefit.
+ */
+export const config = {
   schedule: '*/5 * * * *',
 }

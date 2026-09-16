@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
 
@@ -26,9 +26,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   try {
-    const supabase = await createClient()
+    // Deliberately the cookie-free client. The session-aware one calls
+    // next/headers cookies(), which makes this route dynamic and fails the
+    // build with "couldn't be rendered statically".
+    const supabase = createPublicClient()
 
-    const [{ data: vendors }, { data: products }, { data: categories }] = await Promise.all([
+    // Hard ceiling on the database round trip. This route runs during
+    // `next build`; without a timeout, a slow or unreachable Supabase (it is
+    // in Germany, ~200ms away on a good day) turns a deploy into a hang rather
+    // than a clean failure. Falling back to the static routes is much better
+    // than a stuck build.
+    const withTimeout = <T,>(work: Promise<T>, ms = 10_000): Promise<T> =>
+      Promise.race([
+        work,
+        new Promise<T>((_, reject) =>
+          setTimeout(() => reject(new Error('sitemap: database timed out')), ms)
+        ),
+      ])
+
+    const [{ data: vendors }, { data: products }, { data: categories }] = await withTimeout(Promise.all([
       supabase
         .from('vendors')
         .select('slug, updated_at')
@@ -41,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .eq('is_archived', false)
         .limit(20000),
       supabase.from('categories').select('slug').limit(200),
-    ])
+    ]))
 
     const vendorRoutes: MetadataRoute.Sitemap = (vendors ?? []).map((v) => ({
       url: `${APP_URL}/marketplace/store/${v.slug}`,

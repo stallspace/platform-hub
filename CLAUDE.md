@@ -102,6 +102,14 @@ for gateway orders only the signed ITN may set it — a vendor button must never
 It is idempotent (compare-and-set on `status = 'pending'`) and sends both the customer
 confirmation and the vendor notification. Don't email either side from a webhook directly.
 
+**Public reads that run at build time must not touch cookies.**
+`@/lib/supabase/server`'s `createClient()` calls `next/headers` `cookies()`, which makes
+any caller dynamic — that is the `force-dynamic` trap above, and in `sitemap.ts` it is a
+build failure rather than a page error. Use `createPublicClient()` from
+`@/lib/supabase/public` for genuinely public data. It uses the anon key, so RLS still
+applies. Give any such build-time database call a timeout: Supabase is in Germany and a
+hang turns a deploy into a stuck build rather than a clean failure.
+
 **Rate limiting must be durable.** The in-process `Map` in `rate-limit.ts` resets on every
 Netlify cold start. Use `limitRequest` from `@/lib/utils/rate-limit-db`, which counts in
 Postgres via `consume_rate_limit` (migration 010) and is atomic across instances. It fails
