@@ -22,13 +22,24 @@ const MAX_AGE_HOURS = 48  // past this the customer has long since given up
 const BATCH = 40          // scheduled functions get 30s; stay well inside it
 
 export default async (req: Request) => {
+  // Log on every run, including the quiet ones. Without this a healthy sweep
+  // that finds nothing writes no output at all, so an empty log pane is
+  // indistinguishable from the function never firing — which is exactly the
+  // failure this job exists to prevent someone missing.
+  const startedAt = new Date().toISOString()
+  console.log(`[reconcile] run started ${startedAt}`)
+
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stallspace.co.za'
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   const secret = process.env.RECONCILE_SECRET
 
   if (!supabaseUrl || !serviceKey || !secret) {
-    console.error('[reconcile] missing env — need SUPABASE creds and RECONCILE_SECRET')
+    console.error('[reconcile] MISCONFIGURED — this sweep is not protecting anything.', {
+      hasSupabaseUrl: Boolean(supabaseUrl),
+      hasServiceKey: Boolean(serviceKey),
+      hasReconcileSecret: Boolean(secret),
+    })
     return new Response('misconfigured', { status: 500 })
   }
 
@@ -56,7 +67,12 @@ export default async (req: Request) => {
   }
 
   const orders = (await res.json()) as { id: string; order_number: string }[]
-  if (orders.length === 0) return new Response('nothing pending')
+  if (orders.length === 0) {
+    console.log('[reconcile] nothing pending — no orders awaiting a late webhook')
+    return new Response('nothing pending')
+  }
+
+  console.log(`[reconcile] ${orders.length} order(s) pending longer than ${GRACE_MINUTES}m — checking each with the gateway`)
 
   let settled = 0
   for (const order of orders) {
