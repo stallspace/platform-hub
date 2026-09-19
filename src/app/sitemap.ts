@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${APP_URL}/legal/terms-of-service`,      changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${APP_URL}/legal/privacy-policy`,        changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${APP_URL}/legal/returns-and-refunds`,   changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${APP_URL}/legal/delivery`,              changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${APP_URL}/legal/popia`,                 changeFrequency: 'yearly',  priority: 0.3 },
   ]
 

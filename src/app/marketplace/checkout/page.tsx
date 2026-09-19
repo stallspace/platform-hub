@@ -10,6 +10,10 @@ import {
 } from 'lucide-react'
 import { useCartStore, groupByVendor } from '@/lib/cart/store'
 import { createClient } from '@/lib/supabase/client'
+import {
+  FULFILMENT_SELECT, toVendorFulfilment, deliveryChargeFor, formatRand,
+  type VendorFulfilment,
+} from '@/lib/vendors/fulfilment'
 
 const PROVINCES = [
   'Eastern Cape','Free State','Gauteng','KwaZulu-Natal',
@@ -50,7 +54,7 @@ export default function CheckoutPage() {
   })
   const [vendorConfig, setVendorConfig] = useState<VendorPaymentMethod | null>(null)
   const [vendorInfo, setVendorInfo] = useState<{
-    business_name: string; slug: string; delivery_cost: number; fulfilment_type: string
+    business_name: string; slug: string; fulfilment: VendorFulfilment
   } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -59,7 +63,10 @@ export default function CheckoutPage() {
   const [payMethod, setPayMethod] = useState<'online' | 'collection'>('online')
 
   const subtotal = currentVendorItems.reduce((s, i) => s + i.price * i.quantity, 0)
-  const deliveryCost = form.fulfilment === 'delivery' ? (vendorInfo?.delivery_cost ?? 0) : 0
+  // Quoted from the same function /api/orders/route.ts bills with, threshold
+  // included. Reading delivery_cost alone quoted a total the API did not charge.
+  const vendorFulfilment = vendorInfo?.fulfilment ?? toVendorFulfilment(null)
+  const deliveryCost = deliveryChargeFor(vendorFulfilment, subtotal, form.fulfilment === 'delivery' ? 'delivery' : 'collection')
   const total = subtotal + deliveryCost
 
   useEffect(() => {
@@ -95,16 +102,12 @@ export default function CheckoutPage() {
       const [methodRes, { data: vendor }, { data: ss }] = await Promise.all([
         fetch(`/api/checkout/payment-method?vendorId=${currentVendorId}`).then(r => r.json()).catch(() => null),
         supabase.from('vendors').select('business_name, slug').eq('id', currentVendorId).single(),
-        supabase.from('vendor_store_settings').select('fulfilment_type, delivery_cost').eq('vendor_id', currentVendorId).single(),
+        supabase.from('vendor_store_settings').select(FULFILMENT_SELECT).eq('vendor_id', currentVendorId).maybeSingle(),
       ])
       setVendorConfig(methodRes
         ? { provider: methodRes.provider ?? null, configured: !!methodRes.configured, payOnCollection: !!methodRes.payOnCollection }
         : null)
-      setVendorInfo(vendor ? {
-        ...vendor,
-        delivery_cost: ss?.delivery_cost ?? 0,
-        fulfilment_type: ss?.fulfilment_type ?? 'delivery',
-      } : null)
+      setVendorInfo(vendor ? { ...vendor, fulfilment: toVendorFulfilment(ss) } : null)
     }
     loadVendor()
   }, [currentVendorId])
@@ -297,15 +300,15 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                 {(['delivery', 'collection'] as const).map(opt => {
                   const available = opt === 'delivery'
-                    ? vendorInfo?.fulfilment_type === 'delivery' || vendorInfo?.fulfilment_type === 'both'
-                    : vendorInfo?.fulfilment_type === 'collection' || vendorInfo?.fulfilment_type === 'both'
+                    ? vendorFulfilment.offersDelivery
+                    : vendorFulfilment.offersCollection
                   return (
                     <button key={opt} onClick={() => available && setField('fulfilment', opt)} disabled={!available}
                       className={`flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all ${form.fulfilment === opt ? 'border-brand-mint bg-blue-50' : 'border-gray-200 hover:border-gray-300'} ${!available ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}>
                       {opt === 'delivery' ? <Truck className="w-5 h-5 text-brand-mint flex-shrink-0" /> : <Store className="w-5 h-5 text-brand-mint flex-shrink-0" />}
                       <div>
                         <p className="font-semibold text-gray-900 text-sm capitalize">{opt}</p>
-                        <p className="text-xs text-gray-400">{opt === 'delivery' ? (deliveryCost === 0 ? 'Free delivery' : `R${deliveryCost.toFixed(2)}`) : 'Pick up from vendor'}</p>
+                        <p className="text-xs text-gray-400">{opt === 'delivery' ? (deliveryCost === 0 ? 'Free delivery' : formatRand(deliveryCost)) : 'Pick up from vendor'}</p>
                       </div>
                     </button>
                   )
@@ -417,7 +420,7 @@ export default function CheckoutPage() {
               </div>
               <div className="space-y-1.5 pt-3 border-t border-gray-100 text-sm">
                 <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>R{subtotal.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span></div>
-                <div className="flex justify-between text-gray-600"><span>Delivery</span><span>{form.fulfilment === 'collection' ? 'Free (collection)' : deliveryCost === 0 ? 'Free' : `R${deliveryCost.toFixed(2)}`}</span></div>
+                <div className="flex justify-between text-gray-600"><span>Delivery</span><span>{form.fulfilment === 'collection' ? 'Free (collection)' : deliveryCost === 0 ? 'Free' : formatRand(deliveryCost)}</span></div>
                 <div className="flex justify-between font-bold text-gray-900 pt-2 border-t border-gray-100 mt-2"><span>Total</span><span>R{total.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span></div>
               </div>
               <button onClick={handlePay} disabled={loading || (!canPayOnline && !canPayOnCollection)}

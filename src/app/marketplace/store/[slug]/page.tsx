@@ -7,11 +7,13 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
   MapPin, Phone, Mail, Globe, Instagram, Facebook,
-  Package, Star, ShieldCheck, ChevronRight, Clock
+  Package, Star, ShieldCheck, ChevronRight
 } from 'lucide-react'
 import EnquiryForm from '@/components/storefront/EnquiryForm'
 import ProductEnquiryToggle from '@/components/storefront/ProductEnquiryToggle'
 import TrackView from '@/components/marketplace/TrackView'
+import FulfilmentPanel from '@/components/marketplace/FulfilmentPanel'
+import { FULFILMENT_SELECT, toVendorFulfilment } from '@/lib/vendors/fulfilment'
 import ReviewForm from '@/components/storefront/ReviewForm'
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -53,8 +55,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
     .select(`
       id, business_name, slug, owner_name, email, phone,
       business_address, business_description, logo_url, banner_url,
-      social_links, city, province, operating_hours,
-      fulfilment_type, estimated_delivery_time, created_at
+      social_links, city, province, operating_hours, created_at
     `)
     .eq('slug', params.slug)
     .eq('status', 'approved')
@@ -79,13 +80,18 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
       .limit(6),
     supabase
       .from('vendor_store_settings')
-      .select('show_email, show_phone, show_address')
+      .select(`show_email, show_phone, show_address, ${FULFILMENT_SELECT}`)
       .eq('vendor_id', vendor.id)
       .maybeSingle(),
   ])
 
   // Vendors choose which contact details are public. Default to showing them
   // when no settings row exists yet, so existing storefronts are unchanged.
+  // Delivery terms come from vendor_store_settings because that is the row
+  // /api/orders/route.ts bills from. Reading vendors.* here published terms
+  // the vendor could not edit and checkout did not honour.
+  const fulfilment = toVendorFulfilment(storeSettings)
+
   const showEmail   = storeSettings?.show_email   !== false && Boolean(vendor.email)
   const showPhone   = storeSettings?.show_phone   !== false && Boolean(vendor.phone)
   const showAddress = storeSettings?.show_address !== false && Boolean(vendor.business_address)
@@ -218,15 +224,7 @@ export default async function MarketplaceStorefrontPage({ params }: { params: { 
               )}
             </div>
 
-            {vendor.estimated_delivery_time && (
-              <div className="bg-white rounded-xl border border-[#E5E7EB] p-5">
-                <h2 className="font-semibold text-[#111111] mb-3">Fulfilment</h2>
-                <div className="flex items-center gap-2 text-sm text-[#6B7280]">
-                  <Clock className="w-4 h-4 text-[#9CA3AF]" />
-                  {vendor.estimated_delivery_time}
-                </div>
-              </div>
-            )}
+            <FulfilmentPanel fulfilment={fulfilment} />
 
             <div className="bg-[#0D3B2E] rounded-xl p-5">
               <EnquiryForm vendorId={vendor.id} vendorEmail={vendor.email} />

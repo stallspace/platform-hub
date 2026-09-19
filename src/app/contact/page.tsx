@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Mail, LifeBuoy, Store, ShieldCheck, Instagram } from 'lucide-react'
+import { Mail, LifeBuoy, Store, ShieldCheck, Instagram, Building2 } from 'lucide-react'
+import { COMPANY, companyDisclosureLines } from '@/lib/legal/company'
 
 export const metadata = {
   title: 'Contact Us | Stallspace',
@@ -67,6 +68,27 @@ export default function ContactPage() {
             vendor themselves. Every storefront has a <span className="font-medium">Send an Enquiry</span>{' '}
             form that goes straight to them, and they will usually know more than we do. Come to us if they
             do not reply, or if something has gone wrong with an order.
+          </p>
+        </div>
+
+        {/* ECTA s43 requires an online supplier to publish its registered name,
+            registration number, street address and telephone number. */}
+        <div className="mt-5 border border-[#E5E7EB] rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Building2 className="w-4 h-4 text-[#9CA3AF]" />
+            <h2 className="font-semibold text-[#0D3B2E]">Registered business details</h2>
+          </div>
+          <p className="text-sm text-[#6B7280] leading-relaxed">
+            {companyDisclosureLines().map(line => (
+              <span key={line}>
+                {line}
+                <br />
+              </span>
+            ))}
+          </p>
+          <p className="text-xs text-[#9CA3AF] mt-2">
+            Stallspace is a marketplace. The vendor named on your order is the supplier of the goods, and
+            publishes their own business details on their storefront.
           </p>
         </div>
 

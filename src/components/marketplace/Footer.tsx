@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, MapPin, Instagram } from 'lucide-react'
+import { Mail, MapPin, Phone, Instagram } from 'lucide-react'
+import { COMPANY } from '@/lib/legal/company'
 
 export default function Footer() {
   return (
@@ -67,20 +68,32 @@ export default function Footer() {
                 <Mail className="w-4 h-4 flex-shrink-0 text-[#2ECC8E]" />
                 <a href="mailto:hello@stallspace.co.za" className="hover:text-white transition-colors">hello@stallspace.co.za</a>
               </li>
+              {COMPANY.telephone && (
+                <li className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 flex-shrink-0 text-[#2ECC8E]" />
+                  <a href={`tel:${COMPANY.telephone}`} className="hover:text-white transition-colors">{COMPANY.telephone}</a>
+                </li>
+              )}
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 flex-shrink-0 text-[#2ECC8E] mt-0.5" />
-                <span>South Africa</span>
+                <span>{COMPANY.physicalAddress || COMPANY.country}</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-8 sm:mt-12 pt-5 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-          <p>© {new Date().getFullYear()} Stallspace. All rights reserved.</p>
-          <div className="flex gap-5">
+          {/* ECTA s43 wants the trading entity named wherever the site is used,
+              not only buried in the Terms. */}
+          <p className="text-center sm:text-left">
+            © {new Date().getFullYear()} {COMPANY.legalName} trading as {COMPANY.tradingAs}
+            {COMPANY.registrationNumber ? ` · Reg. ${COMPANY.registrationNumber}` : ''}. All rights reserved.
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2">
             <Link href="/legal/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/legal/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
             <Link href="/legal/returns-and-refunds" className="hover:text-white transition-colors">Returns &amp; Refunds</Link>
+            <Link href="/legal/delivery" className="hover:text-white transition-colors">Delivery Policy</Link>
             <Link href="/legal/popia" className="hover:text-white transition-colors">POPIA Compliance</Link>
             <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
           </div>

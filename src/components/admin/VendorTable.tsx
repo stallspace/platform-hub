@@ -194,9 +194,19 @@ export default function VendorTable({ vendors, activeStatus, statusCounts, searc
                           }
                         </div>
                         <div>
-                          <a href={`/admin/vendors/${vendor.id}`} className="font-semibold text-[#0D3B2E] hover:text-[#2ECC8E] transition-colors">
-                            {vendor.business_name}
-                          </a>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <a href={`/admin/vendors/${vendor.id}`} className="font-semibold text-[#0D3B2E] hover:text-[#2ECC8E] transition-colors">
+                              {vendor.business_name}
+                            </a>
+                            {!vendor.company_registration && (
+                              <span
+                                title="No company registration number given. Trading as an individual is allowed; verify identity before approving."
+                                className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200 whitespace-nowrap"
+                              >
+                                Sole proprietor
+                              </span>
+                            )}
+                          </div>
                           <p className="text-gray-400 text-xs">{vendor.email}</p>
                         </div>
                       </div>

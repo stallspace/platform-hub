@@ -1,5 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import VendorTable from '@/components/admin/VendorTable'
+import StorefrontGapsPanel, { type StorefrontGap } from '@/components/admin/StorefrontGapsPanel'
+import {
+  FULFILMENT_SELECT, toVendorFulfilment, fulfilmentGaps, contactGaps,
+} from '@/lib/vendors/fulfilment'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,6 +60,38 @@ export default async function VendorApplicationsPage({
     }
   }
 
+  // Approved storefronts that do not publish the terms a payment gateway
+  // checks for. Vendors who only collect are not faulted for having no
+  // delivery terms; fulfilmentGaps scopes each rule to what they offer.
+  const { data: approved } = await supabase
+    .from('vendors')
+    .select('id, business_name, slug, email, phone, business_address')
+    .eq('status', 'approved')
+    .order('business_name')
+
+  const { data: allSettings } = await supabase
+    .from('vendor_store_settings')
+    .select(`vendor_id, show_email, show_phone, show_address, ${FULFILMENT_SELECT}`)
+
+  const settingsByVendor = new Map(
+    (allSettings ?? []).map(row => [(row as { vendor_id: string }).vendor_id, row]),
+  )
+
+  const incompleteStorefronts: StorefrontGap[] = (approved ?? [])
+    .map(v => {
+      const settings = settingsByVendor.get(v.id) ?? null
+      return {
+        vendorId: v.id,
+        businessName: v.business_name,
+        slug: v.slug,
+        gaps: [
+          ...fulfilmentGaps(toVendorFulfilment(settings)),
+          ...contactGaps(v, settings),
+        ],
+      }
+    })
+    .filter(v => v.gaps.length > 0)
+
   return (
     <div>
       <div className="mb-8">
@@ -64,6 +100,11 @@ export default async function VendorApplicationsPage({
           Review, approve, or reject vendor applications to the Stallspace marketplace.
         </p>
       </div>
+
+      <StorefrontGapsPanel
+        incomplete={incompleteStorefronts}
+        checked={approved?.length ?? 0}
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { COMPANY, companyDisclosureLines } from '@/lib/legal/company'
 
 export const metadata = {
   title: 'POPIA Compliance | Stallspace',
@@ -16,7 +17,7 @@ export default function PopiaCompliancePage() {
         <h1 className="text-3xl font-bold text-[#0D3B2E] mb-2">POPIA Compliance</h1>
         {/* Pinned, not generated. A policy that always reads "updated today"
             has no audit trail — bump this by hand when the text changes. */}
-        <p className="text-sm text-[#9CA3AF] mb-10">Last updated: 7 September 2026</p>
+        <p className="text-sm text-[#9CA3AF] mb-10">Last updated: 19 September 2026</p>
 
         <div className="prose prose-sm max-w-none text-[#374151] space-y-6">
           <p>
@@ -27,14 +28,22 @@ export default function PopiaCompliancePage() {
 
           <h2 className="text-lg font-bold text-[#0D3B2E] mt-8 mb-3">Information Officer</h2>
           <p>
-            In terms of Section 55 of POPIA, Stallspace has appointed an Information Officer responsible for
-            ensuring compliance with the Act. As Stallspace currently operates with a single team member, this
-            responsibility is held directly by the founder of Kwry (Pty) Ltd.
+            Under POPIA the head of a private body is its Information Officer by operation of law, and is
+            required to register with the Information Regulator. For {COMPANY.legalName} that is
+            {COMPANY.informationOfficer ? ` ${COMPANY.informationOfficer}` : ' the head of the company'}.
           </p>
           <p>
             You can contact our Information Officer with any questions, access requests, or complaints
             relating to your personal information at:{' '}
             <a href="mailto:privacy@stallspace.co.za" className="text-[#2ECC8E] hover:underline">privacy@stallspace.co.za</a>
+          </p>
+          <p>
+            {companyDisclosureLines().map(line => (
+              <span key={line}>
+                {line}
+                <br />
+              </span>
+            ))}
           </p>
 
           <h2 className="text-lg font-bold text-[#0D3B2E] mt-8 mb-3">The Eight Conditions for Lawful Processing</h2>

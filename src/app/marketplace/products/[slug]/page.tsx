@@ -7,11 +7,13 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import {
   MapPin, Phone, Mail, Globe, Instagram, Facebook,
-  Package, Star, ShieldCheck, Truck, StoreIcon,
-  ChevronRight, MessageSquare, Clock, AlertCircle, CheckCircle2, Tag
+  Package, Star, ShieldCheck,
+  ChevronRight, MessageSquare, AlertCircle, CheckCircle2, Tag
 } from 'lucide-react'
 import AddToCartButton from '@/components/marketplace/AddToCartButton'
 import TrackView from '@/components/marketplace/TrackView'
+import FulfilmentPanel from '@/components/marketplace/FulfilmentPanel'
+import { FULFILMENT_SELECT, toVendorFulfilment } from '@/lib/vendors/fulfilment'
 import ReviewForm from '@/components/storefront/ReviewForm'
 import ProductGallery from '@/components/marketplace/ProductGallery'
 
@@ -76,9 +78,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       vendor:vendors(
         id, business_name, slug, logo_url, banner_url,
         business_description, email, phone, business_address,
-        city, province, social_links, status,
-        fulfilment_type, delivery_cost, estimated_delivery_time,
-        collection_address, collection_hours
+        city, province, social_links, status
       ),
       category:categories(id, name, slug)
     `)
@@ -144,8 +144,16 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const specifications = (product.specifications as { key: string; value: string }[]) ?? []
   const variants = (product.variants as { id: string; name: string; options: { id: string; value: string; price_modifier: number }[] }[]) ?? []
 
-  const deliveryOffered = vendor.fulfilment_type === 'delivery' || vendor.fulfilment_type === 'both'
-  const collectionOffered = vendor.fulfilment_type === 'collection' || vendor.fulfilment_type === 'both'
+  // Published delivery terms must match what /api/orders/route.ts charges, and
+  // that reads vendor_store_settings. Anything else quotes a price the customer
+  // will not be billed.
+  const { data: storeSettings } = await supabase
+    .from('vendor_store_settings')
+    .select(FULFILMENT_SELECT)
+    .eq('vendor_id', vendor.id)
+    .maybeSingle()
+
+  const fulfilment = toVendorFulfilment(storeSettings)
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -360,42 +368,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 )}
               </div>
 
-              {/* Delivery info */}
-              <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-3">
-                <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Fulfilment</p>
-                {deliveryOffered && (
-                  <div className="flex items-start gap-2.5">
-                    <Truck className="w-4 h-4 text-brand-mint mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-800">Delivery Available</p>
-                      {vendor.delivery_cost !== null && (
-                        <p className="text-xs text-gray-500">
-                          {Number(vendor.delivery_cost) === 0 ? 'Free delivery' : `R${Number(vendor.delivery_cost).toFixed(2)} delivery fee`}
-                        </p>
-                      )}
-                      {vendor.estimated_delivery_time && (
-                        <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                          <Clock className="w-3 h-3" /> {vendor.estimated_delivery_time}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )}
-                {collectionOffered && (
-                  <div className="flex items-start gap-2.5">
-                    <StoreIcon className="w-4 h-4 text-brand-mint mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-800">Collection Available</p>
-                      {vendor.collection_hours && (
-                        <p className="text-xs text-gray-400">{vendor.collection_hours}</p>
-                      )}
-                    </div>
-                  </div>
-                )}
-                {!deliveryOffered && !collectionOffered && (
-                  <p className="text-xs text-gray-400">Contact vendor for delivery details.</p>
-                )}
-              </div>
+              <FulfilmentPanel fulfilment={fulfilment} className="!p-4" />
 
               {/* CTA buttons */}
               <AddToCartButton

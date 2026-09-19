@@ -217,3 +217,50 @@ scroll endlessly."*
 
 Direct and concise. Say what changed and why; skip the recap. Push back when a request
 would make something worse — that's wanted, not resented. Flag your own mistakes explicitly.
+
+## Delivery terms have one source
+
+`vendor_store_settings` is the only row that holds a vendor's delivery terms.
+`vendors` carries look-alike columns (`delivery_cost`, `fulfilment_type`,
+`estimated_delivery_time`, `collection_address`, `collection_hours`) that Store
+Settings never writes. Reading them published terms the vendor could not edit
+and checkout did not honour.
+
+Everything that quotes or charges delivery goes through
+`src/lib/vendors/fulfilment.ts`. `FULFILMENT_SELECT` is the column list,
+`toVendorFulfilment` parses the row, `deliveryChargeFor` is the pricing rule and
+`describeDeliveryCost` is the sentence the customer reads.
+`tests/payfast-compliance.test.ts` fails if a page goes back to `vendors.*` or
+copies the pricing rule.
+
+## Legal pages are a payment-gateway requirement, not decoration
+
+Payfast will not verify a merchant whose site lacks terms covering refund,
+cancellation and delivery. A vendor selling only through Stallspace gives
+Payfast a Stallspace storefront URL, so `/legal/terms-of-service`,
+`/legal/returns-and-refunds` and `/legal/delivery` are that merchant's website
+for verification purposes. `tests/payfast-compliance.test.ts` asserts each page
+exists, is linked from the footer and sitemap, and still carries its required
+clauses.
+
+Company disclosure facts live in `src/lib/legal/company.ts`, not inline in
+pages. An empty field renders as nothing rather than as a placeholder.
+
+## Storefront readiness is an admin-visible thing
+
+`fulfilmentGaps()` and `contactGaps()` in `src/lib/vendors/fulfilment.ts` say
+what an approved storefront is missing before it reads as a real trading site.
+`/admin/vendors` renders them through `StorefrontGapsPanel`. The rules are
+scoped to what the vendor offers, so a collection-only vendor is never faulted
+for having no delivery terms. Add a rule there rather than in the page.
+
+## Not every vendor is a registered business
+
+`vendors.company_registration` is nullable and the registration form marks it
+optional. That is deliberate. People start trading before they register, and
+the marketplace does not shut them out. ECTA s43 asks for a registration
+number only where there is one; a sole proprietor discloses their own name and
+address instead. Nothing in the legal copy, the admin checks or the storefront
+may treat a missing registration number as a fault. `/admin/vendors` marks
+those vendors "Sole proprietor" as a neutral prompt to verify identity, never
+as a warning.
