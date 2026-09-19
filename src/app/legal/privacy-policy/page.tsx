@@ -161,7 +161,12 @@ export default function PrivacyPolicyPage() {
                 <br />
               </span>
             ))}
-            Email: <a href="mailto:privacy@stallspace.co.za" className="text-[#2ECC8E] hover:underline">privacy@stallspace.co.za</a>
+            Email:{' '}
+            <a href={`mailto:${COMPANY.informationOfficerEmail}`} className="text-[#2ECC8E] hover:underline">
+              {COMPANY.informationOfficerEmail}
+            </a>{' '}
+            or{' '}
+            <a href="mailto:privacy@stallspace.co.za" className="text-[#2ECC8E] hover:underline">privacy@stallspace.co.za</a>
           </p>
           <p>
             We respond to an access request within 30 days, as the Promotion of Access to Information Act

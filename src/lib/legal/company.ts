@@ -14,20 +14,32 @@ export const COMPANY = {
   tradingAs: 'Stallspace',
 
   /** CIPC registration number, format 2024/123456/07. */
-  registrationNumber: '',
+  registrationNumber: '2026/269289/07',
 
-  /** Street address. A PO box does not satisfy ECTA s43(1)(c). */
+  /**
+   * Street address. A PO box does not satisfy ECTA s43(1)(c).
+   *
+   * Empty. Kwry trades with no business premises, so the address to publish
+   * would be the registered office on the CIPC record. Leaving it empty keeps
+   * that off the site, and the cost is ECTA s43(3): where s43(1) is not
+   * complied with, a consumer may cancel within 14 days of delivery and take
+   * a refund, against every vendor on the marketplace. Fill this in to close
+   * that, and tests/payfast-compliance.test.ts stays red until you do.
+   */
   physicalAddress: '',
 
   /** Published contact number, international format. */
-  telephone: '',
+  telephone: '+27 62 025 1903',
 
   /**
    * POPIA makes the head of a private body its Information Officer by
    * operation of law. A data subject cannot address a section 23 request to
    * an unnamed person, so the name has to be published.
    */
-  informationOfficer: '',
+  informationOfficer: 'Mujahid Hendricks',
+
+  /** The Information Officer's own address, alongside the privacy@ mailbox. */
+  informationOfficerEmail: 'mujahidh@stallspace.co.za',
 
   email: 'hello@stallspace.co.za',
   supportEmail: 'support@stallspace.co.za',

@@ -201,7 +201,14 @@ test('the company registration number is published', () => {
 })
 
 test('a physical address is published', () => {
-  assert.notEqual(COMPANY.physicalAddress, '', 'set COMPANY.physicalAddress in src/lib/legal/company.ts')
+  // The only outstanding ECTA s43(1) field. While it is empty, section 43(3)
+  // gives every customer a 14-day cancellation right against every vendor on
+  // the marketplace. Set COMPANY.physicalAddress to the CIPC registered
+  // office address to close it.
+  assert.notEqual(
+    COMPANY.physicalAddress, '',
+    'ECTA s43(1)(c) street address not published. See the comment on COMPANY.physicalAddress.',
+  )
 })
 
 test('a telephone number is published', () => {
